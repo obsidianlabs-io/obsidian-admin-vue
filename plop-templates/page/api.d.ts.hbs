@@ -1,0 +1,13 @@
+declare namespace Api {
+  namespace {{pascalName}} {
+    interface {{pascalName}}Record {
+      id: number;
+      createTime: string;
+      updateTime: string;
+    }
+
+    type {{pascalName}}ListParams = Api.Common.CommonSearchParams;
+
+    type {{pascalName}}List = Api.Common.PaginatingQueryRecord<{{pascalName}}Record>;
+  }
+}

@@ -1,0 +1,53 @@
+name: Frontend Contract Gate
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  contract-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Checkout backend contract repo (with token)
+        if: ${{ secrets.BACKEND_REPO_TOKEN != '' }}
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ vars.BACKEND_REPO || 'obsidianlabs-io/obsidian-admin-laravel' }}
+          token: ${{ secrets.BACKEND_REPO_TOKEN }}
+          path: backend
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Checkout backend contract repo (public)
+        if: ${{ secrets.BACKEND_REPO_TOKEN == '' }}
+        run: git clone --depth=1 https://github.com/${{ vars.BACKEND_REPO || 'obsidianlabs-io/obsidian-admin-laravel' }}.git backend
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.17.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.19.0
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: API client contract snapshot gate
+        run: pnpm contract:check
+
+      - name: Frontend/Backend contract compatibility gate
+        run: node scripts/api-backend-compat.mjs --check --backend=backend/docs/api-contract.snapshot
+
+      - name: Type check
+        run: pnpm typecheck:api

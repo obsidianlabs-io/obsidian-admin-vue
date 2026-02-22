@@ -1,0 +1,26 @@
+@import './reset.css';
+@import './nprogress.css';
+@import './transition.css';
+
+html,
+body,
+#app {
+  height: 100%;
+  text-autospace: normal;
+}
+
+html {
+  overflow-x: hidden;
+  color: rgb(var(--base-text-color));
+}
+
+/* Prevent focus/interaction on form inputs in view mode drawers */
+.view-mode-form .n-input,
+.view-mode-form .n-select,
+.view-mode-form .n-date-picker,
+.view-mode-form .n-input-number,
+.view-mode-form .n-radio-group,
+.view-mode-form .n-checkbox-group,
+.view-mode-form .n-switch {
+  pointer-events: none;
+}

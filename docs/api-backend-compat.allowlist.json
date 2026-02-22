@@ -1,0 +1,9 @@
+{
+  "ignore": [
+    {
+      "method": "GET",
+      "path": "/route/*",
+      "reason": "Frontend local/static route API, not provided by Laravel backend contract."
+    }
+  ]
+}
