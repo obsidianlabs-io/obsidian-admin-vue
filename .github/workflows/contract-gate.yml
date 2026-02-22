@@ -13,11 +13,11 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Checkout backend contract repo (with token)
         if: ${{ secrets.BACKEND_REPO_TOKEN != '' }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: ${{ vars.BACKEND_REPO || 'obsidianlabs-io/obsidian-admin-laravel' }}
           token: ${{ secrets.BACKEND_REPO_TOKEN }}
