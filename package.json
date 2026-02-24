@@ -78,7 +78,7 @@
     "pinia": "3.0.4",
     "pusher-js": "^8.4.0",
     "qrcode.vue": "^3.8.0",
-    "tailwind-merge": "3.4.0",
+    "tailwind-merge": "3.5.0",
     "vue": "3.5.27",
     "vue-draggable-plus": "0.6.1",
     "vue-i18n": "11.2.8",
