@@ -27,18 +27,37 @@ Obsidian 持续进化 —— 扎根韧性与秩序，坚定迈向长期价值。
 
 ## 特性
 
-- **前沿技术应用**：采用 Vue3, Vite7, TypeScript, Pinia 和 UnoCSS 等最新流行的技术栈。
-- **清晰的项目架构**：采用 pnpm monorepo 架构，结构清晰，优雅易懂。
-- **严格的代码规范**：遵循 [SoybeanJS 规范](https://docs.soybeanjs.cn/zh/standard)，集成了eslint, prettier 和 simple-git-hooks，保证代码的规范性。
-- **TypeScript**： 支持严格的类型检查，提高代码的可维护性。
-- **丰富的主题配置**：内置多样的主题配置，与 UnoCSS 完美结合。
+### 基础框架能力
+
+- **前沿技术栈**：采用 `Vue 3`、`Vite 7`、`TypeScript`、`Pinia` 和 `UnoCSS` 等现代化技术栈。
+- **清晰的项目架构**：采用 `pnpm workspace / monorepo` 架构，结构清晰，便于长期维护与扩展。
+- **严格的代码规范**：遵循 [SoybeanJS 规范](https://docs.soybeanjs.cn/zh/standard)，集成 `ESLint`、`Prettier` 与 `simple-git-hooks`。
+- **严格 TypeScript**：支持严格类型检查，提升代码可维护性与重构安全性。
+- **丰富主题配置**：内置多样主题配置，与 `UnoCSS` 深度结合。
 - **内置国际化方案**：轻松实现多语言支持。
 - **自动化文件路由系统**：自动生成路由导入、声明和类型。更多细节请查看 [Elegant Router](https://github.com/soybeanjs/elegant-router)。
 - **灵活的权限路由**：同时支持前端静态路由和后端动态路由。
-- **丰富的页面组件**：内置多样页面和组件，包括403、404、500页面，以及布局组件、标签组件、主题配置组件等。
-- **命令行工具**：内置高效的命令行工具，git提交、删除文件、发布等。
-- **移动端适配**：完美支持移动端，实现自适应布局。
+- **丰富的页面组件**：内置多样页面与组件，包括 `403`、`404`、`500` 页面，以及布局组件、标签组件、主题配置组件等。
+- **命令行工具**：内置高效命令行工具，支持 git 提交、删除文件、发布等操作。
+- **移动端适配**：支持响应式布局与移动端显示。
 
+### Obsidian 增强能力（核心差异化）
+
+- **端到端类型安全**：基于 `@hey-api/openapi-ts` 生成 SDK，强化前后端协作的类型一致性。
+- **前后端契约门禁**：内置 `Contract Gate` 与 `Compatibility Gate`，降低 API Schema 变更带来的破坏性风险。
+- **SaaS 多租户能力**：支持租户上下文、租户 Header 切换、租户维度访问控制与视图隔离。
+- **实时更新能力**：基于 `Laravel Echo / Pusher` 的实时消息与状态同步能力。
+- **Schema 驱动界面能力**：支持 Schema 驱动的动态表单与表格，适配配置化 CRUD 场景。
+- **路由访问控制增强**：支持角色 / 权限 / 租户范围联合校验。
+- **运行时配置协作**：支持主题与国际化运行时配置，便于与后端配置中心联动。
+- **契约驱动开发体验**：推荐与 `Obsidian Admin Laravel` 后端配套使用，获得完整的契约驱动开发流程。
+
+### 工程质量与交付能力
+
+- **类型检查与静态质量门禁**：`vue-tsc`、`ESLint`
+- **测试能力**：单元测试（Node test runner + `tsx`）与 E2E 测试（Playwright）
+- **供应链安全检查**：`pnpm audit`、Dependency Review
+- **CI 工作流**：GitHub Actions（`Lint` / `Contract Gate`（含 `Compatibility Gate`）/ `Supply Chain`）
 
 
 ## 使用
@@ -85,7 +104,7 @@ pnpm contract:check
 # 更新前端 API 契约快照
 pnpm contract:write
 
-# 与 Laravel 后端契约快照做兼容性比对（需要 ../obsidian-admin-laravel/docs/api-contract.snapshot）
+# 与 Laravel 后端契约快照做兼容性比对（Compatibility Gate，需要 ../obsidian-admin-laravel/docs/api-contract.snapshot）
 pnpm contract:backend
 
 # 从 Laravel 后端（OpenAPI + 契约快照 + DTO + Resource）生成前端类型与官方 Axios SDK
@@ -104,9 +123,9 @@ pnpm typecheck:api
 pnpm test:unit
 ```
 
-CI 严格契约门禁（`.github/workflows/contract-gate.yml`）会要求：
+CI 严格契约门禁（`.github/workflows/contract-gate.yml`，包含 `Contract Gate` 与 `Compatibility Gate`）会要求：
 
-- 必须配置仓库 Secret：`BACKEND_REPO_TOKEN`
+- 仓库 Secret：`BACKEND_REPO_TOKEN`（私有后端仓库时必需；公有仓库可选）
 - 可选配置仓库 Variable：`BACKEND_REPO`（默认 `obsidianlabs-io/obsidian-admin-laravel`）
 - 若后端仓库缺少 `docs/api-contract.snapshot` 会直接失败（不再跳过）
 

@@ -28,18 +28,37 @@ Obsidian continues to evolve — rooted in resilience and order, marching steadf
 
 ## Features
 
-- **Cutting-edge technology application**: using the latest popular technology stack such as Vue3, Vite7, TypeScript, Pinia and UnoCSS.
-- **Clear project architecture**: using pnpm monorepo architecture, clear structure, elegant and easy to understand.
-- **Strict code specifications**: follow the [SoybeanJS specification](https://docs.soybeanjs.cn/standard), integrate eslint, prettier and simple-git-hooks to ensure the code is standardized.
-- **TypeScript**: support strict type checking to improve code maintainability.
-- **Rich theme configuration**: built-in a variety of theme configurations, perfectly integrated with UnoCSS.
-- **Built-in internationalization solution**: easily realize multi-language support.
-- **Automated file routing system**: automatically generate route import, declaration and type. For more details, please refer to [Elegant Router](https://github.com/soybeanjs/elegant-router).
-- **Flexible permission routing**: support both front-end static routing and back-end dynamic routing.
-- **Rich page components**: built-in a variety of pages and components, including 403, 404, 500 pages, as well as layout components, tag components, theme configuration components, etc.
-- **Command line tool**: built-in efficient command line tool, git commit, delete file, release, etc.
-- **Mobile adaptation**: perfectly support mobile terminal to realize adaptive layout.
+### Foundation Capabilities
 
+- **Modern tech stack**: built with `Vue 3`, `Vite 7`, `TypeScript`, `Pinia`, and `UnoCSS`.
+- **Clear project architecture**: organized as a `pnpm workspace / monorepo` for long-term maintainability and extension.
+- **Strict code standards**: follows the [SoybeanJS specification](https://docs.soybeanjs.cn/standard), with `ESLint`, `Prettier`, and `simple-git-hooks` integrated.
+- **Strict TypeScript**: supports strict type checking for safer refactoring and better maintainability.
+- **Rich theme configuration**: built-in theme options deeply integrated with `UnoCSS`.
+- **Built-in i18n solution**: easy multi-language support.
+- **Automated file routing system**: automatically generates route imports, declarations, and types. See [Elegant Router](https://github.com/soybeanjs/elegant-router) for details.
+- **Flexible permission routing**: supports both frontend static routes and backend dynamic routes.
+- **Rich page components**: includes multiple pages and components, such as `403`, `404`, `500`, layout components, tabs/tag components, and theme configuration components.
+- **Command-line tooling**: built-in tools for common workflows such as git commit, file cleanup, and release tasks.
+- **Mobile adaptation**: responsive layout support for mobile devices.
+
+### Obsidian Enhancements (Core Differentiators)
+
+- **End-to-end type safety**: SDK generation via `@hey-api/openapi-ts` improves frontend/backend type consistency.
+- **Frontend/backend contract gates**: built-in `Contract Gate` and `Compatibility Gate` checks reduce the risk of breaking API schema changes.
+- **SaaS multi-tenant support**: tenant context, tenant header switching, tenant-scoped access control, and view isolation.
+- **Real-time updates**: powered by `Laravel Echo / Pusher`.
+- **Schema-driven UI capabilities**: dynamic forms and tables for configurable CRUD interfaces.
+- **Enhanced route access control**: combined role / permission / tenant-scope checks.
+- **Runtime configuration collaboration**: supports runtime theme and i18n configuration, designed to work with backend config services.
+- **Contract-driven workflow**: recommended to be used together with `Obsidian Admin Laravel` for a complete contract-driven development experience.
+
+### Engineering Quality & Delivery
+
+- **Type and static quality gates**: `vue-tsc`, `ESLint`
+- **Testing capabilities**: unit tests (Node test runner + `tsx`) and E2E testing (Playwright)
+- **Supply-chain security checks**: `pnpm audit`, Dependency Review
+- **CI workflows**: GitHub Actions (`Lint` / `Contract Gate` (including `Compatibility Gate`) / `Supply Chain`)
 
 
 ## Usage
@@ -86,7 +105,7 @@ pnpm contract:check
 # Regenerate frontend API contract snapshot
 pnpm contract:write
 
-# Validate compatibility with Laravel backend snapshot (requires ../obsidian-admin-laravel/docs/api-contract.snapshot)
+# Validate compatibility with the Laravel backend snapshot (Compatibility Gate; requires ../obsidian-admin-laravel/docs/api-contract.snapshot)
 pnpm contract:backend
 
 # Generate frontend API typings and official Axios SDK from backend (OpenAPI + contract snapshot + DTO + Resource)
@@ -105,9 +124,9 @@ pnpm typecheck:api
 pnpm test:unit
 ```
 
-Strict CI contract gate (`.github/workflows/contract-gate.yml`) requires:
+Strict CI contract gate (`.github/workflows/contract-gate.yml`, including `Contract Gate` and `Compatibility Gate`) requires:
 
-- Repository secret: `BACKEND_REPO_TOKEN` (required)
+- Repository secret: `BACKEND_REPO_TOKEN` (required for private backend repos; optional for public backend repos)
 - Repository variable: `BACKEND_REPO` (optional, defaults to `obsidianlabs-io/obsidian-admin-laravel`)
 - Missing `docs/api-contract.snapshot` in the backend checkout fails the workflow (no skip path)
 
