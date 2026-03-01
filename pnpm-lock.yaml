@@ -115,8 +115,8 @@ importers:
         specifier: 66.6.0
         version: 66.6.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
       '@unocss/preset-icons':
-        specifier: 66.6.0
-        version: 66.6.0
+        specifier: 66.6.2
+        version: 66.6.2
       '@unocss/preset-uno':
         specifier: 66.6.0
         version: 66.6.0
@@ -1289,6 +1289,9 @@ packages:
   '@unocss/core@66.6.0':
     resolution: {integrity: sha512-Sxm7HmhsPIIzxbPnWembPyobuCeA5j9KxL+jIOW2c+kZiTFjHeju7vuVWX9jmAMMC+UyDuuCQ4yE+kBo3Y7SWQ==}
 
+  '@unocss/core@66.6.2':
+    resolution: {integrity: sha512-IOvN1BLRP0VTjjS5afSxmXhvKRDko2Shisp8spU+A9qiH1tXEFP3phyVevm/SuGwBHO1lC+SJ451/4oFkCAwJA==}
+
   '@unocss/eslint-config@66.6.0':
     resolution: {integrity: sha512-SSW5OtPX6vtWjNCOZoGPpVN3SDgfzLMaMN53mMlwZkFVdH+pAAtXok/DqDKq33hJX5Z9KA9xjUanNt4qi46EVQ==}
     engines: {node: '>=14'}
@@ -1303,8 +1306,8 @@ packages:
   '@unocss/inspector@66.6.0':
     resolution: {integrity: sha512-BvdY8ah+OTmzFMb+z8RZkaF15+PWRFt9S2bOARkkRBubybX9EE1rxM07l74kO5Dj16++CS4nO15XFq39pPoBvg==}
 
-  '@unocss/preset-icons@66.6.0':
-    resolution: {integrity: sha512-ObgmN9SsqU7TiClNvy+mQDyqzwOhlBXT0whXFp3iiBfSbnxUIDyf4Pr/2hwxnAWrCWCQj7xw2H0Y0sDtXq8XkA==}
+  '@unocss/preset-icons@66.6.2':
+    resolution: {integrity: sha512-FjhxvYX+21HefYdMIxJCq8C9v/K7fSlO1DMqDQgtrCp0/WvHyFncHILLOwp064M7m3AqzOVJx7Vw/zCvKy0Jrg==}
 
   '@unocss/preset-mini@66.6.0':
     resolution: {integrity: sha512-8bQyTuMJcry/z4JTDsQokI0187/1CJIkVx9hr9eEbKf/gWti538P8ktKEmHCf8IyT0At5dfP9oLHLCUzVetdbA==}
@@ -5532,6 +5535,8 @@ snapshots:
 
   '@unocss/core@66.6.0': {}
 
+  '@unocss/core@66.6.2': {}
+
   '@unocss/eslint-config@66.6.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)':
     dependencies:
       '@unocss/eslint-plugin': 66.6.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
@@ -5566,10 +5571,10 @@ snapshots:
       sirv: 3.0.2
       vue-flow-layout: 0.2.0
 
-  '@unocss/preset-icons@66.6.0':
+  '@unocss/preset-icons@66.6.2':
     dependencies:
       '@iconify/utils': 3.1.0
-      '@unocss/core': 66.6.0
+      '@unocss/core': 66.6.2
       ofetch: 1.5.1
 
   '@unocss/preset-mini@66.6.0':
@@ -5591,7 +5596,7 @@ snapshots:
 
   '@unocss/rule-utils@66.6.0':
     dependencies:
-      '@unocss/core': 66.6.0
+      '@unocss/core': 66.6.2
       magic-string: 0.30.21
 
   '@unocss/transformer-directives@66.6.0':
