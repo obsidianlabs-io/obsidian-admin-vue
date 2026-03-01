@@ -93,7 +93,7 @@
     "@sa/scripts": "workspace:*",
     "@sa/uno-preset": "workspace:*",
     "@soybeanjs/eslint-config": "1.7.5",
-    "@types/node": "25.3.0",
+    "@types/node": "25.3.3",
     "@types/nprogress": "0.2.3",
     "@unocss/eslint-config": "66.6.0",
     "@unocss/preset-icons": "66.6.0",
