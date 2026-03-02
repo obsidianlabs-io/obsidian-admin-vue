@@ -87,7 +87,7 @@
   },
   "devDependencies": {
     "@elegant-router/vue": "0.3.8",
-    "@hey-api/openapi-ts": "^0.92.4",
+    "@hey-api/openapi-ts": "^0.93.1",
     "@iconify/json": "2.2.430",
     "@playwright/test": "^1.58.2",
     "@sa/scripts": "workspace:*",
