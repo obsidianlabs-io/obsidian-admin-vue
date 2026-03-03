@@ -96,6 +96,16 @@ pnpm dev
 pnpm build
 ```
 
+**代码质量检查（推荐）**
+
+```bash
+# 本地统一检查入口（TypeScript + ESLint）
+pnpm check
+
+# CI 一致性检查入口（check + unit tests）
+pnpm check:ci
+```
+
 **接口契约检查（推荐）**
 
 ```bash

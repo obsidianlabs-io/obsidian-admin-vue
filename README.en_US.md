@@ -97,6 +97,16 @@ pnpm dev
 pnpm build
 ```
 
+**Code Quality Checks (Recommended)**
+
+```bash
+# Unified local quality checks (TypeScript + ESLint)
+pnpm check
+
+# CI parity checks (check + unit tests)
+pnpm check:ci
+```
+
 **API Contract Checks (Recommended)**
 
 ```bash

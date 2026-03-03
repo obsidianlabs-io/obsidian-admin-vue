@@ -35,6 +35,8 @@
     "api:types:check": "pnpm api:types && git diff --exit-code src/typings/api/openapi-generated.d.ts src/typings/api/backend-generated.d.ts src/service/api/generated",
     "build": "vite build --mode prod",
     "build:test": "vite build --mode test",
+    "check": "pnpm typecheck && pnpm lint:check",
+    "check:ci": "pnpm check && pnpm test:unit",
     "cleanup": "sa cleanup",
     "commit": "sa git-commit",
     "commit:zh": "sa git-commit -l=zh-cn",
@@ -126,7 +128,7 @@
   },
   "simple-git-hooks": {
     "commit-msg": "pnpm sa git-commit-verify",
-    "pre-commit": "pnpm typecheck && pnpm lint && git diff --exit-code"
+    "pre-commit": "pnpm check"
   },
   "website": "https://admin.soybeanjs.cn"
 }
