@@ -122,7 +122,7 @@ pnpm contract:backend
 pnpm api:types
 
 # 一键优先远程生成（优先读取 http://localhost:8080/docs/api.json，失败时回退本地 OpenAPI 文件）
-npm run generate-api
+pnpm generate-api
 
 # 仅使用官方 openapi-ts 生成 Axios SDK（输出到 src/service/api/generated）
 pnpm openapi:client:official

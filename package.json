@@ -2,6 +2,7 @@
   "name": "obsidian-admin-vue",
   "type": "module",
   "version": "1.1.0",
+  "packageManager": "pnpm@10.30.2",
   "description": "Obsidian Admin Vue administrative dashboard",
   "author": {
     "name": "Obsidian Labs",

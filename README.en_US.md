@@ -123,7 +123,7 @@ pnpm contract:backend
 pnpm api:types
 
 # One-command remote-first generation (tries http://localhost:8080/docs/api.json, falls back to local OpenAPI file)
-npm run generate-api
+pnpm generate-api
 
 # Generate official openapi-ts Axios SDK only (output: src/service/api/generated)
 pnpm openapi:client:official
