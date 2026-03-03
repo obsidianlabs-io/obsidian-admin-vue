@@ -51,20 +51,34 @@ export default defineConfig(configEnv => {
       rollupOptions: {
         output: {
           manualChunks(id): string | undefined {
-            if (!id.includes('node_modules')) {
+            const normalizedId = id.replace(/\\/g, '/');
+
+            if (!normalizedId.includes('/node_modules/')) {
               return undefined;
             }
 
-            if (id.includes('naive-ui')) {
+            if (/\/node_modules\/(naive-ui|@css-render|css-render)\//.test(normalizedId)) {
               return 'vendor-naive';
             }
 
-            if (id.includes('echarts')) {
+            if (/\/node_modules\/(echarts|zrender)\//.test(normalizedId)) {
               return 'vendor-echarts';
             }
 
-            if (id.includes('vue') || id.includes('pinia') || id.includes('vue-router') || id.includes('@vueuse')) {
-              return 'vendor-vue';
+            if (/\/node_modules\/(vue|vue-router|pinia)\//.test(normalizedId)) {
+              return 'vendor-vue-core';
+            }
+
+            if (/\/node_modules\/(@vueuse\/core|vue-i18n|@intlify)\//.test(normalizedId)) {
+              return 'vendor-vue-ecosystem';
+            }
+
+            if (/\/node_modules\/(laravel-echo|pusher-js)\//.test(normalizedId)) {
+              return 'vendor-realtime';
+            }
+
+            if (/\/node_modules\/(axios|dayjs|defu|json5)\//.test(normalizedId)) {
+              return 'vendor-http-utils';
             }
 
             return 'vendor';

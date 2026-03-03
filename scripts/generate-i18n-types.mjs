@@ -1,7 +1,8 @@
-import { writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { fileURLToPath } from 'node:url';
+import ts from 'typescript';
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(scriptDir, '..');
@@ -15,6 +16,82 @@ function isPlainObject(value) {
 
 function toPath(parent, key) {
   return parent ? `${parent}.${key}` : key;
+}
+
+function getPropertyName(node, sourceFile) {
+  if (ts.isIdentifier(node) || ts.isStringLiteral(node) || ts.isNumericLiteral(node)) {
+    return node.text;
+  }
+
+  throw new Error(`Unsupported i18n key syntax: ${node.getText(sourceFile)}`);
+}
+
+function parseLocaleShape(localePath) {
+  const content = readFileSync(localePath, 'utf8');
+  const sourceFile = ts.createSourceFile(localePath, content, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+
+  let localeObject = null;
+
+  function visit(node) {
+    if (
+      ts.isVariableDeclaration(node) &&
+      ts.isIdentifier(node.name) &&
+      node.name.text === 'local' &&
+      node.initializer
+    ) {
+      if (!ts.isObjectLiteralExpression(node.initializer)) {
+        throw new Error(`Expected "local" to be an object literal in ${localePath}`);
+      }
+      localeObject = node.initializer;
+      return;
+    }
+
+    ts.forEachChild(node, visit);
+  }
+
+  visit(sourceFile);
+
+  if (!localeObject) {
+    throw new Error(`Cannot find "local" locale object in ${localePath}`);
+  }
+
+  function parseObjectLiteral(objectLiteral) {
+    const result = {};
+
+    objectLiteral.properties.forEach(property => {
+      if (ts.isSpreadAssignment(property)) {
+        throw new Error(`Spread syntax is not supported in i18n locale: ${property.getText(sourceFile)}`);
+      }
+
+      if (!ts.isPropertyAssignment(property) || !property.name) {
+        throw new Error(`Unsupported property syntax in i18n locale: ${property.getText(sourceFile)}`);
+      }
+
+      const key = getPropertyName(property.name, sourceFile);
+      const valueNode = property.initializer;
+
+      if (ts.isObjectLiteralExpression(valueNode)) {
+        result[key] = parseObjectLiteral(valueNode);
+        return;
+      }
+
+      if (
+        ts.isStringLiteral(valueNode) ||
+        ts.isNoSubstitutionTemplateLiteral(valueNode) ||
+        ts.isTemplateExpression(valueNode)
+      ) {
+        result[key] = '';
+        return;
+      }
+
+      // Fallback: allow non-object literal leaves and still treat them as translatable leaf nodes.
+      result[key] = '';
+    });
+
+    return result;
+  }
+
+  return parseObjectLiteral(localeObject);
 }
 
 function compareLocaleShape(source, target) {
@@ -95,11 +172,9 @@ function toSchemaType(value, depth = 2) {
   return 'string';
 }
 
-async function main() {
-  const [{ default: sourceLocale }, { default: targetLocale }] = await Promise.all([
-    import(pathToFileURL(sourceLocalePath).href),
-    import(pathToFileURL(targetLocalePath).href)
-  ]);
+function main() {
+  const sourceLocale = parseLocaleShape(sourceLocalePath);
+  const targetLocale = parseLocaleShape(targetLocalePath);
 
   const issues = compareLocaleShape(sourceLocale, targetLocale);
   if (issues.length > 0) {
@@ -132,4 +207,4 @@ declare namespace App {
   console.log(`Generated i18n types at ${outputPath}`);
 }
 
-await main();
+main();

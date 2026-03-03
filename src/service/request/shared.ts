@@ -1,13 +1,35 @@
 import { useAuthStore } from '@/store/modules/auth';
-import { getRefreshToken, getToken, updateAuthTokens } from '@/store/modules/auth/shared';
+import { getCurrentTenantId, getRefreshToken, getToken, updateAuthTokens } from '@/store/modules/auth/shared';
+import { resolvePreferredLocale } from '@/locales/default-locale';
 import { fetchRefreshToken } from '../api';
 import type { RequestInstanceState } from './type';
+import { buildRequestContextHeaders, resolveServiceCodeConfig } from './context';
+
+const runtimeEnv = ((import.meta as ImportMeta & { env?: Partial<Env.ImportMeta> }).env ||
+  {}) as Partial<Env.ImportMeta>;
+const serviceCodeConfig = resolveServiceCodeConfig(runtimeEnv);
+
+export const serviceSuccessCode = serviceCodeConfig.successCode;
+export const logoutCodes = serviceCodeConfig.logoutCodes;
+export const modalLogoutCodes = serviceCodeConfig.modalLogoutCodes;
+export const expiredTokenCodes = serviceCodeConfig.expiredTokenCodes;
 
 export function getAuthorization() {
   const token = getToken();
   const Authorization = token ? `Bearer ${token}` : null;
 
   return Authorization;
+}
+
+export function createRequestContextHeaders(initialHeaders: Record<string, unknown> = {}) {
+  return buildRequestContextHeaders(
+    {
+      authorization: getAuthorization(),
+      locale: resolvePreferredLocale(),
+      tenantId: getCurrentTenantId()
+    },
+    initialHeaders
+  );
 }
 
 /** refresh token */

@@ -29,15 +29,45 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      pull-requests: read
     steps:
       - name: Checkout
         uses: actions/checkout@v6
 
+      - name: Detect e2e-relevant changes
+        id: changes
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            e2e:
+              - 'src/**'
+              - 'tests/e2e/**'
+              - 'playwright.config.ts'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - 'vite.config.ts'
+              - '.github/workflows/linter.yml'
+
+      - name: Skip e2e (no relevant changes)
+        if: steps.changes.outputs.e2e != 'true'
+        run: echo "No e2e-relevant file changes; skipping e2e."
+
       - name: Setup frontend toolchain
+        if: steps.changes.outputs.e2e == 'true'
         uses: ./.github/actions/setup-frontend
 
+      - name: Cache Playwright browsers
+        if: steps.changes.outputs.e2e == 'true'
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}
+
       - name: Install Playwright browser
+        if: steps.changes.outputs.e2e == 'true' && steps.playwright-cache.outputs.cache-hit != 'true'
         run: pnpm exec playwright install --with-deps chromium
 
       - name: E2E tests
+        if: steps.changes.outputs.e2e == 'true'
         run: pnpm test:e2e

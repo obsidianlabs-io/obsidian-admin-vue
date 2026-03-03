@@ -76,6 +76,7 @@ export default function useTable<ResponseData, ApiData, Column, Pagination exten
   const columnChecks = ref(getColumnChecks(columns())) as Ref<TableColumnCheck[]>;
 
   const $columns = computed(() => getColumns(columns(), columnChecks.value));
+  let requestSequence = 0;
 
   function reloadColumns() {
     const checkMap = new Map(columnChecks.value.map(col => [col.key, col.checked]));
@@ -91,10 +92,16 @@ export default function useTable<ResponseData, ApiData, Column, Pagination exten
   }
 
   async function getData() {
+    requestSequence += 1;
+    const requestId = requestSequence;
+
     try {
       startLoading();
 
       const response = await api();
+      if (requestId !== requestSequence) {
+        return;
+      }
 
       const transformed = transform(response);
 
@@ -104,7 +111,9 @@ export default function useTable<ResponseData, ApiData, Column, Pagination exten
 
       await onFetched?.(transformed);
     } finally {
-      endLoading();
+      if (requestId === requestSequence) {
+        endLoading();
+      }
     }
   }
 

@@ -1,16 +1,26 @@
 import type { AxiosResponse } from 'axios';
 import { BACKEND_ERROR_CODE, createFlatRequest, createRequest } from '@sa/axios';
-import { getCurrentTenantId, getToken } from '@/store/modules/auth/shared';
+import { getToken } from '@/store/modules/auth/shared';
 import { useAuthStore } from '@/store/modules/auth';
 import { getServiceBaseURL } from '@/utils/service';
 import { $t } from '@/locales';
-import { resolvePreferredLocale } from '@/locales/default-locale';
-import { getAuthorization, handleExpiredRequest, showErrorMsg } from './shared';
+import {
+  createRequestContextHeaders,
+  expiredTokenCodes,
+  getAuthorization,
+  handleExpiredRequest,
+  logoutCodes,
+  modalLogoutCodes,
+  serviceSuccessCode,
+  showErrorMsg
+} from './shared';
 import type { RequestInstanceState } from './type';
 
-const isHttpProxy = import.meta.env.DEV && import.meta.env.VITE_HTTP_PROXY === 'Y';
-const { baseURL, otherBaseURL } = getServiceBaseURL(import.meta.env, isHttpProxy);
-const apifoxToken = import.meta.env.DEV ? String(import.meta.env.VITE_APIFOX_TOKEN || '').trim() : '';
+const runtimeEnv = ((import.meta as ImportMeta & { env?: Partial<Env.ImportMeta> }).env ||
+  {}) as Partial<Env.ImportMeta>;
+const isHttpProxy = runtimeEnv.DEV === true && runtimeEnv.VITE_HTTP_PROXY === 'Y';
+const { baseURL, otherBaseURL } = getServiceBaseURL(runtimeEnv as Env.ImportMeta, isHttpProxy);
+const apifoxToken = runtimeEnv.DEV ? String(runtimeEnv.VITE_APIFOX_TOKEN || '').trim() : '';
 const defaultHeaders = apifoxToken ? { apifoxToken } : {};
 
 export const request = createFlatRequest(
@@ -27,26 +37,14 @@ export const request = createFlatRequest(
       return response.data.data;
     },
     async onRequest(config) {
-      const Authorization = getAuthorization();
-      Object.assign(config.headers, { Authorization });
-
-      const lang = resolvePreferredLocale();
-      Object.assign(config.headers, {
-        'Accept-Language': lang,
-        'X-Locale': lang
-      });
-
-      const tenantId = getCurrentTenantId();
-      if (tenantId) {
-        Object.assign(config.headers, { 'X-Tenant-Id': tenantId });
-      }
-
+      const headers = createRequestContextHeaders(config.headers as Record<string, unknown>);
+      Object.assign(config.headers, headers);
       return config;
     },
     isBackendSuccess(response) {
       // when the backend response code is "0000"(default), it means the request is success
       // to change this logic by yourself, you can modify the `VITE_SERVICE_SUCCESS_CODE` in `.env` file
-      return String(response.data.code) === import.meta.env.VITE_SERVICE_SUCCESS_CODE;
+      return String(response.data.code) === serviceSuccessCode;
     },
     async onBackendFail(response, instance) {
       const authStore = useAuthStore();
@@ -74,14 +72,12 @@ export const request = createFlatRequest(
       }
 
       // when the backend response code is in `logoutCodes`, it means the user will be logged out and redirected to login page
-      const logoutCodes = import.meta.env.VITE_SERVICE_LOGOUT_CODES?.split(',') || [];
       if (logoutCodes.includes(responseCode)) {
         await handlePassiveLogout();
         return null;
       }
 
       // when the backend response code is in `modalLogoutCodes`, it means the user will be logged out by displaying a modal
-      const modalLogoutCodes = import.meta.env.VITE_SERVICE_MODAL_LOGOUT_CODES?.split(',') || [];
       if (modalLogoutCodes.includes(responseCode) && isLogoutRequest) {
         await handlePassiveLogout();
         return null;
@@ -112,7 +108,6 @@ export const request = createFlatRequest(
 
       // when the backend response code is in `expiredTokenCodes`, it means the token is expired, and refresh token
       // the api `refreshToken` can not return error code in `expiredTokenCodes`, otherwise it will be a dead loop, should return `logoutCodes` or `modalLogoutCodes`
-      const expiredTokenCodes = import.meta.env.VITE_SERVICE_EXPIRED_TOKEN_CODES?.split(',') || [];
       if (expiredTokenCodes.includes(responseCode)) {
         const success = await handleExpiredRequest(request.state);
         if (success) {
@@ -138,13 +133,11 @@ export const request = createFlatRequest(
       }
 
       // the error message is displayed in the modal
-      const modalLogoutCodes = import.meta.env.VITE_SERVICE_MODAL_LOGOUT_CODES?.split(',') || [];
       if (modalLogoutCodes.includes(backendErrorCode)) {
         return;
       }
 
       // when the token is expired, refresh token and retry request, so no need to show error message
-      const expiredTokenCodes = import.meta.env.VITE_SERVICE_EXPIRED_TOKEN_CODES?.split(',') || [];
       if (expiredTokenCodes.includes(backendErrorCode)) {
         return;
       }
