@@ -1,4 +1,5 @@
 import { request } from '../request';
+import { createCrudHandlers } from './shared';
 
 /** Get team list */
 export function fetchGetTeamList(params: Api.Team.TeamListParams) {
@@ -16,28 +17,13 @@ export function fetchGetAllTeams(params?: { organizationId?: number }) {
   });
 }
 
+const teamCrud = createCrudHandlers<Api.Team.TeamPayload>('/team');
+
 /** Create team */
-export function fetchCreateTeam(data: Api.Team.TeamPayload) {
-  return request<unknown>({
-    url: '/team',
-    method: 'post',
-    data
-  });
-}
+export const fetchCreateTeam = teamCrud.create;
 
 /** Update team */
-export function fetchUpdateTeam(id: number, data: Api.Team.TeamPayload) {
-  return request<unknown>({
-    url: `/team/${id}`,
-    method: 'put',
-    data
-  });
-}
+export const fetchUpdateTeam = teamCrud.update;
 
 /** Delete team */
-export function fetchDeleteTeam(id: number) {
-  return request<unknown>({
-    url: `/team/${id}`,
-    method: 'delete'
-  });
-}
+export const fetchDeleteTeam = teamCrud.remove;

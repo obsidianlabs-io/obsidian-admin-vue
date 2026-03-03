@@ -18,17 +18,14 @@ import {
   getGlobalMenusByAuthRoutes,
   getGlobalMenusByBackend,
   getRouteKeyByMenuKey,
-  getRoutePermissionCodes,
-  getRouteRoleCodes,
   getSelectedMenuKeyPathByKey,
-  isRouteEnabled,
+  hasNamedRouteAccess,
   isRouteExistByRouteName,
-  isRouteNoTenantOnly,
-  isRouteTenantOnly,
   sortRoutesByOrder,
   transformMenuToSearchMenus,
   updateLocaleOfGlobalMenus
 } from './shared';
+import { dedupeRoutesByName } from './route-utils';
 
 export const useRouteStore = defineStore(SetupStoreId.Route, () => {
   const authStore = useAuthStore();
@@ -61,26 +58,14 @@ export const useRouteStore = defineStore(SetupStoreId.Route, () => {
   const constantRoutes = shallowRef<ElegantConstRoute[]>([]);
 
   function addConstantRoutes(routes: ElegantConstRoute[]) {
-    const constantRoutesMap = new Map<string, ElegantConstRoute>([]);
-
-    routes.forEach(route => {
-      constantRoutesMap.set(route.name, route);
-    });
-
-    constantRoutes.value = Array.from(constantRoutesMap.values());
+    constantRoutes.value = dedupeRoutesByName(routes);
   }
 
   /** auth routes */
   const authRoutes = shallowRef<ElegantConstRoute[]>([]);
 
   function addAuthRoutes(routes: ElegantConstRoute[]) {
-    const authRoutesMap = new Map<string, ElegantConstRoute>([]);
-
-    routes.forEach(route => {
-      authRoutesMap.set(route.name, route);
-    });
-
-    authRoutes.value = Array.from(authRoutesMap.values());
+    authRoutes.value = dedupeRoutesByName(routes);
   }
 
   const removeRouteFns: (() => void)[] = [];
@@ -319,21 +304,13 @@ export const useRouteStore = defineStore(SetupStoreId.Route, () => {
 
     if (authRouteMode.value === 'static') {
       const { authRoutes: staticAuthRoutes } = createStaticRoutes();
-      const routeRules = authStore.userInfo.routeRules;
-      const routeRoleCodes = getRouteRoleCodes(routeName, null, routeRules);
-      const routePermissionCodes = getRoutePermissionCodes(routeName, null, routeRules);
-      const noTenantOnly = isRouteNoTenantOnly(routeName, routeRules);
-      const tenantOnly = isRouteTenantOnly(routeName, routeRules);
-      const routeEnabled = isRouteEnabled(routeName, routeRules);
-      const hasRole = routeRoleCodes.some(role => authStore.userInfo.roles.includes(role));
-      const hasRoleAuth = routeRoleCodes.length === 0 || hasRole;
-      const hasCodePermission = routePermissionCodes.some(code => authStore.userInfo.buttons.includes(code));
-      const hasTenantScopeAuth =
-        (!noTenantOnly || !authStore.userInfo.currentTenantId) &&
-        (!tenantOnly || Boolean(authStore.userInfo.currentTenantId));
-      const canAccessRoute = Boolean(
-        routeEnabled && hasRoleAuth && hasTenantScopeAuth && (routePermissionCodes.length === 0 || hasCodePermission)
-      );
+      const canAccessRoute = hasNamedRouteAccess({
+        routeName,
+        roles: authStore.userInfo.roles,
+        permissionCodes: authStore.userInfo.buttons,
+        currentTenantId: authStore.userInfo.currentTenantId,
+        routeRules: authStore.userInfo.routeRules
+      });
 
       if (!canAccessRoute) {
         return true;

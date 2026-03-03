@@ -1,4 +1,5 @@
 import { request } from '../request';
+import { createCrudHandlers } from './shared';
 
 /**
  * Get language translation list
@@ -34,41 +35,13 @@ export function fetchGetRuntimeLocaleMessages(params: Api.Language.RuntimeMessag
   });
 }
 
-/**
- * Create translation item
- *
- * @param data Payload
- */
-export function fetchCreateLanguageTranslation(data: Api.Language.TranslationPayload) {
-  return request<unknown>({
-    url: '/language',
-    method: 'post',
-    data
-  });
-}
+const languageCrud = createCrudHandlers<Api.Language.TranslationPayload>('/language');
 
-/**
- * Update translation item
- *
- * @param id Translation id
- * @param data Payload
- */
-export function fetchUpdateLanguageTranslation(id: number, data: Api.Language.TranslationPayload) {
-  return request<unknown>({
-    url: `/language/${id}`,
-    method: 'put',
-    data
-  });
-}
+/** Create translation item */
+export const fetchCreateLanguageTranslation = languageCrud.create;
 
-/**
- * Delete translation item
- *
- * @param id Translation id
- */
-export function fetchDeleteLanguageTranslation(id: number) {
-  return request<unknown>({
-    url: `/language/${id}`,
-    method: 'delete'
-  });
-}
+/** Update translation item */
+export const fetchUpdateLanguageTranslation = languageCrud.update;
+
+/** Delete translation item */
+export const fetchDeleteLanguageTranslation = languageCrud.remove;

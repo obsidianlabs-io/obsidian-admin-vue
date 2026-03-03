@@ -1,5 +1,4 @@
 import { request } from '../request';
-import { callGenerated } from './generated-adapter';
 import {
   getAuthGetUserInfo,
   postAuth2FaDisable,
@@ -7,6 +6,8 @@ import {
   postAuth2FaSetup,
   postAuthLogin
 } from './generated';
+import type { ApiRequestResult } from './shared';
+import { callGeneratedApi } from './shared';
 
 /**
  * Login
@@ -19,10 +20,10 @@ export function fetchLogin(payload: {
   rememberMe: boolean;
   otpCode?: string;
   locale?: App.I18n.LangType | null;
-}): ReturnType<typeof request<Api.Auth.LoginToken>> {
+}): ApiRequestResult<Api.Auth.LoginToken> {
   const { userName, password, rememberMe, otpCode, locale } = payload;
 
-  return callGenerated<Api.Auth.LoginToken>(
+  return callGeneratedApi<Api.Auth.LoginToken>(
     () =>
       postAuthLogin({
         body: {
@@ -31,17 +32,17 @@ export function fetchLogin(payload: {
           rememberMe,
           otpCode,
           locale: locale || undefined
-        } as any
-      }),
+        }
+      } as Parameters<typeof postAuthLogin>[0]),
     {
       silentCodes: ['4020']
     }
-  ) as ReturnType<typeof request<Api.Auth.LoginToken>>;
+  );
 }
 
 /** Get user info */
-export function fetchGetUserInfo(): ReturnType<typeof request<Api.Auth.UserInfo>> {
-  return callGenerated<Api.Auth.UserInfo>(() => getAuthGetUserInfo()) as ReturnType<typeof request<Api.Auth.UserInfo>>;
+export function fetchGetUserInfo(): ApiRequestResult<Api.Auth.UserInfo> {
+  return callGeneratedApi<Api.Auth.UserInfo>(() => getAuthGetUserInfo());
 }
 
 /** Get backend-driven menus and route rules */
@@ -183,9 +184,7 @@ export function fetchCustomBackendError(code: string, msg: string) {
  * Setup Two-Factor Authentication
  */
 export function fetchSetupTwoFactor() {
-  return callGenerated<{ secret: string; otpauthUrl: string; enabled: boolean }>(() =>
-    postAuth2FaSetup({} as any)
-  ) as ReturnType<typeof request<{ secret: string; otpauthUrl: string; enabled: boolean }>>;
+  return callGeneratedApi<{ secret: string; otpauthUrl: string; enabled: boolean }>(() => postAuth2FaSetup());
 }
 
 /**
@@ -194,9 +193,11 @@ export function fetchSetupTwoFactor() {
  * @param otpCode OTP Code
  */
 export function fetchEnableTwoFactor(otpCode: string) {
-  return callGenerated<{ enabled: boolean }>(() => postAuth2FaEnable({ body: { otpCode } } as any)) as ReturnType<
-    typeof request<{ enabled: boolean }>
-  >;
+  return callGeneratedApi<{ enabled: boolean }>(() =>
+    postAuth2FaEnable({
+      body: { otpCode }
+    } as unknown as Parameters<typeof postAuth2FaEnable>[0])
+  );
 }
 
 /**
@@ -205,7 +206,9 @@ export function fetchEnableTwoFactor(otpCode: string) {
  * @param otpCode OTP Code
  */
 export function fetchDisableTwoFactor(otpCode: string) {
-  return callGenerated<{ enabled: boolean }>(() => postAuth2FaDisable({ body: { otpCode } } as any)) as ReturnType<
-    typeof request<{ enabled: boolean }>
-  >;
+  return callGeneratedApi<{ enabled: boolean }>(() =>
+    postAuth2FaDisable({
+      body: { otpCode }
+    } as unknown as Parameters<typeof postAuth2FaDisable>[0])
+  );
 }

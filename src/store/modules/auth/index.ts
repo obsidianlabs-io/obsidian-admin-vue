@@ -173,11 +173,16 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
       locale: loginSelectedLocale
     });
 
-    if (
-      error?.code === '4020' ||
-      (error as any)?.response?.data?.code === 4020 ||
-      (error as any)?.response?.data?.code === '4020'
-    ) {
+    function resolveBackendCode(errorLike: unknown): string {
+      if (!errorLike || typeof errorLike !== 'object') {
+        return '';
+      }
+
+      const maybeResponse = (errorLike as { response?: { data?: { code?: unknown } } }).response;
+      return String(maybeResponse?.data?.code ?? '');
+    }
+
+    if (error?.code === '4020' || resolveBackendCode(error) === '4020') {
       endLoading();
       return '2fa_required';
     }

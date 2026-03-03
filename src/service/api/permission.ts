@@ -1,6 +1,6 @@
 import { request } from '../request';
-import { callGenerated } from './generated-adapter';
 import { getPermissionList } from './generated';
+import { callGeneratedApi, createCrudHandlers } from './shared';
 
 /**
  * Get permission list
@@ -10,9 +10,11 @@ import { getPermissionList } from './generated';
 export function fetchGetPermissionList(
   params: Api.Permission.PermissionListParams
 ): ReturnType<typeof request<Api.Permission.PermissionList>> {
-  return callGenerated<Api.Permission.PermissionList>(() => getPermissionList({ query: params } as any)) as ReturnType<
-    typeof request<Api.Permission.PermissionList>
-  >;
+  return callGeneratedApi<Api.Permission.PermissionList>(() =>
+    getPermissionList({
+      query: params
+    } as unknown as Parameters<typeof getPermissionList>[0])
+  );
 }
 
 /** Get all active permissions */
@@ -22,41 +24,13 @@ export function fetchGetAllPermissions() {
   });
 }
 
-/**
- * Create permission
- *
- * @param data Payload
- */
-export function fetchCreatePermission(data: Api.Permission.PermissionPayload) {
-  return request<unknown>({
-    url: '/permission',
-    method: 'post',
-    data
-  });
-}
+const permissionCrud = createCrudHandlers<Api.Permission.PermissionPayload>('/permission');
 
-/**
- * Update permission
- *
- * @param id Permission id
- * @param data Payload
- */
-export function fetchUpdatePermission(id: number, data: Api.Permission.PermissionPayload) {
-  return request<unknown>({
-    url: `/permission/${id}`,
-    method: 'put',
-    data
-  });
-}
+/** Create permission */
+export const fetchCreatePermission = permissionCrud.create;
 
-/**
- * Delete permission
- *
- * @param id Permission id
- */
-export function fetchDeletePermission(id: number) {
-  return request<unknown>({
-    url: `/permission/${id}`,
-    method: 'delete'
-  });
-}
+/** Update permission */
+export const fetchUpdatePermission = permissionCrud.update;
+
+/** Delete permission */
+export const fetchDeletePermission = permissionCrud.remove;

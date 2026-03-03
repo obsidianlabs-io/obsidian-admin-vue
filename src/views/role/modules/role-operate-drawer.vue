@@ -4,6 +4,7 @@ import { jsonClone } from '@sa/utils';
 import { getEnableStatusLabel, getEnableStatusOptions, getEnableStatusTagType } from '@/constants/common';
 import { fetchCreateRole, fetchGetRoleAssignablePermissions, fetchUpdateRole } from '@/service/api';
 import { useFormRules, useNaiveForm } from '@/hooks/common/form';
+import { useOperateModal } from '@/hooks/business/operate-modal';
 import { $t } from '@/locales';
 import FormModalWrapper from '@/components/advanced/form-modal-wrapper.vue';
 
@@ -37,7 +38,15 @@ const visible = defineModel<boolean>('visible', {
 const { formRef, validate, restoreValidation } = useNaiveForm();
 const { defaultRequiredRule } = useFormRules();
 
-const isViewMode = computed(() => Boolean(props.readOnly));
+const { isViewMode, title } = useOperateModal({
+  operateType: () => props.operateType,
+  readOnly: () => props.readOnly,
+  titles: {
+    add: $t('page.role.addTitle'),
+    edit: $t('page.role.editTitle'),
+    view: $t('page.role.viewTitle')
+  }
+});
 const enableStatusOptions = computed(() => getEnableStatusOptions());
 const resolvedActorRoleLevel = computed(() => {
   const level = Number(props.actorRoleLevel ?? 0);
@@ -63,18 +72,6 @@ const levelAllowedRangeHint = computed(() =>
         current: String(resolvedActorRoleLevel.value)
       })
 );
-
-const title = computed(() => {
-  if (isViewMode.value) {
-    return $t('page.role.viewTitle');
-  }
-
-  const titles: Record<NaiveUI.TableOperateType, string> = {
-    add: $t('page.role.addTitle'),
-    edit: $t('page.role.editTitle')
-  };
-  return titles[props.operateType];
-});
 
 interface Model {
   roleCode: string;

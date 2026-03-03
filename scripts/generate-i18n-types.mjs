@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
@@ -26,33 +26,101 @@ function getPropertyName(node, sourceFile) {
   throw new Error(`Unsupported i18n key syntax: ${node.getText(sourceFile)}`);
 }
 
-function parseLocaleShape(localePath) {
-  const content = readFileSync(localePath, 'utf8');
-  const sourceFile = ts.createSourceFile(localePath, content, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+function unwrapExpression(node) {
+  if (ts.isAsExpression(node) || ts.isSatisfiesExpression(node) || ts.isParenthesizedExpression(node)) {
+    return unwrapExpression(node.expression);
+  }
 
-  let localeObject = null;
+  return node;
+}
 
-  function visit(node) {
-    if (
-      ts.isVariableDeclaration(node) &&
-      ts.isIdentifier(node.name) &&
-      node.name.text === 'local' &&
-      node.initializer
-    ) {
-      if (!ts.isObjectLiteralExpression(node.initializer)) {
-        throw new Error(`Expected "local" to be an object literal in ${localePath}`);
+function resolveRelativeModule(fromFilePath, moduleSpecifier) {
+  const basePath = path.resolve(path.dirname(fromFilePath), moduleSpecifier);
+  const candidates = [
+    basePath,
+    `${basePath}.ts`,
+    `${basePath}.mts`,
+    `${basePath}.tsx`,
+    `${basePath}.js`,
+    path.join(basePath, 'index.ts')
+  ];
+
+  const resolved = candidates.find(candidate => existsSync(candidate));
+  if (!resolved) {
+    throw new Error(`Cannot resolve import "${moduleSpecifier}" from ${fromFilePath}`);
+  }
+
+  return resolved;
+}
+
+const localeShapeCache = new Map();
+
+function parseLocaleShapeFromFile(filePath) {
+  const normalizedPath = path.resolve(filePath);
+  const cached = localeShapeCache.get(normalizedPath);
+  if (cached) {
+    return cached;
+  }
+
+  const content = readFileSync(normalizedPath, 'utf8');
+  const sourceFile = ts.createSourceFile(normalizedPath, content, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+
+  const variableMap = new Map();
+  const importMap = new Map();
+  let defaultExportExpression = null;
+
+  sourceFile.statements.forEach(statement => {
+    if (ts.isImportDeclaration(statement)) {
+      const importClause = statement.importClause;
+      if (
+        importClause?.name &&
+        ts.isStringLiteral(statement.moduleSpecifier) &&
+        statement.moduleSpecifier.text.startsWith('.')
+      ) {
+        importMap.set(importClause.name.text, resolveRelativeModule(normalizedPath, statement.moduleSpecifier.text));
       }
-      localeObject = node.initializer;
+
       return;
     }
 
-    ts.forEachChild(node, visit);
+    if (ts.isVariableStatement(statement)) {
+      statement.declarationList.declarations.forEach(declaration => {
+        if (ts.isIdentifier(declaration.name) && declaration.initializer) {
+          variableMap.set(declaration.name.text, declaration.initializer);
+        }
+      });
+      return;
+    }
+
+    if (ts.isExportAssignment(statement)) {
+      defaultExportExpression = statement.expression;
+    }
+  });
+
+  const rootExpression = variableMap.get('local') || defaultExportExpression;
+  if (!rootExpression) {
+    throw new Error(`Cannot find "local" locale object in ${normalizedPath}`);
   }
 
-  visit(sourceFile);
+  const resolvingIdentifiers = new Set();
 
-  if (!localeObject) {
-    throw new Error(`Cannot find "local" locale object in ${localePath}`);
+  function resolveIdentifier(name) {
+    if (resolvingIdentifiers.has(name)) {
+      throw new Error(`Circular locale reference detected for identifier "${name}" in ${normalizedPath}`);
+    }
+
+    if (variableMap.has(name)) {
+      resolvingIdentifiers.add(name);
+      const result = parseExpression(variableMap.get(name));
+      resolvingIdentifiers.delete(name);
+      return result;
+    }
+
+    if (importMap.has(name)) {
+      return parseLocaleShapeFromFile(importMap.get(name));
+    }
+
+    throw new Error(`Cannot resolve identifier "${name}" in ${normalizedPath}`);
   }
 
   function parseObjectLiteral(objectLiteral) {
@@ -60,7 +128,19 @@ function parseLocaleShape(localePath) {
 
     objectLiteral.properties.forEach(property => {
       if (ts.isSpreadAssignment(property)) {
-        throw new Error(`Spread syntax is not supported in i18n locale: ${property.getText(sourceFile)}`);
+        const spreadValue = parseExpression(property.expression);
+        if (!isPlainObject(spreadValue)) {
+          throw new Error(`Spread source must be object in ${normalizedPath}: ${property.getText(sourceFile)}`);
+        }
+        Object.assign(result, spreadValue);
+        return;
+      }
+
+      if (ts.isShorthandPropertyAssignment(property)) {
+        const key = getPropertyName(property.name, sourceFile);
+        const resolvedValue = resolveIdentifier(property.name.text);
+        result[key] = isPlainObject(resolvedValue) ? resolvedValue : '';
+        return;
       }
 
       if (!ts.isPropertyAssignment(property) || !property.name) {
@@ -68,30 +148,51 @@ function parseLocaleShape(localePath) {
       }
 
       const key = getPropertyName(property.name, sourceFile);
-      const valueNode = property.initializer;
-
-      if (ts.isObjectLiteralExpression(valueNode)) {
-        result[key] = parseObjectLiteral(valueNode);
-        return;
-      }
-
-      if (
-        ts.isStringLiteral(valueNode) ||
-        ts.isNoSubstitutionTemplateLiteral(valueNode) ||
-        ts.isTemplateExpression(valueNode)
-      ) {
-        result[key] = '';
-        return;
-      }
-
-      // Fallback: allow non-object literal leaves and still treat them as translatable leaf nodes.
-      result[key] = '';
+      const resolvedValue = parseExpression(property.initializer);
+      result[key] = isPlainObject(resolvedValue) ? resolvedValue : '';
     });
 
     return result;
   }
 
-  return parseObjectLiteral(localeObject);
+  function parseExpression(expressionNode) {
+    const node = unwrapExpression(expressionNode);
+
+    if (ts.isObjectLiteralExpression(node)) {
+      return parseObjectLiteral(node);
+    }
+
+    if (ts.isIdentifier(node)) {
+      return resolveIdentifier(node.text);
+    }
+
+    if (
+      ts.isStringLiteral(node) ||
+      ts.isNoSubstitutionTemplateLiteral(node) ||
+      ts.isTemplateExpression(node) ||
+      ts.isNumericLiteral(node) ||
+      node.kind === ts.SyntaxKind.TrueKeyword ||
+      node.kind === ts.SyntaxKind.FalseKeyword ||
+      node.kind === ts.SyntaxKind.NullKeyword
+    ) {
+      return '';
+    }
+
+    // Fallback: allow non-object literal leaves and still treat them as translatable leaf nodes.
+    return '';
+  }
+
+  const localeShape = parseExpression(rootExpression);
+  if (!isPlainObject(localeShape)) {
+    throw new Error(`Locale root must resolve to object in ${normalizedPath}`);
+  }
+
+  localeShapeCache.set(normalizedPath, localeShape);
+  return localeShape;
+}
+
+function parseLocaleShape(localePath) {
+  return parseLocaleShapeFromFile(localePath);
 }
 
 function compareLocaleShape(source, target) {

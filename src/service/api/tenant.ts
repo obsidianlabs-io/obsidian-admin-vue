@@ -1,6 +1,6 @@
 import { request } from '../request';
-import { callGenerated } from './generated-adapter';
 import { getTenantList } from './generated';
+import { callGeneratedApi, createCrudHandlers } from './shared';
 
 /**
  * Get tenant list
@@ -10,9 +10,11 @@ import { getTenantList } from './generated';
 export function fetchGetTenantList(
   params: Api.Tenant.TenantListParams
 ): ReturnType<typeof request<Api.Tenant.TenantList>> {
-  return callGenerated<Api.Tenant.TenantList>(() => getTenantList({ query: params } as any)) as ReturnType<
-    typeof request<Api.Tenant.TenantList>
-  >;
+  return callGeneratedApi<Api.Tenant.TenantList>(() =>
+    getTenantList({
+      query: params
+    } as unknown as Parameters<typeof getTenantList>[0])
+  );
 }
 
 /** Get all active tenants */
@@ -22,41 +24,13 @@ export function fetchGetAllTenants() {
   });
 }
 
-/**
- * Create tenant
- *
- * @param data Payload
- */
-export function fetchCreateTenant(data: Api.Tenant.TenantPayload) {
-  return request<unknown>({
-    url: '/tenant',
-    method: 'post',
-    data
-  });
-}
+const tenantCrud = createCrudHandlers<Api.Tenant.TenantPayload>('/tenant');
 
-/**
- * Update tenant
- *
- * @param id Tenant id
- * @param data Payload
- */
-export function fetchUpdateTenant(id: number, data: Api.Tenant.TenantPayload) {
-  return request<unknown>({
-    url: `/tenant/${id}`,
-    method: 'put',
-    data
-  });
-}
+/** Create tenant */
+export const fetchCreateTenant = tenantCrud.create;
 
-/**
- * Delete tenant
- *
- * @param id Tenant id
- */
-export function fetchDeleteTenant(id: number) {
-  return request<unknown>({
-    url: `/tenant/${id}`,
-    method: 'delete'
-  });
-}
+/** Update tenant */
+export const fetchUpdateTenant = tenantCrud.update;
+
+/** Delete tenant */
+export const fetchDeleteTenant = tenantCrud.remove;

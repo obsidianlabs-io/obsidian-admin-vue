@@ -9,15 +9,11 @@ import { localStg } from '@/utils/storage';
 import { SetupStoreId } from '@/enum';
 import { useAuthStore } from '../auth';
 import { getToken } from '../auth/shared';
+import { isThemeScheme } from './remote-utils';
 import {
-  applyBooleanSetting,
-  applyEnumSetting,
-  clampInteger,
-  isLayoutMode,
-  isPageAnimateMode,
-  isScrollMode,
-  isThemeScheme
-} from './remote-utils';
+  applyRemoteThemeConfig as applyRemoteThemeConfigToStore,
+  applyRemoteThemeSchema as applyRemoteThemeSchemaToStore
+} from './remote-apply';
 import {
   addThemeVarsToGlobal,
   createThemeToken,
@@ -111,113 +107,25 @@ export const useThemeStore = defineStore(SetupStoreId.Theme, () => {
   }
 
   function applyRemoteThemeSchema(themeSchema?: UnionKey.ThemeScheme | null) {
-    if (!isThemeScheme(themeSchema)) {
-      return;
-    }
-
-    applyingRemoteThemeScheme.value = true;
-    lastSyncedThemeScheme.value = themeSchema;
-    settings.value.themeScheme = themeSchema;
-
-    queueMicrotask(() => {
-      applyingRemoteThemeScheme.value = false;
-    });
+    applyRemoteThemeSchemaToStore(
+      {
+        settings,
+        applyingRemoteThemeScheme,
+        lastSyncedThemeScheme
+      },
+      themeSchema
+    );
   }
 
   function applyRemoteThemeConfig(config?: Api.Theme.Config | null) {
-    if (!config) {
-      return;
-    }
-
-    applyingRemoteThemeScheme.value = true;
-
-    applyEnumSetting(config.themeScheme, isThemeScheme, nextThemeScheme => {
-      settings.value.themeScheme = nextThemeScheme;
-      lastSyncedThemeScheme.value = nextThemeScheme;
-    });
-
-    const nextThemeColor = String(config.themeColor || '').trim();
-    if (/^#(?:[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(nextThemeColor)) {
-      settings.value.themeColor = nextThemeColor;
-    }
-
-    const themeRadius = clampInteger(config.themeRadius, 0, 16);
-    if (themeRadius !== null) {
-      settings.value.themeRadius = themeRadius;
-    }
-
-    const headerHeight = clampInteger(config.headerHeight, 48, 80);
-    if (headerHeight !== null) {
-      settings.value.header.height = headerHeight;
-    }
-
-    const siderWidth = clampInteger(config.siderWidth, 180, 320);
-    if (siderWidth !== null) {
-      settings.value.sider.width = siderWidth;
-    }
-
-    const siderCollapsedWidth = clampInteger(config.siderCollapsedWidth, 48, 120);
-    if (siderCollapsedWidth !== null) {
-      settings.value.sider.collapsedWidth = siderCollapsedWidth;
-    }
-
-    const footerHeight = clampInteger(config.footerHeight, 32, 96);
-    if (footerHeight !== null) {
-      settings.value.footer.height = footerHeight;
-    }
-
-    applyEnumSetting(config.layoutMode, isLayoutMode, nextMode => {
-      settings.value.layout.mode = nextMode;
-    });
-
-    applyEnumSetting(config.scrollMode, isScrollMode, nextScrollMode => {
-      settings.value.layout.scrollMode = nextScrollMode;
-    });
-
-    applyEnumSetting(config.pageAnimateMode, isPageAnimateMode, nextPageAnimateMode => {
-      settings.value.page.animateMode = nextPageAnimateMode;
-    });
-
-    applyBooleanSetting(config.darkSider, next => {
-      settings.value.sider.inverted = next;
-    });
-    applyBooleanSetting(config.themeSchemaVisible, next => {
-      settings.value.header.themeSchema.visible = next;
-    });
-    applyBooleanSetting(config.headerFullscreenVisible, next => {
-      settings.value.header.fullscreen.visible = next;
-    });
-    applyBooleanSetting(config.tabVisible, next => {
-      settings.value.tab.visible = next;
-    });
-    applyBooleanSetting(config.tabFullscreenVisible, next => {
-      settings.value.tab.fullscreen.visible = next;
-    });
-    applyBooleanSetting(config.breadcrumbVisible, next => {
-      settings.value.header.breadcrumb.visible = next;
-    });
-    applyBooleanSetting(config.footerVisible, next => {
-      settings.value.footer.visible = next;
-    });
-    applyBooleanSetting(config.multilingualVisible, next => {
-      settings.value.header.multilingual.visible = next;
-    });
-    applyBooleanSetting(config.globalSearchVisible, next => {
-      settings.value.header.globalSearch.visible = next;
-    });
-    applyBooleanSetting(config.themeConfigVisible, next => {
-      settings.value.header.themeConfig.visible = next;
-    });
-    applyBooleanSetting(config.pageAnimate, next => {
-      settings.value.page.animate = next;
-    });
-    applyBooleanSetting(config.fixedHeaderAndTab, next => {
-      settings.value.fixedHeaderAndTab = next;
-    });
-
-    queueMicrotask(() => {
-      applyingRemoteThemeScheme.value = false;
-    });
+    applyRemoteThemeConfigToStore(
+      {
+        settings,
+        applyingRemoteThemeScheme,
+        lastSyncedThemeScheme
+      },
+      config
+    );
   }
 
   /**

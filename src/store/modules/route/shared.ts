@@ -3,8 +3,10 @@ import type { ElegantConstRoute, LastLevelRouteKey, RouteKey, RouteMap } from '@
 import { useSvgIcon } from '@/hooks/common/icon';
 import { $t } from '@/locales';
 import { type RouteAuthFilterContext, hasRouteAccess } from './auth-access';
+import { resolveBackendMenuI18nKey, resolveMenuI18nFallbackByKey } from './menu-i18n';
 
 export {
+  hasNamedRouteAccess,
   type RouteAuthFilterContext,
   getRoutePermissionCodes,
   getRouteRoleCodes,
@@ -13,35 +15,6 @@ export {
   isRouteNoTenantOnly,
   isRouteTenantOnly
 } from './auth-access';
-
-const MENU_I18N_FALLBACK_BY_KEY: Record<string, App.I18n.I18nKey> = {
-  dashboard: 'route.dashboard',
-  tenant: 'route.tenant',
-  user: 'route.user',
-  role: 'route.role',
-  'audit-policy': 'route.audit-policy',
-  audit: 'route.audit',
-  permission: 'route.permission',
-  language: 'route.language',
-  'access-management': 'menu.accessManagement',
-  'platform-settings': 'menu.systemSettings'
-};
-
-function resolveBackendMenuI18nKey(item: Api.Auth.MenuItem): App.I18n.I18nKey | undefined {
-  if (item.i18nKey) {
-    return item.i18nKey;
-  }
-
-  if (item.key && MENU_I18N_FALLBACK_BY_KEY[item.key]) {
-    return MENU_I18N_FALLBACK_BY_KEY[item.key];
-  }
-
-  if (item.routeKey && MENU_I18N_FALLBACK_BY_KEY[item.routeKey]) {
-    return MENU_I18N_FALLBACK_BY_KEY[item.routeKey];
-  }
-
-  return undefined;
-}
 
 /**
  * Filter auth routes by roles
@@ -175,7 +148,7 @@ export function updateLocaleOfGlobalMenus(menus: App.Global.Menu[]) {
 
   menus.forEach(menu => {
     const { i18nKey, key, label, children } = menu;
-    const resolvedI18nKey = i18nKey || MENU_I18N_FALLBACK_BY_KEY[key];
+    const resolvedI18nKey = i18nKey || resolveMenuI18nFallbackByKey(key);
 
     const newLabel = resolvedI18nKey ? $t(resolvedI18nKey) : label;
 

@@ -1,4 +1,5 @@
 import { request } from '../request';
+import { createCrudHandlers } from './shared';
 
 /** Get organization list */
 export function fetchGetOrganizationList(params: Api.Organization.OrganizationListParams) {
@@ -15,28 +16,13 @@ export function fetchGetAllOrganizations() {
   });
 }
 
+const organizationCrud = createCrudHandlers<Api.Organization.OrganizationPayload>('/organization');
+
 /** Create organization */
-export function fetchCreateOrganization(data: Api.Organization.OrganizationPayload) {
-  return request<unknown>({
-    url: '/organization',
-    method: 'post',
-    data
-  });
-}
+export const fetchCreateOrganization = organizationCrud.create;
 
 /** Update organization */
-export function fetchUpdateOrganization(id: number, data: Api.Organization.OrganizationPayload) {
-  return request<unknown>({
-    url: `/organization/${id}`,
-    method: 'put',
-    data
-  });
-}
+export const fetchUpdateOrganization = organizationCrud.update;
 
 /** Delete organization */
-export function fetchDeleteOrganization(id: number) {
-  return request<unknown>({
-    url: `/organization/${id}`,
-    method: 'delete'
-  });
-}
+export const fetchDeleteOrganization = organizationCrud.remove;

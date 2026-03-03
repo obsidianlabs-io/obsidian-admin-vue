@@ -1,6 +1,6 @@
-import { request } from '../request';
-import { callGenerated } from './generated-adapter';
+import type { request } from '../request';
 import { getUserList } from './generated';
+import { callGeneratedApi, createCrudHandlers } from './shared';
 
 /**
  * Get user list
@@ -8,46 +8,20 @@ import { getUserList } from './generated';
  * @param params Query params
  */
 export function fetchGetUserList(params: Api.User.UserListParams): ReturnType<typeof request<Api.User.UserList>> {
-  return callGenerated<Api.User.UserList>(() => getUserList({ query: params } as any)) as ReturnType<
-    typeof request<Api.User.UserList>
-  >;
+  return callGeneratedApi<Api.User.UserList>(() =>
+    getUserList({
+      query: params
+    } as unknown as Parameters<typeof getUserList>[0])
+  );
 }
 
-/**
- * Create user
- *
- * @param data Payload
- */
-export function fetchCreateUser(data: Api.User.UserPayload) {
-  return request<unknown>({
-    url: '/user',
-    method: 'post',
-    data
-  });
-}
+const userCrud = createCrudHandlers<Api.User.UserPayload>('/user');
 
-/**
- * Update user
- *
- * @param id User id
- * @param data Payload
- */
-export function fetchUpdateUser(id: number, data: Api.User.UserPayload) {
-  return request<unknown>({
-    url: `/user/${id}`,
-    method: 'put',
-    data
-  });
-}
+/** Create user */
+export const fetchCreateUser = userCrud.create;
 
-/**
- * Delete user
- *
- * @param id User id
- */
-export function fetchDeleteUser(id: number) {
-  return request<unknown>({
-    url: `/user/${id}`,
-    method: 'delete'
-  });
-}
+/** Update user */
+export const fetchUpdateUser = userCrud.update;
+
+/** Delete user */
+export const fetchDeleteUser = userCrud.remove;

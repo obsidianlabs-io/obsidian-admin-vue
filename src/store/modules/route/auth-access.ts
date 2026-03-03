@@ -16,6 +16,10 @@ interface RouteAccessOptions {
   context: RouteAuthFilterContext;
 }
 
+export interface RouteNamedAccessContext extends RouteAuthFilterContext {
+  routeName: string | symbol | null | undefined;
+}
+
 function getRouteRule(routeName?: string | symbol | null, routeRules?: RouteRuleMap): Api.Auth.RouteRule | null {
   if (!routeRules || typeof routeName !== 'string') {
     return null;
@@ -82,4 +86,11 @@ export function hasRouteAccess(options: RouteAccessOptions): boolean {
   const hasTenantScopeAuth = (!noTenantOnly || !currentTenantId) && (!tenantOnly || Boolean(currentTenantId));
 
   return enabled && hasRoleAuth && hasPermissionAuth && hasTenantScopeAuth;
+}
+
+export function hasNamedRouteAccess(context: RouteNamedAccessContext): boolean {
+  return hasRouteAccess({
+    routeName: context.routeName,
+    context
+  });
 }

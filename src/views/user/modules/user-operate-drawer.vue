@@ -11,6 +11,7 @@ import {
 } from '@/service/api';
 import { useAuthStore } from '@/store/modules/auth';
 import { useFormRules, useNaiveForm } from '@/hooks/common/form';
+import { useOperateModal } from '@/hooks/business/operate-modal';
 import { $t } from '@/locales';
 import FormModalWrapper from '@/components/advanced/form-modal-wrapper.vue';
 
@@ -43,22 +44,17 @@ const { formRef, validate, restoreValidation } = useNaiveForm();
 const { defaultRequiredRule, patternRules } = useFormRules();
 const authStore = useAuthStore();
 
-const isViewMode = computed(() => Boolean(props.readOnly));
+const { isViewMode, title } = useOperateModal({
+  operateType: () => props.operateType,
+  readOnly: () => props.readOnly,
+  titles: {
+    add: $t('page.user.addTitle'),
+    edit: $t('page.user.editTitle'),
+    view: $t('page.user.viewTitle')
+  }
+});
 const enableStatusOptions = computed(() => getEnableStatusOptions());
 const hasTenantScope = computed(() => Boolean(authStore.userInfo.currentTenantId));
-
-const title = computed(() => {
-  if (isViewMode.value) {
-    return $t('page.user.viewTitle');
-  }
-
-  const titles: Record<NaiveUI.TableOperateType, string> = {
-    add: $t('page.user.addTitle'),
-    edit: $t('page.user.editTitle')
-  };
-
-  return titles[props.operateType];
-});
 
 type Model = Pick<Api.User.UserRecord, 'userName' | 'email' | 'status'>;
 type UserFormModel = Model & {
