@@ -1,5 +1,5 @@
 import { request } from '../request';
-import { createCrudHandlers } from './shared';
+import { buildResourceItemUrl } from './url';
 
 /**
  * Get tenant list
@@ -22,13 +22,28 @@ export function fetchGetAllTenants() {
   });
 }
 
-const tenantCrud = createCrudHandlers<Api.Tenant.TenantPayload>('/tenant');
-
 /** Create tenant */
-export const fetchCreateTenant = tenantCrud.create;
+export function fetchCreateTenant(data: Api.Tenant.TenantPayload) {
+  return request<unknown>({
+    url: '/tenant',
+    method: 'post',
+    data
+  });
+}
 
 /** Update tenant */
-export const fetchUpdateTenant = tenantCrud.update;
+export function fetchUpdateTenant(id: number, data: Api.Tenant.TenantPayload) {
+  return request<unknown>({
+    url: buildResourceItemUrl('/tenant', id),
+    method: 'put',
+    data
+  });
+}
 
 /** Delete tenant */
-export const fetchDeleteTenant = tenantCrud.remove;
+export function fetchDeleteTenant(id: number) {
+  return request<unknown>({
+    url: buildResourceItemUrl('/tenant', id),
+    method: 'delete'
+  });
+}

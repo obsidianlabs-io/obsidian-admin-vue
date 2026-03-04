@@ -31,7 +31,7 @@ const visible = defineModel<boolean>('visible', {
   default: false
 });
 
-const { formRef, validate, restoreValidation } = useNaiveForm();
+const naiveForm = useNaiveForm();
 const { defaultRequiredRule } = useFormRules();
 
 const isViewMode = computed(() => Boolean(props.readOnly));
@@ -92,7 +92,7 @@ async function handleSubmit() {
     return;
   }
 
-  await validate();
+  await naiveForm.validate();
 
   const payload: Api.Tenant.TenantPayload = {
     tenantCode: model.value.tenantCode.trim(),
@@ -115,7 +115,7 @@ async function handleSubmit() {
 watch(visible, () => {
   if (visible.value) {
     handleInitModel();
-    restoreValidation();
+    naiveForm.restoreValidation();
   }
 });
 </script>
@@ -128,7 +128,7 @@ watch(visible, () => {
     @submit="handleSubmit"
     @close="closeDrawer"
   >
-    <NForm ref="formRef" :model="model" :rules="rules" :show-require-mark="!isViewMode">
+    <NForm :ref="naiveForm.formRef" :model="model" :rules="rules" :show-require-mark="!isViewMode">
       <NGrid responsive="screen" item-responsive :x-gap="12">
         <NFormItemGi span="24 s:12" :label="$t('page.tenant.tenantCode')" path="tenantCode">
           <NInput

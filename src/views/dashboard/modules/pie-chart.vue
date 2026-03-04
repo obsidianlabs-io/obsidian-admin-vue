@@ -10,7 +10,7 @@ defineOptions({
 
 const appStore = useAppStore();
 
-const { domRef, updateOptions } = useEcharts(() => ({
+const chart = useEcharts(() => ({
   tooltip: {
     trigger: 'item'
   },
@@ -56,7 +56,7 @@ async function mockData() {
     setTimeout(resolve, 1000);
   });
 
-  updateOptions(opts => {
+  chart.updateOptions(opts => {
     opts.series[0].data = [
       { name: $t('page.dashboard.study'), value: 20 },
       { name: $t('page.dashboard.entertainment'), value: 10 },
@@ -69,7 +69,7 @@ async function mockData() {
 }
 
 function updateLocale() {
-  updateOptions((opts, factory) => {
+  chart.updateOptions((opts, factory) => {
     const originOpts = factory();
 
     opts.series[0].name = originOpts.series[0].name;
@@ -102,7 +102,7 @@ init();
 
 <template>
   <NCard :bordered="false" class="card-wrapper">
-    <div ref="domRef" class="h-360px overflow-hidden"></div>
+    <div :ref="chart.domRef" class="h-360px overflow-hidden"></div>
   </NCard>
 </template>
 

@@ -1,5 +1,5 @@
 import { request } from '../request';
-import { createCrudHandlers } from './shared';
+import { buildResourceItemUrl } from './url';
 
 /**
  * Get role list
@@ -28,16 +28,31 @@ export function fetchGetRoleAssignablePermissions() {
   });
 }
 
-const roleCrud = createCrudHandlers<Api.Role.RolePayload>('/role');
-
 /** Create role */
-export const fetchCreateRole = roleCrud.create;
+export function fetchCreateRole(data: Api.Role.RolePayload) {
+  return request<unknown>({
+    url: '/role',
+    method: 'post',
+    data
+  });
+}
 
 /** Update role */
-export const fetchUpdateRole = roleCrud.update;
+export function fetchUpdateRole(id: number, data: Api.Role.RolePayload) {
+  return request<unknown>({
+    url: buildResourceItemUrl('/role', id),
+    method: 'put',
+    data
+  });
+}
 
 /** Delete role */
-export const fetchDeleteRole = roleCrud.remove;
+export function fetchDeleteRole(id: number) {
+  return request<unknown>({
+    url: buildResourceItemUrl('/role', id),
+    method: 'delete'
+  });
+}
 
 /**
  * Sync role permissions
@@ -47,7 +62,7 @@ export const fetchDeleteRole = roleCrud.remove;
  */
 export function fetchSyncRolePermissions(id: number, permissionCodes: string[]) {
   return request<unknown>({
-    url: `/role/${id}/permissions`,
+    url: `${buildResourceItemUrl('/role', id)}/permissions`,
     method: 'put',
     data: {
       permissionCodes

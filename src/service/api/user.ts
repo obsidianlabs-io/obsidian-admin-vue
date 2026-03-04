@@ -1,5 +1,5 @@
 import { request } from '../request';
-import { createCrudHandlers } from './shared';
+import { buildResourceItemUrl } from './url';
 
 /**
  * Get user list
@@ -13,13 +13,28 @@ export function fetchGetUserList(params: Api.User.UserListParams): ReturnType<ty
   });
 }
 
-const userCrud = createCrudHandlers<Api.User.UserPayload>('/user');
-
 /** Create user */
-export const fetchCreateUser = userCrud.create;
+export function fetchCreateUser(data: Api.User.UserPayload) {
+  return request<unknown>({
+    url: '/user',
+    method: 'post',
+    data
+  });
+}
 
 /** Update user */
-export const fetchUpdateUser = userCrud.update;
+export function fetchUpdateUser(id: number, data: Api.User.UserPayload) {
+  return request<unknown>({
+    url: buildResourceItemUrl('/user', id),
+    method: 'put',
+    data
+  });
+}
 
 /** Delete user */
-export const fetchDeleteUser = userCrud.remove;
+export function fetchDeleteUser(id: number) {
+  return request<unknown>({
+    url: buildResourceItemUrl('/user', id),
+    method: 'delete'
+  });
+}

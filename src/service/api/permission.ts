@@ -1,5 +1,5 @@
 import { request } from '../request';
-import { createCrudHandlers } from './shared';
+import { buildResourceItemUrl } from './url';
 
 /**
  * Get permission list
@@ -22,13 +22,28 @@ export function fetchGetAllPermissions() {
   });
 }
 
-const permissionCrud = createCrudHandlers<Api.Permission.PermissionPayload>('/permission');
-
 /** Create permission */
-export const fetchCreatePermission = permissionCrud.create;
+export function fetchCreatePermission(data: Api.Permission.PermissionPayload) {
+  return request<unknown>({
+    url: '/permission',
+    method: 'post',
+    data
+  });
+}
 
 /** Update permission */
-export const fetchUpdatePermission = permissionCrud.update;
+export function fetchUpdatePermission(id: number, data: Api.Permission.PermissionPayload) {
+  return request<unknown>({
+    url: buildResourceItemUrl('/permission', id),
+    method: 'put',
+    data
+  });
+}
 
 /** Delete permission */
-export const fetchDeletePermission = permissionCrud.remove;
+export function fetchDeletePermission(id: number) {
+  return request<unknown>({
+    url: buildResourceItemUrl('/permission', id),
+    method: 'delete'
+  });
+}

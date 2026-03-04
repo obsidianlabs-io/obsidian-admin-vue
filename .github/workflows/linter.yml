@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
       - name: Setup frontend toolchain
         uses: ./.github/actions/setup-frontend
@@ -24,6 +24,10 @@ jobs:
       - name: Unit tests
         run: pnpm test:unit
 
+      - name: Strict TypeScript check (non-blocking)
+        continue-on-error: true
+        run: pnpm typecheck:strict
+
   e2e:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
@@ -32,11 +36,11 @@ jobs:
       pull-requests: read
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
       - name: Detect e2e-relevant changes
         id: changes
-        uses: dorny/paths-filter@v3
+        uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36
         with:
           filters: |
             e2e:
@@ -59,7 +63,7 @@ jobs:
       - name: Cache Playwright browsers
         if: steps.changes.outputs.e2e == 'true'
         id: playwright-cache
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830
         with:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}

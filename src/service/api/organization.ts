@@ -1,5 +1,5 @@
 import { request } from '../request';
-import { createCrudHandlers } from './shared';
+import { buildResourceItemUrl } from './url';
 
 /** Get organization list */
 export function fetchGetOrganizationList(params: Api.Organization.OrganizationListParams) {
@@ -16,13 +16,28 @@ export function fetchGetAllOrganizations() {
   });
 }
 
-const organizationCrud = createCrudHandlers<Api.Organization.OrganizationPayload>('/organization');
-
 /** Create organization */
-export const fetchCreateOrganization = organizationCrud.create;
+export function fetchCreateOrganization(data: Api.Organization.OrganizationPayload) {
+  return request<unknown>({
+    url: '/organization',
+    method: 'post',
+    data
+  });
+}
 
 /** Update organization */
-export const fetchUpdateOrganization = organizationCrud.update;
+export function fetchUpdateOrganization(id: number, data: Api.Organization.OrganizationPayload) {
+  return request<unknown>({
+    url: buildResourceItemUrl('/organization', id),
+    method: 'put',
+    data
+  });
+}
 
 /** Delete organization */
-export const fetchDeleteOrganization = organizationCrud.remove;
+export function fetchDeleteOrganization(id: number) {
+  return request<unknown>({
+    url: buildResourceItemUrl('/organization', id),
+    method: 'delete'
+  });
+}

@@ -40,7 +40,7 @@ const visible = defineModel<boolean>('visible', {
   default: false
 });
 
-const { formRef, validate, restoreValidation } = useNaiveForm();
+const naiveForm = useNaiveForm();
 const { defaultRequiredRule, patternRules } = useFormRules();
 const authStore = useAuthStore();
 
@@ -285,7 +285,7 @@ async function handleSubmit() {
     return;
   }
 
-  await validate();
+  await naiveForm.validate();
 
   const roleCode = model.value.roleCode || '';
   const payload: Api.User.UserPayload = {
@@ -365,7 +365,7 @@ watch(
 watch(visible, () => {
   if (visible.value) {
     handleInitModel();
-    restoreValidation();
+    naiveForm.restoreValidation();
     if (!isViewMode.value) {
       if (!hasTenantScope.value) {
         organizationOptions.value = [];
@@ -388,7 +388,7 @@ watch(visible, () => {
     @submit="handleSubmit"
     @close="closeDrawer"
   >
-    <NForm ref="formRef" :model="model" :rules="rules" :show-require-mark="!isViewMode">
+    <NForm :ref="naiveForm.formRef" :model="model" :rules="rules" :show-require-mark="!isViewMode">
       <div class="form-row">
         <NFormItem :label="$t('page.user.userName')" path="userName">
           <NInput

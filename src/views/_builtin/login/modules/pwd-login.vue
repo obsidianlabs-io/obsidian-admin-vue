@@ -9,7 +9,7 @@ defineOptions({
 });
 
 const authStore = useAuthStore();
-const { formRef, validate } = useNaiveForm();
+const naiveForm = useNaiveForm();
 const { createRequiredRule } = useFormRules();
 const emit = defineEmits<{
   (e: 'update:title', title: App.I18n.I18nKey | undefined): void;
@@ -41,7 +41,7 @@ const rules = computed<Record<FormRuleKey, App.Global.FormRule[]>>(() => {
 });
 
 async function handleSubmit() {
-  await validate();
+  await naiveForm.validate();
   const result = await authStore.login(model.userName, model.password, {
     redirect: true,
     rememberMe: model.rememberMe,
@@ -118,7 +118,14 @@ function handleBack() {
 </script>
 
 <template>
-  <NForm ref="formRef" :model="model" :rules="rules" size="large" :show-label="false" @keyup.enter="handleSubmit">
+  <NForm
+    :ref="naiveForm.formRef"
+    :model="model"
+    :rules="rules"
+    size="large"
+    :show-label="false"
+    @keyup.enter="handleSubmit"
+  >
     <NFormItem v-show="!showOtpField" path="userName">
       <NInput v-model:value="model.userName" :placeholder="$t('page.login.common.userNamePlaceholder')" />
     </NFormItem>

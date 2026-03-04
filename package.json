@@ -36,7 +36,7 @@
     "api:types:check": "pnpm api:types && git diff --exit-code src/typings/api/openapi-generated.d.ts src/typings/api/backend-generated.d.ts src/service/api/generated",
     "build": "vite build --mode prod",
     "build:test": "vite build --mode test",
-    "check": "pnpm i18n:types:check && pnpm typecheck && pnpm lint:check && pnpm format:check",
+    "check": "pnpm i18n:types:check && pnpm typecheck && pnpm lint:check && pnpm format:check && pnpm contract:check",
     "check:ci": "pnpm check && pnpm test:unit",
     "cleanup": "sa cleanup",
     "commit": "sa git-commit",
@@ -63,6 +63,7 @@
     "test:unit": "node scripts/run-unit-tests.mjs",
     "typecheck": "vue-tsc --noEmit --skipLibCheck",
     "typecheck:api": "pnpm api:types:check && pnpm typecheck",
+    "typecheck:strict": "vue-tsc --noEmit --skipLibCheck --noUnusedLocals",
     "update-pkg": "sa update-pkg"
   },
   "dependencies": {

@@ -24,7 +24,7 @@ defineOptions({
 });
 
 const authStore = useAuthStore();
-const { formRef, validate, restoreValidation } = useNaiveForm();
+const naiveForm = useNaiveForm();
 const { formRules } = useFormRules();
 
 const loading = ref(false);
@@ -162,7 +162,7 @@ function resetProfileForm() {
   model.email = profile.value.email;
   model.timezone = profile.value.timezone || 'UTC';
   resetPasswordFields();
-  restoreValidation();
+  naiveForm.restoreValidation();
 }
 
 function formatSessionTime(value?: string) {
@@ -234,7 +234,7 @@ async function getAuthSessions() {
 }
 
 async function handleSubmit() {
-  await validate();
+  await naiveForm.validate();
 
   submitting.value = true;
   const previousTimezone = profile.value?.timezone || 'UTC';
@@ -275,7 +275,7 @@ async function handleSubmit() {
       timezone
     });
     await authStore.initUserInfo();
-    restoreValidation();
+    naiveForm.restoreValidation();
 
     if (timezonePreferenceSaveFailed) {
       window.$message?.warning($t('page.userCenter.profileUpdatePartialSuccess'));
@@ -430,7 +430,7 @@ onMounted(() => {
         </NSpace>
       </template>
       <NSpin :show="loading">
-        <NForm ref="formRef" :model="model" :rules="rules" label-placement="top">
+        <NForm :ref="naiveForm.formRef" :model="model" :rules="rules" label-placement="top">
           <div class="form-row">
             <NFormItem :label="$t('page.user.userName')" path="userName">
               <NInput v-model:value="model.userName" :placeholder="$t('page.user.userNamePlaceholder')" />

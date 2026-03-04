@@ -10,7 +10,7 @@ defineOptions({
 });
 
 const { toggleLoginModule } = useRouterPush();
-const { formRef, validate } = useNaiveForm();
+const naiveForm = useNaiveForm();
 const { label, isCounting, loading, getCaptcha } = useCaptcha();
 
 interface FormModel {
@@ -39,14 +39,21 @@ const rules = computed<Record<keyof FormModel, App.Global.FormRule[]>>(() => {
 });
 
 async function handleSubmit() {
-  await validate();
+  await naiveForm.validate();
   // request to register
   window.$message?.success($t('page.login.common.validateSuccess'));
 }
 </script>
 
 <template>
-  <NForm ref="formRef" :model="model" :rules="rules" size="large" :show-label="false" @keyup.enter="handleSubmit">
+  <NForm
+    :ref="naiveForm.formRef"
+    :model="model"
+    :rules="rules"
+    size="large"
+    :show-label="false"
+    @keyup.enter="handleSubmit"
+  >
     <NFormItem path="phone">
       <NInput v-model:value="model.phone" :placeholder="$t('page.login.common.phonePlaceholder')" />
     </NFormItem>

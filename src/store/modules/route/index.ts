@@ -25,6 +25,7 @@ import {
   transformMenuToSearchMenus,
   updateLocaleOfGlobalMenus
 } from './shared';
+import { handleDynamicAuthRouteInitFailure } from './init-failover';
 import { dedupeRoutesByName } from './route-utils';
 
 export const useRouteStore = defineStore(SetupStoreId.Route, () => {
@@ -229,7 +230,7 @@ export const useRouteStore = defineStore(SetupStoreId.Route, () => {
       setIsInitAuthRoute(true);
     } else {
       // if fetch user routes failed, reset store
-      await authStore.resetStore();
+      await handleDynamicAuthRouteInitFailure(() => authStore.resetStore());
     }
   }
 

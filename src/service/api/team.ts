@@ -1,5 +1,5 @@
 import { request } from '../request';
-import { createCrudHandlers } from './shared';
+import { buildResourceItemUrl } from './url';
 
 /** Get team list */
 export function fetchGetTeamList(params: Api.Team.TeamListParams) {
@@ -17,13 +17,28 @@ export function fetchGetAllTeams(params?: { organizationId?: number }) {
   });
 }
 
-const teamCrud = createCrudHandlers<Api.Team.TeamPayload>('/team');
-
 /** Create team */
-export const fetchCreateTeam = teamCrud.create;
+export function fetchCreateTeam(data: Api.Team.TeamPayload) {
+  return request<unknown>({
+    url: '/team',
+    method: 'post',
+    data
+  });
+}
 
 /** Update team */
-export const fetchUpdateTeam = teamCrud.update;
+export function fetchUpdateTeam(id: number, data: Api.Team.TeamPayload) {
+  return request<unknown>({
+    url: buildResourceItemUrl('/team', id),
+    method: 'put',
+    data
+  });
+}
 
 /** Delete team */
-export const fetchDeleteTeam = teamCrud.remove;
+export function fetchDeleteTeam(id: number) {
+  return request<unknown>({
+    url: buildResourceItemUrl('/team', id),
+    method: 'delete'
+  });
+}
