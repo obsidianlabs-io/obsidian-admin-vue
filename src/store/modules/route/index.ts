@@ -229,7 +229,7 @@ export const useRouteStore = defineStore(SetupStoreId.Route, () => {
       setIsInitAuthRoute(true);
     } else {
       // if fetch user routes failed, reset store
-      authStore.resetStore();
+      await authStore.resetStore();
     }
   }
 

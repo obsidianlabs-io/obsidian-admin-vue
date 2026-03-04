@@ -1,6 +1,5 @@
-import type { request } from '../request';
-import { getUserList } from './generated';
-import { callGeneratedApi, createCrudHandlers } from './shared';
+import { request } from '../request';
+import { createCrudHandlers } from './shared';
 
 /**
  * Get user list
@@ -8,11 +7,10 @@ import { callGeneratedApi, createCrudHandlers } from './shared';
  * @param params Query params
  */
 export function fetchGetUserList(params: Api.User.UserListParams): ReturnType<typeof request<Api.User.UserList>> {
-  return callGeneratedApi<Api.User.UserList>(() =>
-    getUserList({
-      query: params
-    } as unknown as Parameters<typeof getUserList>[0])
-  );
+  return request<Api.User.UserList>({
+    url: '/user/list',
+    params
+  });
 }
 
 const userCrud = createCrudHandlers<Api.User.UserPayload>('/user');

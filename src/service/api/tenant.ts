@@ -1,6 +1,5 @@
 import { request } from '../request';
-import { getTenantList } from './generated';
-import { callGeneratedApi, createCrudHandlers } from './shared';
+import { createCrudHandlers } from './shared';
 
 /**
  * Get tenant list
@@ -10,11 +9,10 @@ import { callGeneratedApi, createCrudHandlers } from './shared';
 export function fetchGetTenantList(
   params: Api.Tenant.TenantListParams
 ): ReturnType<typeof request<Api.Tenant.TenantList>> {
-  return callGeneratedApi<Api.Tenant.TenantList>(() =>
-    getTenantList({
-      query: params
-    } as unknown as Parameters<typeof getTenantList>[0])
-  );
+  return request<Api.Tenant.TenantList>({
+    url: '/tenant/list',
+    params
+  });
 }
 
 /** Get all active tenants */

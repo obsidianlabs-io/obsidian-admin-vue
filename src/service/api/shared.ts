@@ -1,14 +1,6 @@
 import { request } from '../request';
-import { callGenerated } from './generated-adapter';
 
 type Id = number | string;
-
-export type ApiRequestResult<T> = ReturnType<typeof request<T>>;
-
-interface GeneratedCallOptions {
-  silentCodes?: string[];
-  retryOnExpired?: boolean;
-}
 
 export function createCrudHandlers<TPayload>(resourcePath: string) {
   function create(data: TPayload) {
@@ -20,16 +12,20 @@ export function createCrudHandlers<TPayload>(resourcePath: string) {
   }
 
   function update(id: Id, data: TPayload) {
+    const encodedId = encodeURIComponent(String(id));
+
     return request<unknown>({
-      url: `${resourcePath}/${id}`,
+      url: `${resourcePath}/${encodedId}`,
       method: 'put',
       data
     });
   }
 
   function remove(id: Id) {
+    const encodedId = encodeURIComponent(String(id));
+
     return request<unknown>({
-      url: `${resourcePath}/${id}`,
+      url: `${resourcePath}/${encodedId}`,
       method: 'delete'
     });
   }
@@ -39,11 +35,4 @@ export function createCrudHandlers<TPayload>(resourcePath: string) {
     update,
     remove
   };
-}
-
-export function callGeneratedApi<TData>(
-  call: () => Promise<unknown>,
-  callOptions?: GeneratedCallOptions
-): ApiRequestResult<TData> {
-  return callGenerated<TData>(call, callOptions) as ApiRequestResult<TData>;
 }

@@ -1,6 +1,5 @@
 import { request } from '../request';
-import { getPermissionList } from './generated';
-import { callGeneratedApi, createCrudHandlers } from './shared';
+import { createCrudHandlers } from './shared';
 
 /**
  * Get permission list
@@ -10,11 +9,10 @@ import { callGeneratedApi, createCrudHandlers } from './shared';
 export function fetchGetPermissionList(
   params: Api.Permission.PermissionListParams
 ): ReturnType<typeof request<Api.Permission.PermissionList>> {
-  return callGeneratedApi<Api.Permission.PermissionList>(() =>
-    getPermissionList({
-      query: params
-    } as unknown as Parameters<typeof getPermissionList>[0])
-  );
+  return request<Api.Permission.PermissionList>({
+    url: '/permission/list',
+    params
+  });
 }
 
 /** Get all active permissions */

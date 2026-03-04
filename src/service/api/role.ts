@@ -1,6 +1,5 @@
 import { request } from '../request';
-import { getRoleList } from './generated';
-import { callGeneratedApi, createCrudHandlers } from './shared';
+import { createCrudHandlers } from './shared';
 
 /**
  * Get role list
@@ -8,11 +7,10 @@ import { callGeneratedApi, createCrudHandlers } from './shared';
  * @param params Query params
  */
 export function fetchGetRoleList(params: Api.Role.RoleListParams): ReturnType<typeof request<Api.Role.RoleList>> {
-  return callGeneratedApi<Api.Role.RoleList>(() =>
-    getRoleList({
-      query: params
-    } as unknown as Parameters<typeof getRoleList>[0])
-  );
+  return request<Api.Role.RoleList>({
+    url: '/role/list',
+    params
+  });
 }
 
 /** Get all active roles */
