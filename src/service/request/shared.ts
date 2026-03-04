@@ -20,6 +20,8 @@ const userInactiveMessage = 'User is inactive';
 const backendMessageI18nMap: Partial<Record<string, App.I18n.I18nKey>> = {
   'User is inactive': 'page.login.common.userInactive',
   'Tenant is inactive': 'page.login.common.tenantInactive',
+  'Organization is inactive': 'page.login.common.organizationInactive',
+  'Team is inactive': 'page.login.common.teamInactive',
   'Email is not verified': 'page.login.common.emailNotVerified',
   'Username or password is incorrect': 'page.login.common.invalidCredentials',
   'Two-factor code required': 'page.login.common.twoFactorRequired',

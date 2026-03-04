@@ -15,6 +15,8 @@ const pageSection: App.I18n.Schema['page'] = {
       welcomeBack: '欢迎回来，{userName} ！',
       userInactive: '用户已停用',
       tenantInactive: '所属租户已停用',
+      organizationInactive: '所属组织已停用',
+      teamInactive: '所属团队已停用',
       emailNotVerified: '邮箱未验证',
       invalidCredentials: '用户名或密码错误',
       twoFactorRequired: '需要双重验证码',

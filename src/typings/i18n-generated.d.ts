@@ -299,6 +299,8 @@ declare namespace App {
           "welcomeBack": string;
           "userInactive": string;
           "tenantInactive": string;
+          "organizationInactive": string;
+          "teamInactive": string;
           "emailNotVerified": string;
           "invalidCredentials": string;
           "twoFactorRequired": string;
@@ -917,8 +919,10 @@ declare namespace App {
       | "page.login.common.invalidCredentials"
       | "page.login.common.loginOrRegister"
       | "page.login.common.loginSuccess"
+      | "page.login.common.organizationInactive"
       | "page.login.common.passwordPlaceholder"
       | "page.login.common.phonePlaceholder"
+      | "page.login.common.teamInactive"
       | "page.login.common.tenantInactive"
       | "page.login.common.twoFactorInvalid"
       | "page.login.common.twoFactorRequired"

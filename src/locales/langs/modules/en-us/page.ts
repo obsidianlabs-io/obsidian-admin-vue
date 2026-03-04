@@ -15,6 +15,8 @@ const pageSection: App.I18n.Schema['page'] = {
       welcomeBack: 'Welcome back, {userName} !',
       userInactive: 'User is inactive',
       tenantInactive: 'Tenant is inactive',
+      organizationInactive: 'Organization is inactive',
+      teamInactive: 'Team is inactive',
       emailNotVerified: 'Email is not verified',
       invalidCredentials: 'Username or password is incorrect',
       twoFactorRequired: 'Two-factor code required',
