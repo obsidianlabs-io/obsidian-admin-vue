@@ -37,6 +37,28 @@ const newValuesText = computed(() => {
   return Object.keys(values).length ? JSON.stringify(values, null, 2) : '{}';
 });
 
+const logTypeLabel = computed(() => {
+  if (!rowData.value) {
+    return '-';
+  }
+
+  const logType = (rowData.value?.logType ?? '').toString().trim();
+
+  switch (logType) {
+    case 'login':
+      return $t('page.audit.logTypeLogin');
+    case 'api':
+      return $t('page.audit.logTypeApi');
+    case 'data':
+      return $t('page.audit.logTypeData');
+    case 'permission':
+      return $t('page.audit.logTypePermission');
+    case 'operation':
+    default:
+      return $t('page.audit.logTypeOperation');
+  }
+});
+
 function closeModal() {
   visible.value = false;
 }
@@ -55,6 +77,7 @@ function closeModal() {
     <div :style="commonFormModalBodyStyle" class="view-mode-form">
       <NDescriptions :column="2" label-placement="top" bordered>
         <NDescriptionsItem :label="$t('page.audit.action')">{{ rowData?.action || '-' }}</NDescriptionsItem>
+        <NDescriptionsItem :label="$t('page.audit.logType')">{{ logTypeLabel }}</NDescriptionsItem>
         <NDescriptionsItem :label="$t('page.audit.operator')">{{ rowData?.userName || '-' }}</NDescriptionsItem>
         <NDescriptionsItem :label="$t('common.tenant')">{{ rowData?.tenantName || '-' }}</NDescriptionsItem>
         <NDescriptionsItem :label="$t('page.audit.target')">{{ rowData?.target || '-' }}</NDescriptionsItem>

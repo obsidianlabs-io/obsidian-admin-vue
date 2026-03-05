@@ -384,6 +384,14 @@ declare namespace App {
         "viewTitle": string;
         "action": string;
         "actionPlaceholder": string;
+        "logType": string;
+        "logTypePlaceholder": string;
+        "logTypeAll": string;
+        "logTypeLogin": string;
+        "logTypeApi": string;
+        "logTypeOperation": string;
+        "logTypeData": string;
+        "logTypePermission": string;
         "operator": string;
         "operatorPlaceholder": string;
         "target": string;
@@ -819,6 +827,14 @@ declare namespace App {
       | "page.audit.ipAddress"
       | "page.audit.last24Hours"
       | "page.audit.last7Days"
+      | "page.audit.logType"
+      | "page.audit.logTypeAll"
+      | "page.audit.logTypeApi"
+      | "page.audit.logTypeData"
+      | "page.audit.logTypeLogin"
+      | "page.audit.logTypeOperation"
+      | "page.audit.logTypePermission"
+      | "page.audit.logTypePlaceholder"
       | "page.audit.newValues"
       | "page.audit.oldValues"
       | "page.audit.operator"

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, h, reactive, ref } from 'vue';
-import { NButton } from 'naive-ui';
+import { NButton, NTag } from 'naive-ui';
 import { fetchGetAuditLogList } from '@/service/api';
 import { useAppStore } from '@/store/modules/app';
 import { useAuth } from '@/hooks/business/auth';
@@ -24,6 +24,7 @@ const searchParams = reactive({
   size: 10,
   keyword: null as string | null,
   action: null as string | null,
+  logType: null as Api.Audit.AuditLogType | '' | null,
   userName: null as string | null,
   dateRange: null as [number, number] | null
 });
@@ -53,6 +54,42 @@ function resolveDateTo(): string | undefined {
   return formatLocalDateTime(searchParams.dateRange[1]);
 }
 
+function resolveLogTypeLabel(logType: Api.Audit.AuditLogType | string | null | undefined): string {
+  const normalized = (logType ?? '').toString().trim();
+
+  switch (normalized) {
+    case 'login':
+      return $t('page.audit.logTypeLogin');
+    case 'api':
+      return $t('page.audit.logTypeApi');
+    case 'data':
+      return $t('page.audit.logTypeData');
+    case 'permission':
+      return $t('page.audit.logTypePermission');
+    case 'operation':
+    default:
+      return $t('page.audit.logTypeOperation');
+  }
+}
+
+function resolveLogTypeTagType(logType: Api.Audit.AuditLogType | string | null | undefined) {
+  const normalized = (logType ?? '').toString().trim();
+
+  switch (normalized) {
+    case 'login':
+      return 'info';
+    case 'api':
+      return 'warning';
+    case 'data':
+      return 'success';
+    case 'permission':
+      return 'error';
+    case 'operation':
+    default:
+      return 'default';
+  }
+}
+
 const { columns, columnChecks, data, getData, getDataByPage, loading, mobilePagination } = useNaivePaginatedTable({
   api: () =>
     fetchGetAuditLogList({
@@ -60,6 +97,7 @@ const { columns, columnChecks, data, getData, getDataByPage, loading, mobilePagi
       size: searchParams.size,
       keyword: searchParams.keyword ?? undefined,
       action: searchParams.action ?? undefined,
+      logType: searchParams.logType || undefined,
       userName: searchParams.userName ?? undefined,
       dateFrom: resolveDateFrom(),
       dateTo: resolveDateTo()
@@ -82,6 +120,22 @@ const { columns, columnChecks, data, getData, getDataByPage, loading, mobilePagi
       title: $t('page.audit.action'),
       align: 'center',
       minWidth: 200
+    },
+    {
+      key: 'logType',
+      title: $t('page.audit.logType'),
+      align: 'center',
+      minWidth: 120,
+      render: row =>
+        h(
+          NTag,
+          {
+            type: resolveLogTypeTagType(row.logType),
+            size: 'small',
+            bordered: false
+          },
+          { default: () => resolveLogTypeLabel(row.logType) }
+        )
     },
     {
       key: 'userName',
@@ -149,6 +203,7 @@ function resetSearchParamsForTenantChange() {
   searchParams.current = 1;
   searchParams.keyword = null;
   searchParams.action = null;
+  searchParams.logType = null;
   searchParams.userName = null;
   searchParams.dateRange = null;
 }
@@ -183,7 +238,7 @@ useTenantChanged(handleTenantChanged);
       :data="data"
       :loading="loading || !canViewAudit"
       :flex-height="!appStore.isMobile"
-      :scroll-x="1350"
+      :scroll-x="1450"
       :row-key="row => row.id"
       :pagination="mobilePagination"
     />

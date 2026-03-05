@@ -16,6 +16,7 @@ const emit = defineEmits<Emits>();
 interface AuditSearchModel {
   keyword: string | null;
   action: string | null;
+  logType: Api.Audit.AuditLogType | '' | null;
   userName: string | null;
   dateRange: [number, number] | null;
 }
@@ -33,6 +34,15 @@ const dateShortcuts = computed(() => {
     [$t('page.audit.last7Days')]: () => [now - 7 * ONE_DAY, now] as [number, number]
   };
 });
+
+const logTypeOptions = computed(() => [
+  { label: $t('page.audit.logTypeAll'), value: '' },
+  { label: $t('page.audit.logTypeLogin'), value: 'login' },
+  { label: $t('page.audit.logTypeApi'), value: 'api' },
+  { label: $t('page.audit.logTypeOperation'), value: 'operation' },
+  { label: $t('page.audit.logTypeData'), value: 'data' },
+  { label: $t('page.audit.logTypePermission'), value: 'permission' }
+]);
 </script>
 
 <template>
@@ -55,6 +65,14 @@ const dateShortcuts = computed(() => {
                 clearable
                 :placeholder="$t('page.audit.actionPlaceholder')"
                 @keyup.enter="search"
+              />
+            </NFormItemGi>
+            <NFormItemGi span="24 s:12 m:6" :label="$t('page.audit.logType')" class="pr-24px">
+              <NSelect
+                v-model:value="model.logType"
+                clearable
+                :options="logTypeOptions"
+                :placeholder="$t('page.audit.logTypePlaceholder')"
               />
             </NFormItemGi>
             <NFormItemGi span="24 s:12 m:6" :label="$t('page.audit.operator')" class="pr-24px">

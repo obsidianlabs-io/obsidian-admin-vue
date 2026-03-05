@@ -5,9 +5,12 @@ declare namespace Api {
    * backend api module: "audit"
    */
   namespace Audit {
+    type AuditLogType = 'login' | 'api' | 'operation' | 'data' | 'permission';
+
     interface AuditLogRecord {
       id: number;
       action: string;
+      logType: AuditLogType;
       userName: string;
       tenantId: string;
       tenantName: string;
@@ -26,6 +29,7 @@ declare namespace Api {
       size: number;
       keyword?: string;
       action?: string;
+      logType?: AuditLogType;
       userName?: string;
       dateFrom?: string;
       dateTo?: string;
