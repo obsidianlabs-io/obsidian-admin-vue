@@ -81,6 +81,56 @@ function loadGeneratedSdkMap() {
   return map;
 }
 
+function sanitizePlaceholder(text, fallback = 'id') {
+  const normalized = text.replace(/[^A-Za-z0-9_]+/g, '_').replace(/^_+|_+$/g, '');
+  if (normalized === '') {
+    return fallback;
+  }
+
+  if (/^[0-9]/.test(normalized)) {
+    return `${fallback}_${normalized}`;
+  }
+
+  return normalized;
+}
+
+function resolvePathParamPlaceholder(node, sourceFile) {
+  if (ts.isIdentifier(node)) {
+    return node.text;
+  }
+
+  const raw = normalizeWhitespace(node.getText(sourceFile));
+  return sanitizePlaceholder(raw, 'id');
+}
+
+function resolveBuildResourceItemUrlPath(node, sourceFile) {
+  if (
+    !ts.isCallExpression(node) ||
+    !ts.isIdentifier(node.expression) ||
+    node.expression.text !== 'buildResourceItemUrl'
+  ) {
+    return null;
+  }
+
+  const [resourcePathNode, idNode] = node.arguments;
+  if (!resourcePathNode || !idNode) {
+    return null;
+  }
+
+  if (
+    !ts.isStringLiteral(resourcePathNode) &&
+    !ts.isNoSubstitutionTemplateLiteral(resourcePathNode) &&
+    !ts.isTemplateExpression(resourcePathNode)
+  ) {
+    return null;
+  }
+
+  const resourcePath = normalizePath(renderTemplateExpression(resourcePathNode, sourceFile));
+  const paramName = resolvePathParamPlaceholder(idNode, sourceFile);
+
+  return normalizePath(`${resourcePath}/{${paramName}}`);
+}
+
 function renderTemplateExpression(node, sourceFile) {
   if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) {
     return node.text;
@@ -90,6 +140,12 @@ function renderTemplateExpression(node, sourceFile) {
 
   node.templateSpans.forEach((span, index) => {
     const expression = span.expression;
+    const resolvedPath = resolveBuildResourceItemUrlPath(expression, sourceFile);
+    if (resolvedPath) {
+      result += `${resolvedPath}${span.literal.text}`;
+      return;
+    }
+
     const raw = normalizeWhitespace(expression.getText(sourceFile));
     const placeholder = raw !== '' && /^[A-Za-z_][A-Za-z0-9_]*$/.test(raw) ? raw : `expr${index + 1}`;
 
@@ -169,6 +225,13 @@ function extractUrl(objectLiteral, sourceFile) {
         ts.isTemplateExpression(pathTemplateNode))
     ) {
       return normalizePath(renderTemplateExpression(pathTemplateNode, sourceFile));
+    }
+  }
+
+  if (ts.isCallExpression(initializer)) {
+    const resourcePath = resolveBuildResourceItemUrlPath(initializer, sourceFile);
+    if (resourcePath) {
+      return resourcePath;
     }
   }
 
