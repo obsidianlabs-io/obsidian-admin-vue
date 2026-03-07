@@ -27,6 +27,7 @@ pnpm dev
 - Keep shared client abstractions backend-neutral; do not add Laravel-only coupling into generic frontend layers
 - Prefer composables for reusable page logic
 - Keep route, permission, tenant, and table behavior deterministic across page modules
+- API-backed forms should use the shared server-validation path: `useNaiveForm()`, request config `handleValidationErrorLocally: true`, and `naiveForm.applyServerValidation(error)`
 - Avoid editing generated API files by hand unless the workflow explicitly requires format-only normalization
 
 ## Generated Files Policy
@@ -90,3 +91,12 @@ We are unlikely to accept pull requests that:
 - weaken CI gates or type checks
 - add visual churn without product or maintainability value
 - introduce broad abstractions without proven reuse value
+
+## Auth Module Truth
+
+The current built-in auth pages are intentionally mixed in maturity:
+
+- `pwd-login` is wired to the real backend login contract
+- `code-login`, `register`, and `reset-pwd` are still template-level placeholder modules
+
+Do not force those placeholder modules onto backend APIs unless the frontend field model and backend contract are aligned first.

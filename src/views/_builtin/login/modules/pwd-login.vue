@@ -28,27 +28,36 @@ const model: FormModel = reactive({
   rememberMe: true,
   otpCode: ''
 });
+naiveForm.bindModelValidation(ref(model), ['userName', 'password', 'otpCode']);
 
 const showOtpField = ref(false);
 
-type FormRuleKey = 'userName' | 'password';
+type FormRuleKey = 'userName' | 'password' | 'otpCode';
 
-const rules = computed<Record<FormRuleKey, App.Global.FormRule[]>>(() => {
+const baseRules = computed<Record<FormRuleKey, App.Global.FormRule[]>>(() => {
   return {
     userName: [createRequiredRule('form.userName.required')],
-    password: [createRequiredRule('form.pwd.required')]
+    password: [createRequiredRule('form.pwd.required')],
+    otpCode: []
   };
 });
+const rules = naiveForm.withServerValidationRules(baseRules, ['userName', 'password', 'otpCode'] as const);
 
 async function handleSubmit() {
   await naiveForm.validate();
   const result = await authStore.login(model.userName, model.password, {
     redirect: true,
     rememberMe: model.rememberMe,
-    otpCode: model.otpCode
+    otpCode: model.otpCode,
+    handleValidationErrorLocally: true
   });
 
-  if (result === '2fa_required') {
+  if (result.status === 'validation_error') {
+    await naiveForm.applyServerValidation(result.error);
+    return;
+  }
+
+  if (result.status === '2fa_required') {
     showOtpField.value = true;
   }
 }
@@ -105,7 +114,7 @@ async function handleAccountLogin(account: Account) {
     rememberMe: model.rememberMe
   });
 
-  if (result === '2fa_required') {
+  if (result.status === '2fa_required') {
     showOtpField.value = true;
     emit('update:title', 'page.login.pwdLogin.twoFactorOtpPlaceholder');
   }

@@ -4,6 +4,7 @@ import { defineStore } from 'pinia';
 import { useLoading } from '@sa/hooks';
 import { appEvent } from '@/constants/event';
 import { fetchGetUserInfo, fetchLogin, fetchLogout, fetchUpdateLocale } from '@/service/api';
+import { isValidationErrorPayload } from '@/service/request/shared';
 import { connectRealtime, disconnectRealtime } from '@/service/websocket';
 import { useRouterPush } from '@/hooks/common/router';
 import { localStg } from '@/utils/storage';
@@ -158,20 +159,24 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
       redirect?: boolean;
       rememberMe?: boolean;
       otpCode?: string;
+      handleValidationErrorLocally?: boolean;
     } = {}
-  ): Promise<'2fa_required' | null> {
-    const { redirect = true, rememberMe = true, otpCode } = options;
+  ): Promise<{ status: 'success' | '2fa_required' | 'validation_error' | 'error'; error: unknown | null }> {
+    const { redirect = true, rememberMe = true, otpCode, handleValidationErrorLocally = false } = options;
     const loginSelectedLocale = getStoredSupportedLocale();
 
     startLoading();
 
-    const { data: loginToken, error } = await fetchLogin({
-      userName,
-      password,
-      rememberMe,
-      otpCode,
-      locale: loginSelectedLocale
-    });
+    const { data: loginToken, error } = await fetchLogin(
+      {
+        userName,
+        password,
+        rememberMe,
+        otpCode,
+        locale: loginSelectedLocale
+      },
+      handleValidationErrorLocally ? { handleValidationErrorLocally: true } : undefined
+    );
 
     function resolveBackendCode(errorLike: unknown): string {
       if (!errorLike || typeof errorLike !== 'object') {
@@ -184,7 +189,12 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
 
     if (error?.code === '4020' || resolveBackendCode(error) === '4020') {
       endLoading();
-      return '2fa_required';
+      return { status: '2fa_required', error };
+    }
+
+    if (error && handleValidationErrorLocally && isValidationErrorPayload(error)) {
+      endLoading();
+      return { status: 'validation_error', error };
     }
 
     if (!error) {
@@ -207,13 +217,16 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
           duration: 4500
         });
       }
-    } else {
-      resetStore();
+
+      endLoading();
+
+      return { status: 'success', error: null };
     }
+    resetStore();
 
     endLoading();
 
-    return null;
+    return { status: 'error', error };
   }
 
   async function loginByToken(

@@ -6,13 +6,16 @@ import { request } from '../request';
  *
  * @param payload Login payload
  */
-export function fetchLogin(payload: {
-  userName: string;
-  password: string;
-  rememberMe: boolean;
-  otpCode?: string;
-  locale?: App.I18n.LangType | null;
-}): ReturnType<typeof request<Api.Auth.LoginToken>> {
+export function fetchLogin(
+  payload: {
+    userName: string;
+    password: string;
+    rememberMe: boolean;
+    otpCode?: string;
+    locale?: App.I18n.LangType | null;
+  },
+  config?: CustomAxiosRequestConfig
+): ReturnType<typeof request<Api.Auth.LoginToken>> {
   const { userName, password, rememberMe, otpCode, locale } = payload;
 
   return request<Api.Auth.LoginToken>({
@@ -24,7 +27,8 @@ export function fetchLogin(payload: {
       rememberMe,
       otpCode,
       locale: locale || undefined
-    }
+    },
+    ...config
   });
 }
 
