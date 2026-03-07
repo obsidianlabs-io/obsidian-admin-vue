@@ -3,7 +3,12 @@ import { defineConfig } from '@soybeanjs/eslint-config';
 export default defineConfig(
   { vue: true, unocss: true },
   {
-    ignores: ['src/service/api/generated/**']
+    ignores: [
+      'src/service/api/generated/**',
+      'src/typings/api/openapi-generated.d.ts',
+      'src/typings/api/backend-generated.d.ts',
+      'src/typings/i18n-generated.d.ts'
+    ]
   },
   {
     files: ['packages/**/*.{js,cjs,mjs,ts,tsx}'],

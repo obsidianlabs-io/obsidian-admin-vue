@@ -8,7 +8,43 @@
  */
 declare namespace BackendGenerated {
   namespace DTO {
+    namespace Audit {
+      interface ListAuditLogsInputDTO {
+        current: number;
+        size: number;
+        cursor: string | null;
+        keyword: string;
+        action: string;
+        logType: string;
+        userName: string;
+        requestId: string;
+        dateFrom: string;
+        dateTo: string;
+      }
+
+      interface ListAuditPolicyHistoryInputDTO {
+        current: number;
+        size: number;
+      }
+
+      interface UpdateAuditPoliciesInputDTO {
+        records: unknown[];
+        changeReason: string;
+      }
+
+      interface UpdateAuditPolicyRecordInputDTO {
+        action: string;
+        enabled: boolean;
+        samplingRate: number | null;
+        retentionDays: number | null;
+      }
+    }
+
     namespace Auth {
+      interface ForgotPasswordInputDTO {
+        email: string;
+      }
+
       interface LoginInputDTO {
         userName: string | null;
         email: string | null;
@@ -16,6 +52,10 @@ declare namespace BackendGenerated {
         rememberMe: boolean;
         otpCode: string | null;
         locale: string | null;
+      }
+
+      interface LogoutInputDTO {
+        refreshToken: string | null;
       }
 
       interface RefreshTokenInputDTO {
@@ -28,13 +68,43 @@ declare namespace BackendGenerated {
         password: string;
       }
 
+      interface ResetPasswordInputDTO {
+        token: string;
+        email: string;
+        password: string;
+        passwordConfirmation: string;
+      }
+
       interface RevokeSessionInputDTO {
         sessionId: string;
+      }
+
+      interface TwoFactorCodeInputDTO {
+        otpCode: string;
+      }
+
+      interface UpdatePreferredLocaleInputDTO {
+        locale: string;
+      }
+
+      interface UpdateProfileInputDTO {
+        userName: string;
+        email: string;
+        currentPassword: string | null;
+        password: string | null;
+        timezone: string | null;
       }
 
       interface UpdateSessionAliasInputDTO {
         sessionId: string;
         deviceAlias: string | null;
+      }
+
+      interface UpdateUserPreferencesInputDTO {
+        hasThemeSchema: boolean;
+        themeSchema: string | null;
+        hasTimezone: boolean;
+        timezone: string | null;
       }
     }
 
@@ -66,6 +136,49 @@ declare namespace BackendGenerated {
       }
     }
 
+    namespace Language {
+      interface CreateLanguageTranslationDTO {
+        languageId: number;
+        translationKey: string;
+        translationValue: string;
+        description: string;
+        status: string;
+      }
+
+      interface ListLanguageTranslationsInputDTO {
+        current: number;
+        size: number;
+        cursor: string | null;
+        locale: string;
+        keyword: string;
+        status: string;
+      }
+
+      interface StoreLanguageTranslationInputDTO {
+        locale: string;
+        translationKey: string;
+        translationValue: string;
+        description: string;
+        status: string;
+      }
+
+      interface UpdateLanguageTranslationDTO {
+        languageId: number;
+        translationKey: string;
+        translationValue: string;
+        description: string;
+        status: string;
+      }
+
+      interface UpdateLanguageTranslationInputDTO {
+        locale: string;
+        translationKey: string;
+        translationValue: string;
+        description: string;
+        status: string | null;
+      }
+    }
+
     namespace Organization {
       interface CreateOrganizationDTO {
         organizationCode: string;
@@ -73,6 +186,14 @@ declare namespace BackendGenerated {
         description: string;
         status: string;
         sort: number;
+      }
+
+      interface ListOrganizationsInputDTO {
+        current: number;
+        size: number;
+        cursor: string | null;
+        keyword: string;
+        status: string;
       }
 
       interface UpdateOrganizationDTO {
@@ -84,6 +205,104 @@ declare namespace BackendGenerated {
       }
     }
 
+    namespace Permission {
+      interface CreatePermissionDTO {
+        code: string;
+        name: string;
+        group: string;
+        description: string;
+        status: string;
+      }
+
+      interface ListPermissionsInputDTO {
+        current: number;
+        size: number;
+        cursor: string | null;
+        keyword: string;
+        status: string;
+        group: string;
+      }
+
+      interface StorePermissionInputDTO {
+        permissionCode: string;
+        permissionName: string;
+        group: string;
+        description: string;
+        status: string;
+      }
+
+      interface UpdatePermissionDTO {
+        code: string;
+        name: string;
+        group: string;
+        description: string;
+        status: string;
+      }
+
+      interface UpdatePermissionInputDTO {
+        permissionCode: string;
+        permissionName: string;
+        group: string;
+        description: string;
+        status: string | null;
+      }
+    }
+
+    namespace Role {
+      interface CreateRoleDTO {
+        code: string;
+        name: string;
+        description: string;
+        status: string;
+        tenantId: number | null;
+        level: number;
+      }
+
+      interface ListRolesInputDTO {
+        current: number;
+        size: number;
+        cursor: string | null;
+        keyword: string;
+        status: string;
+        level: number | null;
+      }
+
+      interface StoreRoleInputDTO {
+        roleCode: string;
+        roleName: string;
+        description: string;
+        status: string;
+        level: number;
+        permissionCodes: unknown[];
+      }
+
+      interface SyncRolePermissionsDTO {
+        permissionIds: unknown[];
+      }
+
+      interface SyncRolePermissionsInputDTO {
+        permissionCodes: unknown[];
+      }
+
+      interface UpdateRoleDTO {
+        code: string;
+        name: string;
+        description: string;
+        status: string;
+        level: number;
+      }
+
+      interface UpdateRoleInputDTO {
+        roleCode: string;
+        roleName: string;
+        description: string;
+        status: string | null;
+        level: number;
+        hasPermissionCodes: boolean;
+        permissionCodes: unknown[];
+      }
+    }
+
     namespace Team {
       interface CreateTeamDTO {
         organizationId: number;
@@ -92,6 +311,15 @@ declare namespace BackendGenerated {
         description: string;
         status: string;
         sort: number;
+      }
+
+      interface ListTeamsInputDTO {
+        current: number;
+        size: number;
+        cursor: string | null;
+        keyword: string;
+        status: string;
+        organizationId: number | null;
       }
 
       interface UpdateTeamDTO {
@@ -111,6 +339,14 @@ declare namespace BackendGenerated {
         status: string;
       }
 
+      interface ListTenantsInputDTO {
+        current: number;
+        size: number;
+        cursor: string | null;
+        keyword: string;
+        status: string;
+      }
+
       interface UpdateTenantDTO {
         tenantCode: string;
         tenantName: string;
@@ -118,7 +354,38 @@ declare namespace BackendGenerated {
       }
     }
 
+    namespace Theme {
+      interface UpdateThemeConfigInputDTO {
+        themeScheme: string | null;
+        themeColor: string | null;
+        themeRadius: number | null;
+        headerHeight: number | null;
+        siderWidth: number | null;
+        siderCollapsedWidth: number | null;
+        layoutMode: string | null;
+        scrollMode: string | null;
+        darkSider: boolean | null;
+        themeSchemaVisible: boolean | null;
+        headerFullscreenVisible: boolean | null;
+        tabVisible: boolean | null;
+        tabFullscreenVisible: boolean | null;
+        breadcrumbVisible: boolean | null;
+        footerVisible: boolean | null;
+        footerHeight: number | null;
+        multilingualVisible: boolean | null;
+        globalSearchVisible: boolean | null;
+        themeConfigVisible: boolean | null;
+        pageAnimate: boolean | null;
+        pageAnimateMode: string | null;
+        fixedHeaderAndTab: boolean | null;
+      }
+    }
+
     namespace User {
+      interface AssignUserRoleInputDTO {
+        roleCode: string;
+      }
+
       interface CreateUserDTO {
         name: string;
         email: string;
@@ -128,6 +395,27 @@ declare namespace BackendGenerated {
         tenantId: number | null;
         organizationId: number | null;
         teamId: number | null;
+      }
+
+      interface CreateUserInputDTO {
+        userName: string;
+        email: string;
+        roleCode: string;
+        organizationId: number | null;
+        teamId: number | null;
+        status: string;
+        password: string;
+      }
+
+      interface ListUsersInputDTO {
+        current: number;
+        size: number;
+        cursor: string | null;
+        keyword: string;
+        userName: string;
+        userEmail: string;
+        roleCode: string;
+        status: string;
       }
 
       interface UpdateOwnProfileDTO {
@@ -146,6 +434,16 @@ declare namespace BackendGenerated {
         tenantId: number | null;
         organizationId: number | null;
         teamId: number | null;
+      }
+
+      interface UpdateUserInputDTO {
+        userName: string;
+        email: string;
+        roleCode: string;
+        organizationId: number | null;
+        teamId: number | null;
+        status: string | null;
+        password: string | null;
       }
     }
   }
