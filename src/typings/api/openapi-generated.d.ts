@@ -7,7 +7,75 @@
  * - ../obsidian-admin-laravel/docs/api-contract.snapshot
  */
 declare namespace BackendContract {
-  type EndpointPath = '/audit/list' | '/audit/policy' | '/audit/policy/history' | '/audit/policy/list' | '/auth/2fa/disable' | '/auth/2fa/enable' | '/auth/2fa/setup' | '/auth/error' | '/auth/forgot-password' | '/auth/getUserInfo' | '/auth/login' | '/auth/logout' | '/auth/me' | '/auth/menus' | '/auth/preferences' | '/auth/preferred-locale' | '/auth/profile' | '/auth/refreshToken' | '/auth/register' | '/auth/reset-password' | '/auth/sessions' | `/auth/sessions/${string}` | `/auth/sessions/${string}/alias` | '/auth/timezones' | '/auth/verify-email' | '/health' | '/health/live' | '/health/ready' | '/language' | `/language/${string}` | '/language/list' | '/language/locales' | '/language/messages' | '/language/options' | '/organization' | `/organization/${string}` | '/organization/all' | '/organization/list' | '/permission' | `/permission/${string}` | '/permission/all' | '/permission/list' | '/role' | `/role/${string}` | `/role/${string}/permissions` | '/role/all' | '/role/assignable-permissions' | '/role/list' | '/system/bootstrap' | '/system/feature-flags' | '/system/feature-flags/purge' | '/system/feature-flags/toggle' | `/system/ui/crud-schema/${string}` | '/team' | `/team/${string}` | '/team/all' | '/team/list' | '/tenant' | `/tenant/${string}` | '/tenant/all' | '/tenant/list' | '/theme/config' | '/theme/config/reset' | '/theme/public-config' | '/user' | `/user/${string}` | `/user/${string}/role` | '/user/list';
+  type EndpointPath =
+    | '/audit/list'
+    | '/audit/policy'
+    | '/audit/policy/history'
+    | '/audit/policy/list'
+    | '/auth/2fa/disable'
+    | '/auth/2fa/enable'
+    | '/auth/2fa/setup'
+    | '/auth/error'
+    | '/auth/forgot-password'
+    | '/auth/getUserInfo'
+    | '/auth/login'
+    | '/auth/logout'
+    | '/auth/me'
+    | '/auth/menus'
+    | '/auth/preferences'
+    | '/auth/preferred-locale'
+    | '/auth/profile'
+    | '/auth/refreshToken'
+    | '/auth/register'
+    | '/auth/reset-password'
+    | '/auth/sessions'
+    | `/auth/sessions/${string}`
+    | `/auth/sessions/${string}/alias`
+    | '/auth/timezones'
+    | '/auth/verify-email'
+    | '/health'
+    | '/health/live'
+    | '/health/ready'
+    | '/language'
+    | `/language/${string}`
+    | '/language/list'
+    | '/language/locales'
+    | '/language/messages'
+    | '/language/options'
+    | '/organization'
+    | `/organization/${string}`
+    | '/organization/all'
+    | '/organization/list'
+    | '/permission'
+    | `/permission/${string}`
+    | '/permission/all'
+    | '/permission/list'
+    | '/role'
+    | `/role/${string}`
+    | `/role/${string}/permissions`
+    | '/role/all'
+    | '/role/assignable-permissions'
+    | '/role/list'
+    | '/system/bootstrap'
+    | '/system/feature-flags'
+    | '/system/feature-flags/purge'
+    | '/system/feature-flags/toggle'
+    | `/system/ui/crud-schema/${string}`
+    | '/team'
+    | `/team/${string}`
+    | '/team/all'
+    | '/team/list'
+    | '/tenant'
+    | `/tenant/${string}`
+    | '/tenant/all'
+    | '/tenant/list'
+    | '/theme/config'
+    | '/theme/config/reset'
+    | '/theme/public-config'
+    | '/user'
+    | `/user/${string}`
+    | `/user/${string}/role`
+    | '/user/list';
 
   interface EndpointMethodMap {
     '/audit/list': 'GET';
