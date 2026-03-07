@@ -133,6 +133,7 @@ declare namespace Api {
       currentPassword?: string;
       password?: string;
       password_confirmation?: string;
+      timezone?: string;
     }
 
     interface UpdateLocalePayload {

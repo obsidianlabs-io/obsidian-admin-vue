@@ -8,6 +8,36 @@
  */
 declare namespace BackendGenerated {
   namespace DTO {
+    namespace Auth {
+      interface LoginInputDTO {
+        userName: string | null;
+        email: string | null;
+        password: string;
+        rememberMe: boolean;
+        otpCode: string | null;
+        locale: string | null;
+      }
+
+      interface RefreshTokenInputDTO {
+        refreshToken: string;
+      }
+
+      interface RegisterInputDTO {
+        name: string;
+        email: string;
+        password: string;
+      }
+
+      interface RevokeSessionInputDTO {
+        sessionId: string;
+      }
+
+      interface UpdateSessionAliasInputDTO {
+        sessionId: string;
+        deviceAlias: string | null;
+      }
+    }
+
     namespace FeatureFlag {
       interface ForgetFeatureFlagOverrideDTO {
         key: string;
@@ -98,6 +128,13 @@ declare namespace BackendGenerated {
         tenantId: number | null;
         organizationId: number | null;
         teamId: number | null;
+      }
+
+      interface UpdateOwnProfileDTO {
+        userName: string;
+        email: string;
+        password: string | null;
+        timezone: string | null;
       }
 
       interface UpdateUserDTO {

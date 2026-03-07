@@ -1,23 +1,12 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from 'vue';
+import { onMounted } from 'vue';
 import QrcodeVue from 'qrcode.vue';
-import { REG_PWD } from '@/constants/reg';
-import {
-  fetchDisableTwoFactor,
-  fetchEnableTwoFactor,
-  fetchGetAuthSessions,
-  fetchGetTimezoneOptions,
-  fetchGetUserProfile,
-  fetchRevokeAuthSession,
-  fetchSetupTwoFactor,
-  fetchUpdateAuthSessionAlias,
-  fetchUpdateUserPreferences,
-  fetchUpdateUserProfile
-} from '@/service/api';
 import { useAuthStore } from '@/store/modules/auth';
 import { useFormRules, useNaiveForm } from '@/hooks/common/form';
-import { $t } from '@/locales';
 import FormModalWrapper from '@/components/advanced/form-modal-wrapper.vue';
+import { useAuthSessions } from './composables/use-auth-sessions';
+import { useProfileForm } from './composables/use-profile-form';
+import { useTwoFactor } from './composables/use-two-factor';
 
 defineOptions({
   name: 'UserCenterPage'
@@ -27,375 +16,59 @@ const authStore = useAuthStore();
 const naiveForm = useNaiveForm();
 const { formRules } = useFormRules();
 
-const loading = ref(false);
-const submitting = ref(false);
-const profile = ref<Api.Auth.UserProfile | null>(null);
-const timezoneOptions = ref<CommonType.Option<string>[]>([]);
-
-// Two-Factor Auth State
-const twoFactorEnabled = computed(() => profile.value?.twoFactorEnabled ?? false);
-const twoFactorSetupVisible = ref(false);
-const twoFactorOtpCode = ref('');
-const twoFactorSecret = ref('');
-const twoFactorQrCodeUrl = ref('');
-const twoFactorLoading = ref(false);
-const sessionsLoading = ref(false);
-const sessionsRevokingId = ref('');
-const authSessions = ref<Api.Auth.AuthSessionRecord[]>([]);
-const singleDeviceLogin = ref<boolean | null>(null);
-const sessionAliasVisible = ref(false);
-const sessionAliasSubmitting = ref(false);
-const sessionAliasTarget = reactive({
-  sessionId: '',
-  deviceAlias: ''
+const {
+  loading,
+  submitting,
+  profile,
+  timezoneOptions,
+  model,
+  rules,
+  hasChanges,
+  resetProfileForm,
+  getProfile,
+  getTimezoneOptions,
+  handleSubmit
+} = useProfileForm({
+  authStore,
+  naiveForm,
+  formRules
 });
 
-interface Model {
-  userName: string;
-  email: string;
-  timezone: string;
-  currentPassword: string;
-  password: string;
-  confirmPassword: string;
-}
-
-const model = reactive<Model>({
-  userName: '',
-  email: '',
-  timezone: 'UTC',
-  currentPassword: '',
-  password: '',
-  confirmPassword: ''
+const {
+  twoFactorEnabled,
+  twoFactorSetupVisible,
+  twoFactorOtpCode,
+  twoFactorSecret,
+  twoFactorQrCodeUrl,
+  twoFactorLoading,
+  handleSetupTwoFactor,
+  closeTwoFactorSetup,
+  handleConfirmTwoFactor,
+  handleDisableTwoFactor
+} = useTwoFactor({
+  profile,
+  reloadProfile: getProfile
 });
 
-const hasChanges = computed(() => {
-  if (!profile.value) return false;
-
-  const p = profile.value;
-  return (
-    model.userName !== p.userName ||
-    model.email !== p.email ||
-    model.timezone !== (p.timezone || 'UTC') ||
-    model.currentPassword !== '' ||
-    model.password !== '' ||
-    model.confirmPassword !== ''
-  );
+const {
+  sessionsLoading,
+  sessionsRevokingId,
+  authSessions,
+  singleDeviceLogin,
+  sessionAliasVisible,
+  sessionAliasSubmitting,
+  sessionAliasTarget,
+  formatSessionTime,
+  formatSessionText,
+  getSessionDisplayName,
+  getAuthSessions,
+  handleRevokeAuthSession,
+  openSessionAliasModal,
+  closeSessionAliasModal,
+  handleSubmitSessionAlias
+} = useAuthSessions({
+  authStore
 });
-
-type FormRuleKey = keyof Model;
-
-const rules = computed<Record<FormRuleKey, App.Global.FormRule[]>>(() => {
-  return {
-    userName: formRules.userName,
-    email: formRules.email,
-    timezone: [],
-    currentPassword: [
-      {
-        asyncValidator: (rule, value) => {
-          if (model.password !== '' && String(value) === '') {
-            return Promise.reject(rule.message);
-          }
-
-          return Promise.resolve();
-        },
-        message: $t('page.userCenter.currentPasswordRequired'),
-        trigger: ['blur', 'input']
-      }
-    ],
-    password: [
-      {
-        asyncValidator: (rule, value) => {
-          const password = String(value);
-          if (password === '') {
-            return Promise.resolve();
-          }
-
-          if (!REG_PWD.test(password)) {
-            return Promise.reject(rule.message);
-          }
-
-          return Promise.resolve();
-        },
-        message: $t('form.pwd.invalid'),
-        trigger: ['blur', 'input']
-      }
-    ],
-    confirmPassword: [
-      {
-        asyncValidator: (rule, value) => {
-          const password = model.password;
-          const confirmPassword = String(value);
-
-          if (password === '' && confirmPassword === '') {
-            return Promise.resolve();
-          }
-
-          if (password === '' && confirmPassword !== '') {
-            return Promise.reject(rule.message);
-          }
-
-          if (password !== confirmPassword) {
-            return Promise.reject(rule.message);
-          }
-
-          return Promise.resolve();
-        },
-        message: $t('form.confirmPwd.invalid'),
-        trigger: ['blur', 'input']
-      }
-    ]
-  };
-});
-
-function resetPasswordFields() {
-  model.currentPassword = '';
-  model.password = '';
-  model.confirmPassword = '';
-}
-
-function resetProfileForm() {
-  if (!profile.value) {
-    return;
-  }
-
-  model.userName = profile.value.userName;
-  model.email = profile.value.email;
-  model.timezone = profile.value.timezone || 'UTC';
-  resetPasswordFields();
-  naiveForm.restoreValidation();
-}
-
-function formatSessionTime(value?: string) {
-  return value && value.trim() !== '' ? value : $t('common.noData');
-}
-
-function formatSessionText(value?: string) {
-  return value && value.trim() !== '' ? value : $t('common.noData');
-}
-
-function getSessionDisplayName(session: Api.Auth.AuthSessionRecord) {
-  return formatSessionText(session.deviceAlias || session.deviceName);
-}
-
-function applyProfileToModel(data: Api.Auth.UserProfile) {
-  profile.value = data;
-  model.userName = data.userName;
-  model.email = data.email;
-  model.timezone = data.timezone || 'UTC';
-  resetPasswordFields();
-}
-
-async function getProfile() {
-  loading.value = true;
-
-  const { data, error } = await fetchGetUserProfile();
-
-  if (!error) {
-    applyProfileToModel(data);
-  }
-
-  loading.value = false;
-}
-
-async function getTimezoneOptions() {
-  const { data, error } = await fetchGetTimezoneOptions();
-
-  if (error) {
-    return;
-  }
-
-  timezoneOptions.value = data.records.map(item => ({
-    label: item.label,
-    value: item.timezone
-  }));
-
-  if (!model.timezone && data.defaultTimezone) {
-    model.timezone = data.defaultTimezone;
-  }
-}
-
-async function getAuthSessions() {
-  sessionsLoading.value = true;
-
-  try {
-    const { data, error } = await fetchGetAuthSessions();
-
-    if (!error && data) {
-      authSessions.value = data.records || [];
-      singleDeviceLogin.value = Boolean(data.singleDeviceLogin);
-      return;
-    }
-
-    authSessions.value = [];
-    singleDeviceLogin.value = null;
-  } finally {
-    sessionsLoading.value = false;
-  }
-}
-
-async function handleSubmit() {
-  await naiveForm.validate();
-
-  submitting.value = true;
-  const previousTimezone = profile.value?.timezone || 'UTC';
-
-  const payload: Api.Auth.UpdateProfilePayload = {
-    userName: model.userName.trim(),
-    email: model.email.trim()
-  };
-
-  const password = model.password;
-  if (password !== '') {
-    payload.currentPassword = model.currentPassword;
-    payload.password = password;
-    payload.password_confirmation = model.confirmPassword;
-  }
-
-  const { data, error } = await fetchUpdateUserProfile(payload);
-
-  if (!error) {
-    let timezone = previousTimezone;
-    let timezonePreferenceSaveFailed = false;
-    const nextTimezone = model.timezone.trim();
-
-    if (nextTimezone !== '' && nextTimezone !== previousTimezone) {
-      const { data: preferenceData, error: preferenceError } = await fetchUpdateUserPreferences({
-        timezone: nextTimezone
-      });
-
-      if (!preferenceError) {
-        timezone = preferenceData.timezone || nextTimezone;
-      } else {
-        timezonePreferenceSaveFailed = true;
-      }
-    }
-
-    applyProfileToModel({
-      ...data,
-      timezone
-    });
-    await authStore.initUserInfo();
-    naiveForm.restoreValidation();
-
-    if (timezonePreferenceSaveFailed) {
-      window.$message?.warning($t('page.userCenter.profileUpdatePartialSuccess'));
-    } else {
-      window.$message?.success($t('common.updateSuccess'));
-    }
-  }
-
-  submitting.value = false;
-}
-
-async function handleSetupTwoFactor() {
-  twoFactorLoading.value = true;
-  const { data, error } = await fetchSetupTwoFactor();
-  if (!error && data) {
-    twoFactorSecret.value = data.secret;
-    twoFactorQrCodeUrl.value = data.otpauthUrl;
-    twoFactorSetupVisible.value = true;
-    twoFactorOtpCode.value = '';
-  }
-  twoFactorLoading.value = false;
-}
-
-function closeTwoFactorSetup() {
-  twoFactorSetupVisible.value = false;
-  twoFactorOtpCode.value = '';
-}
-
-async function handleConfirmTwoFactor() {
-  if (!twoFactorOtpCode.value) {
-    window.$message?.error($t('page.userCenter.twoFactor.otpMissing'));
-    return;
-  }
-  twoFactorLoading.value = true;
-  const { error } = await fetchEnableTwoFactor(twoFactorOtpCode.value);
-  if (!error) {
-    window.$message?.success($t('page.userCenter.twoFactor.enableSuccess'));
-    twoFactorSetupVisible.value = false;
-    await getProfile();
-  }
-  twoFactorLoading.value = false;
-}
-
-async function handleDisableTwoFactor() {
-  if (!twoFactorOtpCode.value) {
-    window.$message?.error($t('page.userCenter.twoFactor.otpMissing'));
-    return;
-  }
-  twoFactorLoading.value = true;
-  const { error } = await fetchDisableTwoFactor(twoFactorOtpCode.value);
-  if (!error) {
-    window.$message?.success($t('page.userCenter.twoFactor.disableSuccess'));
-    twoFactorSetupVisible.value = false;
-    twoFactorOtpCode.value = '';
-    await getProfile();
-  }
-  twoFactorLoading.value = false;
-}
-
-async function handleRevokeAuthSession(session: Api.Auth.AuthSessionRecord) {
-  if (!session.sessionId || sessionsRevokingId.value) {
-    return;
-  }
-
-  sessionsRevokingId.value = session.sessionId;
-
-  const { data, error } = await fetchRevokeAuthSession(session.sessionId);
-
-  if (!error && data) {
-    window.$message?.success($t('page.userCenter.sessions.revokeSuccess'));
-
-    if (data.revokedCurrentSession) {
-      await authStore.resetStore();
-      sessionsRevokingId.value = '';
-      return;
-    }
-
-    await getAuthSessions();
-  }
-
-  sessionsRevokingId.value = '';
-}
-
-function openSessionAliasModal(session: Api.Auth.AuthSessionRecord) {
-  sessionAliasTarget.sessionId = session.sessionId;
-  sessionAliasTarget.deviceAlias = (session.deviceAlias || '').trim();
-  sessionAliasVisible.value = true;
-}
-
-function closeSessionAliasModal() {
-  if (sessionAliasSubmitting.value) {
-    return;
-  }
-
-  sessionAliasVisible.value = false;
-  sessionAliasTarget.sessionId = '';
-  sessionAliasTarget.deviceAlias = '';
-}
-
-async function handleSubmitSessionAlias() {
-  if (!sessionAliasTarget.sessionId) {
-    return;
-  }
-
-  sessionAliasSubmitting.value = true;
-
-  const { error } = await fetchUpdateAuthSessionAlias(sessionAliasTarget.sessionId, {
-    deviceAlias: sessionAliasTarget.deviceAlias.trim() || undefined
-  });
-
-  if (!error) {
-    window.$message?.success($t('page.userCenter.sessions.renameSuccess'));
-    sessionAliasSubmitting.value = false;
-    closeSessionAliasModal();
-    await getAuthSessions();
-    return;
-  }
-
-  sessionAliasSubmitting.value = false;
-}
 
 onMounted(() => {
   getProfile();
