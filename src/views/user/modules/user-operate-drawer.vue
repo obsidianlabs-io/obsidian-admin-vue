@@ -363,6 +363,10 @@ watch(
       return;
     }
 
+    if (teamOptions.value.length === 0) {
+      return;
+    }
+
     const selectedTeam = teamOptions.value.find(item => item.value === teamId);
     if (!selectedTeam) {
       model.value.teamId = null;
@@ -373,6 +377,27 @@ watch(
       model.value.teamId = null;
     }
   }
+);
+
+watch(
+  teamOptions,
+  options => {
+    const teamId = model.value.teamId;
+    if (teamId === null || options.length === 0) {
+      return;
+    }
+
+    const selectedTeam = options.find(item => item.value === teamId);
+    if (!selectedTeam) {
+      model.value.teamId = null;
+      return;
+    }
+
+    if (model.value.organizationId !== selectedTeam.organizationId) {
+      model.value.organizationId = selectedTeam.organizationId;
+    }
+  },
+  { deep: true }
 );
 
 watch(visible, () => {
