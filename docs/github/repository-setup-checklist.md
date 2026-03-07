@@ -185,3 +185,7 @@ This checklist is for `/Users/zero/Documents/Project/WK/obsidian-admin-vue`.
 3. 再勾 `Required status checks`
 4. 再检查 `Actions permissions`
 5. 最后创建 GitHub Release
+
+内部发布流程文档:
+
+- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/docs/release-sop.md`
