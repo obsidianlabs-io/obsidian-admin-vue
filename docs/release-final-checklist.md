@@ -1,8 +1,8 @@
 # Release Final Checklist
 
-This is the final release gate for `/Users/zero/Documents/Project/WK/obsidian-admin-vue`.
+This is the last sign-off checklist for `/Users/zero/Documents/Project/WK/obsidian-admin-vue`.
 
-Use this checklist after implementation is complete and before tagging or publishing a GitHub Release.
+Use it after implementation is complete and before tagging or publishing a release.
 
 ## 1. Working Tree
 
@@ -12,15 +12,15 @@ Use this checklist after implementation is complete and before tagging or publis
 
 ## 2. Release Content
 
-- `package.json` version is correct
-- `CHANGELOG.md` is updated
-- `CHANGELOG.zh_CN.md` is updated
+- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/package.json` version is correct
+- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/CHANGELOG.md` is updated
+- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/CHANGELOG.zh_CN.md` is updated
 - the release note exists:
   - `/Users/zero/Documents/Project/WK/obsidian-admin-vue/docs/releases/vX.Y.Z.md`
-- repository metadata still matches the current project positioning:
+- repository metadata still matches current positioning:
   - `/Users/zero/Documents/Project/WK/obsidian-admin-vue/docs/github/repository-metadata.md`
 
-## 3. Frontend Quality Gates
+## 3. Required Frontend Gates
 
 All of these must pass on the release commit:
 
@@ -31,7 +31,7 @@ pnpm test:unit
 pnpm build
 ```
 
-If login, table behavior, or contract-driven page flows changed, also run:
+If login, table behavior, or contract-driven flows changed, also run:
 
 ```bash
 pnpm test:e2e
@@ -43,10 +43,10 @@ Confirm the frontend still matches backend reality:
 
 - generated API types are in sync
 - contract snapshot is updated if API facade signatures changed
-- placeholder auth modules are still documented truthfully
-- no Laravel-only coupling leaked into shared frontend layers
+- placeholder auth modules are documented truthfully
+- no backend-specific coupling leaked into shared generic frontend layers
 
-## 5. GitHub Repository Settings
+## 5. GitHub Settings
 
 Confirm there is no drift in:
 
@@ -79,7 +79,7 @@ Always use this order:
 
 ## 8. GitHub Release
 
-Before pressing publish:
+Before publishing:
 
 - selected tag is correct
 - release title matches repository metadata guidance
@@ -100,7 +100,7 @@ After publishing, confirm:
 Do not release if any of these are true:
 
 - working tree is dirty
-- generated API files differ from current scripts output
+- generated API files differ from current script output
 - `pnpm typecheck:api` is red
 - release note, changelog, and package version disagree
-- auth/documentation truth is ahead of actual implementation
+- docs are ahead of actual implementation
