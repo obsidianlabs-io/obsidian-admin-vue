@@ -155,3 +155,9 @@ git push origin vX.Y.Z
 8. 推 `main`
 9. 打 tag 并推
 10. 创建 GitHub Release
+
+## 12. Final Sign-Off
+
+For the last pre-release pass, use:
+
+- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/docs/release-final-checklist.md`
