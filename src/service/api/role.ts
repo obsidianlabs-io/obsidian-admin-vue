@@ -1,60 +1,84 @@
 import type { CustomAxiosRequestConfig } from '@sa/axios';
-import { request } from '../request';
-import { buildResourceItemUrl } from './url';
+import {
+  deleteRoleById,
+  getRoleAll,
+  getRoleAssignablePermissions,
+  getRoleList,
+  postRole,
+  putRoleById,
+  putRoleByIdPermissions
+} from './generated';
+import { buildGeneratedOptions, callGenerated } from './generated-adapter';
 
 /**
  * Get role list
  *
  * @param params Query params
  */
-export function fetchGetRoleList(params: Api.Role.RoleListParams): ReturnType<typeof request<Api.Role.RoleList>> {
-  return request<Api.Role.RoleList>({
-    url: '/role/list',
-    params
-  });
+export function fetchGetRoleList(params: Api.Role.RoleListParams) {
+  return callGenerated<Api.Role.RoleList>(() =>
+    getRoleList(
+      buildGeneratedOptions({
+        query: params
+      })
+    )
+  );
 }
 
 /** Get all active roles */
 export function fetchGetAllRoles(params?: { manageableOnly?: boolean }) {
-  return request<{ records: Api.Role.RoleOption[] }>({
-    url: '/role/all',
-    params
-  });
+  return callGenerated<{ records: Api.Role.RoleOption[] }>(() =>
+    getRoleAll(
+      buildGeneratedOptions({
+        query: params
+      })
+    )
+  );
 }
 
 /** Get assignable permissions for role form */
 export function fetchGetRoleAssignablePermissions() {
-  return request<{ records: Api.Permission.PermissionOption[] }>({
-    url: '/role/assignable-permissions'
-  });
+  return callGenerated<{ records: Api.Permission.PermissionOption[] }>(() => getRoleAssignablePermissions());
 }
 
 /** Create role */
 export function fetchCreateRole(data: Api.Role.RolePayload, config?: CustomAxiosRequestConfig) {
-  return request<unknown>({
-    url: '/role',
-    method: 'post',
-    data,
-    ...config
-  });
+  return callGenerated<unknown>(() =>
+    postRole(
+      buildGeneratedOptions(
+        {
+          body: data
+        },
+        config
+      )
+    )
+  );
 }
 
 /** Update role */
 export function fetchUpdateRole(id: number, data: Api.Role.RolePayload, config?: CustomAxiosRequestConfig) {
-  return request<unknown>({
-    url: buildResourceItemUrl('/role', id),
-    method: 'put',
-    data,
-    ...config
-  });
+  return callGenerated<unknown>(() =>
+    putRoleById(
+      buildGeneratedOptions(
+        {
+          path: { id },
+          body: data
+        },
+        config
+      )
+    )
+  );
 }
 
 /** Delete role */
 export function fetchDeleteRole(id: number) {
-  return request<unknown>({
-    url: buildResourceItemUrl('/role', id),
-    method: 'delete'
-  });
+  return callGenerated<unknown>(() =>
+    deleteRoleById(
+      buildGeneratedOptions({
+        path: { id }
+      })
+    )
+  );
 }
 
 /**
@@ -64,11 +88,14 @@ export function fetchDeleteRole(id: number) {
  * @param permissionCodes Permission code list
  */
 export function fetchSyncRolePermissions(id: number, permissionCodes: string[]) {
-  return request<unknown>({
-    url: `${buildResourceItemUrl('/role', id)}/permissions`,
-    method: 'put',
-    data: {
-      permissionCodes
-    }
-  });
+  return callGenerated<unknown>(() =>
+    putRoleByIdPermissions(
+      buildGeneratedOptions({
+        path: { id },
+        body: {
+          permissionCodes
+        }
+      })
+    )
+  );
 }

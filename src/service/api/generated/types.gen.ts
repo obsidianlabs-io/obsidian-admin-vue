@@ -19,14 +19,145 @@ export type ApiResponse = {
 
 export type ApiErrorResponse = ApiResponse;
 
+export type EnableStatus = '1' | '2';
+
+export type LoginRequestBody = {
+    userName: string;
+    email?: string;
+    password: string;
+    rememberMe: boolean;
+    otpCode?: string;
+    locale?: string;
+};
+
+export type RegisterRequestBody = {
+    name: string;
+    email: string;
+    password: string;
+};
+
+export type ForgotPasswordRequestBody = {
+    email: string;
+};
+
+export type ResetPasswordRequestBody = {
+    token: string;
+    email: string;
+    password: string;
+    password_confirmation: string;
+};
+
+export type RefreshTokenRequestBody = {
+    refreshToken: string;
+};
+
+export type LogoutRequestBody = {
+    refreshToken?: string;
+};
+
+export type UpdateSessionAliasRequestBody = {
+    deviceAlias?: string;
+};
+
+export type UpdatePreferredLocaleRequestBody = {
+    locale: string;
+    /**
+     * @deprecated
+     */
+    preferredLocale?: string;
+};
+
+export type UpdateUserPreferencesRequestBody = {
+    themeSchema?: 'light' | 'dark' | 'auto';
+    timezone?: string;
+};
+
+export type UpdateProfileRequestBody = {
+    userName: string;
+    email: string;
+    currentPassword?: string;
+    password?: string;
+    password_confirmation?: string;
+    timezone?: string;
+    version?: number;
+    updatedAt?: string;
+    updateTime?: string;
+};
+
+export type TwoFactorCodeRequestBody = {
+    otpCode: string;
+};
+
+export type UserPayload = {
+    userName: string;
+    email: string;
+    roleCode: string;
+    organizationId?: number | null;
+    teamId?: number | null;
+    status?: EnableStatus;
+    password?: string;
+    version?: number;
+    updatedAt?: string;
+    updateTime?: string;
+};
+
+export type AssignUserRoleRequestBody = {
+    roleCode: string;
+    version?: number;
+    updatedAt?: string;
+    updateTime?: string;
+};
+
+export type TenantPayload = {
+    tenantCode: string;
+    tenantName: string;
+    status?: EnableStatus;
+    version?: number;
+    updatedAt?: string;
+    updateTime?: string;
+};
+
+export type PermissionPayload = {
+    permissionCode: string;
+    permissionName: string;
+    group?: string;
+    description?: string;
+    status?: EnableStatus;
+    version?: number;
+    updatedAt?: string;
+    updateTime?: string;
+};
+
+export type RolePayload = {
+    roleCode: string;
+    roleName: string;
+    description?: string;
+    status?: EnableStatus;
+    level: number;
+    permissionCodes?: Array<string>;
+    version?: number;
+    updatedAt?: string;
+    updateTime?: string;
+};
+
+export type RoleSyncPermissionsRequestBody = {
+    permissionCodes: Array<string>;
+    version?: number;
+    updatedAt?: string;
+    updateTime?: string;
+};
+
+/**
+ * Optional tenant override for super-admin scope.
+ */
+export type TenantHeader = string;
+
+export type IdPath = number;
+
+export type SessionIdPath = string;
+
 export type PostAuthLoginData = {
-    body: {
-        userName?: string;
-        email?: string;
-        password?: string;
-        rememberMe?: boolean;
-        otpCode?: string;
-    };
+    body: LoginRequestBody;
     path?: never;
     query?: never;
     url: '/auth/login';
@@ -36,8 +167,74 @@ export type PostAuthLoginResponses = {
     /**
      * Obsidian response wrapper
      */
-    200: unknown;
+    200: ApiResponse;
 };
+
+export type PostAuthLoginResponse = PostAuthLoginResponses[keyof PostAuthLoginResponses];
+
+export type PostAuthRegisterData = {
+    body: RegisterRequestBody;
+    path?: never;
+    query?: never;
+    url: '/auth/register';
+};
+
+export type PostAuthRegisterResponses = {
+    /**
+     * Registration response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type PostAuthRegisterResponse = PostAuthRegisterResponses[keyof PostAuthRegisterResponses];
+
+export type PostAuthForgotPasswordData = {
+    body: ForgotPasswordRequestBody;
+    path?: never;
+    query?: never;
+    url: '/auth/forgot-password';
+};
+
+export type PostAuthForgotPasswordResponses = {
+    /**
+     * Forgot password response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type PostAuthForgotPasswordResponse = PostAuthForgotPasswordResponses[keyof PostAuthForgotPasswordResponses];
+
+export type PostAuthResetPasswordData = {
+    body: ResetPasswordRequestBody;
+    path?: never;
+    query?: never;
+    url: '/auth/reset-password';
+};
+
+export type PostAuthResetPasswordResponses = {
+    /**
+     * Reset password response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type PostAuthResetPasswordResponse = PostAuthResetPasswordResponses[keyof PostAuthResetPasswordResponses];
+
+export type PostAuthRefreshTokenData = {
+    body: RefreshTokenRequestBody;
+    path?: never;
+    query?: never;
+    url: '/auth/refreshToken';
+};
+
+export type PostAuthRefreshTokenResponses = {
+    /**
+     * Refresh token response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type PostAuthRefreshTokenResponse = PostAuthRefreshTokenResponses[keyof PostAuthRefreshTokenResponses];
 
 export type GetAuthGetUserInfoData = {
     body?: never;
@@ -48,97 +245,211 @@ export type GetAuthGetUserInfoData = {
 
 export type GetAuthGetUserInfoResponses = {
     /**
-     * OK
+     * Current user info response wrapper
      */
-    200: unknown;
+    200: ApiResponse;
 };
 
-export type GetUserListData = {
+export type GetAuthGetUserInfoResponse = GetAuthGetUserInfoResponses[keyof GetAuthGetUserInfoResponses];
+
+export type GetAuthMenusData = {
     body?: never;
-    headers?: {
-        'X-Tenant-Id'?: string;
+    path?: never;
+    query?: never;
+    url: '/auth/menus';
+};
+
+export type GetAuthMenusResponses = {
+    /**
+     * Menus response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type GetAuthMenusResponse = GetAuthMenusResponses[keyof GetAuthMenusResponses];
+
+export type GetAuthProfileData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/auth/profile';
+};
+
+export type GetAuthProfileResponses = {
+    /**
+     * Profile response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type GetAuthProfileResponse = GetAuthProfileResponses[keyof GetAuthProfileResponses];
+
+export type PutAuthProfileData = {
+    body: UpdateProfileRequestBody;
+    path?: never;
+    query?: never;
+    url: '/auth/profile';
+};
+
+export type PutAuthProfileResponses = {
+    /**
+     * Profile update response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type PutAuthProfileResponse = PutAuthProfileResponses[keyof PutAuthProfileResponses];
+
+export type PutAuthPreferredLocaleData = {
+    body: UpdatePreferredLocaleRequestBody;
+    path?: never;
+    query?: never;
+    url: '/auth/preferred-locale';
+};
+
+export type PutAuthPreferredLocaleResponses = {
+    /**
+     * Preferred locale update response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type PutAuthPreferredLocaleResponse = PutAuthPreferredLocaleResponses[keyof PutAuthPreferredLocaleResponses];
+
+export type PutAuthPreferencesData = {
+    body: UpdateUserPreferencesRequestBody;
+    path?: never;
+    query?: never;
+    url: '/auth/preferences';
+};
+
+export type PutAuthPreferencesResponses = {
+    /**
+     * User preferences update response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type PutAuthPreferencesResponse = PutAuthPreferencesResponses[keyof PutAuthPreferencesResponses];
+
+export type GetAuthTimezonesData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/auth/timezones';
+};
+
+export type GetAuthTimezonesResponses = {
+    /**
+     * Timezone options response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type GetAuthTimezonesResponse = GetAuthTimezonesResponses[keyof GetAuthTimezonesResponses];
+
+export type GetAuthSessionsData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/auth/sessions';
+};
+
+export type GetAuthSessionsResponses = {
+    /**
+     * Sessions response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type GetAuthSessionsResponse = GetAuthSessionsResponses[keyof GetAuthSessionsResponses];
+
+export type PutAuthSessionsBySessionIdAliasData = {
+    body: UpdateSessionAliasRequestBody;
+    path: {
+        sessionId: string;
     };
+    query?: never;
+    url: '/auth/sessions/{sessionId}/alias';
+};
+
+export type PutAuthSessionsBySessionIdAliasResponses = {
+    /**
+     * Session alias update response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type PutAuthSessionsBySessionIdAliasResponse = PutAuthSessionsBySessionIdAliasResponses[keyof PutAuthSessionsBySessionIdAliasResponses];
+
+export type DeleteAuthSessionsBySessionIdData = {
+    body?: never;
+    path: {
+        sessionId: string;
+    };
+    query?: never;
+    url: '/auth/sessions/{sessionId}';
+};
+
+export type DeleteAuthSessionsBySessionIdResponses = {
+    /**
+     * Session revoke response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type DeleteAuthSessionsBySessionIdResponse = DeleteAuthSessionsBySessionIdResponses[keyof DeleteAuthSessionsBySessionIdResponses];
+
+export type PostAuthLogoutData = {
+    body?: LogoutRequestBody;
     path?: never;
     query?: never;
-    url: '/user/list';
+    url: '/auth/logout';
 };
 
-export type GetUserListResponses = {
+export type PostAuthLogoutResponses = {
     /**
-     * OK
+     * Logout response wrapper
      */
-    200: unknown;
+    200: ApiResponse;
 };
 
-export type GetRoleListData = {
+export type PostAuthLogoutResponse = PostAuthLogoutResponses[keyof PostAuthLogoutResponses];
+
+export type GetAuthMeData = {
     body?: never;
     path?: never;
     query?: never;
-    url: '/role/list';
+    url: '/auth/me';
 };
 
-export type GetRoleListResponses = {
+export type GetAuthMeResponses = {
     /**
-     * OK
+     * Current user response wrapper
      */
-    200: unknown;
+    200: ApiResponse;
 };
 
-export type GetPermissionListData = {
+export type GetAuthMeResponse = GetAuthMeResponses[keyof GetAuthMeResponses];
+
+export type GetAuthErrorData = {
     body?: never;
     path?: never;
-    query?: never;
-    url: '/permission/list';
+    query: {
+        code: string;
+        msg: string;
+    };
+    url: '/auth/error';
 };
 
-export type GetPermissionListResponses = {
+export type GetAuthErrorResponses = {
     /**
-     * OK
+     * Custom error response wrapper
      */
-    200: unknown;
+    200: ApiResponse;
 };
 
-export type GetTenantListData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/tenant/list';
-};
-
-export type GetTenantListResponses = {
-    /**
-     * OK
-     */
-    200: unknown;
-};
-
-export type PostAuthForgotPasswordData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/auth/forgot-password';
-};
-
-export type PostAuthForgotPasswordResponses = {
-    /**
-     * OK
-     */
-    200: unknown;
-};
-
-export type PostAuthResetPasswordData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/auth/reset-password';
-};
-
-export type PostAuthResetPasswordResponses = {
-    /**
-     * OK
-     */
-    200: unknown;
-};
+export type GetAuthErrorResponse = GetAuthErrorResponses[keyof GetAuthErrorResponses];
 
 export type PostAuth2FaSetupData = {
     body?: never;
@@ -149,13 +460,15 @@ export type PostAuth2FaSetupData = {
 
 export type PostAuth2FaSetupResponses = {
     /**
-     * OK
+     * Two-factor setup response wrapper
      */
-    200: unknown;
+    200: ApiResponse;
 };
 
+export type PostAuth2FaSetupResponse = PostAuth2FaSetupResponses[keyof PostAuth2FaSetupResponses];
+
 export type PostAuth2FaEnableData = {
-    body?: never;
+    body: TwoFactorCodeRequestBody;
     path?: never;
     query?: never;
     url: '/auth/2fa/enable';
@@ -163,13 +476,15 @@ export type PostAuth2FaEnableData = {
 
 export type PostAuth2FaEnableResponses = {
     /**
-     * OK
+     * Two-factor enable response wrapper
      */
-    200: unknown;
+    200: ApiResponse;
 };
 
+export type PostAuth2FaEnableResponse = PostAuth2FaEnableResponses[keyof PostAuth2FaEnableResponses];
+
 export type PostAuth2FaDisableData = {
-    body?: never;
+    body: TwoFactorCodeRequestBody;
     path?: never;
     query?: never;
     url: '/auth/2fa/disable';
@@ -177,7 +492,414 @@ export type PostAuth2FaDisableData = {
 
 export type PostAuth2FaDisableResponses = {
     /**
-     * OK
+     * Two-factor disable response wrapper
      */
-    200: unknown;
+    200: ApiResponse;
 };
+
+export type PostAuth2FaDisableResponse = PostAuth2FaDisableResponses[keyof PostAuth2FaDisableResponses];
+
+export type GetUserListData = {
+    body?: never;
+    headers?: {
+        /**
+         * Optional tenant override for super-admin scope.
+         */
+        'X-Tenant-Id'?: string;
+    };
+    path?: never;
+    query?: {
+        current?: number;
+        size?: number;
+        keyword?: string;
+        status?: EnableStatus;
+        userName?: string;
+        userEmail?: string;
+        roleCode?: string;
+    };
+    url: '/user/list';
+};
+
+export type GetUserListResponses = {
+    /**
+     * User list response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type GetUserListResponse = GetUserListResponses[keyof GetUserListResponses];
+
+export type PostUserData = {
+    body: UserPayload;
+    path?: never;
+    query?: never;
+    url: '/user';
+};
+
+export type PostUserResponses = {
+    /**
+     * User create response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type PostUserResponse = PostUserResponses[keyof PostUserResponses];
+
+export type DeleteUserByIdData = {
+    body?: never;
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/user/{id}';
+};
+
+export type DeleteUserByIdResponses = {
+    /**
+     * User delete response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type DeleteUserByIdResponse = DeleteUserByIdResponses[keyof DeleteUserByIdResponses];
+
+export type PutUserByIdData = {
+    body: UserPayload;
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/user/{id}';
+};
+
+export type PutUserByIdResponses = {
+    /**
+     * User update response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type PutUserByIdResponse = PutUserByIdResponses[keyof PutUserByIdResponses];
+
+export type PutUserByIdRoleData = {
+    body: AssignUserRoleRequestBody;
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/user/{id}/role';
+};
+
+export type PutUserByIdRoleResponses = {
+    /**
+     * User role assignment response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type PutUserByIdRoleResponse = PutUserByIdRoleResponses[keyof PutUserByIdRoleResponses];
+
+export type GetRoleListData = {
+    body?: never;
+    path?: never;
+    query?: {
+        current?: number;
+        size?: number;
+        keyword?: string;
+        status?: EnableStatus;
+        level?: number;
+    };
+    url: '/role/list';
+};
+
+export type GetRoleListResponses = {
+    /**
+     * Role list response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type GetRoleListResponse = GetRoleListResponses[keyof GetRoleListResponses];
+
+export type GetRoleAllData = {
+    body?: never;
+    path?: never;
+    query?: {
+        manageableOnly?: boolean;
+    };
+    url: '/role/all';
+};
+
+export type GetRoleAllResponses = {
+    /**
+     * Role selector response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type GetRoleAllResponse = GetRoleAllResponses[keyof GetRoleAllResponses];
+
+export type GetRoleAssignablePermissionsData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/role/assignable-permissions';
+};
+
+export type GetRoleAssignablePermissionsResponses = {
+    /**
+     * Assignable permissions response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type GetRoleAssignablePermissionsResponse = GetRoleAssignablePermissionsResponses[keyof GetRoleAssignablePermissionsResponses];
+
+export type PostRoleData = {
+    body: RolePayload;
+    path?: never;
+    query?: never;
+    url: '/role';
+};
+
+export type PostRoleResponses = {
+    /**
+     * Role create response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type PostRoleResponse = PostRoleResponses[keyof PostRoleResponses];
+
+export type DeleteRoleByIdData = {
+    body?: never;
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/role/{id}';
+};
+
+export type DeleteRoleByIdResponses = {
+    /**
+     * Role delete response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type DeleteRoleByIdResponse = DeleteRoleByIdResponses[keyof DeleteRoleByIdResponses];
+
+export type PutRoleByIdData = {
+    body: RolePayload;
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/role/{id}';
+};
+
+export type PutRoleByIdResponses = {
+    /**
+     * Role update response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type PutRoleByIdResponse = PutRoleByIdResponses[keyof PutRoleByIdResponses];
+
+export type PutRoleByIdPermissionsData = {
+    body: RoleSyncPermissionsRequestBody;
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/role/{id}/permissions';
+};
+
+export type PutRoleByIdPermissionsResponses = {
+    /**
+     * Role permissions sync response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type PutRoleByIdPermissionsResponse = PutRoleByIdPermissionsResponses[keyof PutRoleByIdPermissionsResponses];
+
+export type GetPermissionListData = {
+    body?: never;
+    path?: never;
+    query?: {
+        current?: number;
+        size?: number;
+        keyword?: string;
+        status?: EnableStatus;
+        group?: string;
+    };
+    url: '/permission/list';
+};
+
+export type GetPermissionListResponses = {
+    /**
+     * Permission list response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type GetPermissionListResponse = GetPermissionListResponses[keyof GetPermissionListResponses];
+
+export type GetPermissionAllData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/permission/all';
+};
+
+export type GetPermissionAllResponses = {
+    /**
+     * Permission selector response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type GetPermissionAllResponse = GetPermissionAllResponses[keyof GetPermissionAllResponses];
+
+export type PostPermissionData = {
+    body: PermissionPayload;
+    path?: never;
+    query?: never;
+    url: '/permission';
+};
+
+export type PostPermissionResponses = {
+    /**
+     * Permission create response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type PostPermissionResponse = PostPermissionResponses[keyof PostPermissionResponses];
+
+export type DeletePermissionByIdData = {
+    body?: never;
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/permission/{id}';
+};
+
+export type DeletePermissionByIdResponses = {
+    /**
+     * Permission delete response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type DeletePermissionByIdResponse = DeletePermissionByIdResponses[keyof DeletePermissionByIdResponses];
+
+export type PutPermissionByIdData = {
+    body: PermissionPayload;
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/permission/{id}';
+};
+
+export type PutPermissionByIdResponses = {
+    /**
+     * Permission update response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type PutPermissionByIdResponse = PutPermissionByIdResponses[keyof PutPermissionByIdResponses];
+
+export type GetTenantListData = {
+    body?: never;
+    path?: never;
+    query?: {
+        current?: number;
+        size?: number;
+        keyword?: string;
+        status?: EnableStatus;
+    };
+    url: '/tenant/list';
+};
+
+export type GetTenantListResponses = {
+    /**
+     * Tenant list response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type GetTenantListResponse = GetTenantListResponses[keyof GetTenantListResponses];
+
+export type GetTenantAllData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/tenant/all';
+};
+
+export type GetTenantAllResponses = {
+    /**
+     * Tenant selector response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type GetTenantAllResponse = GetTenantAllResponses[keyof GetTenantAllResponses];
+
+export type PostTenantData = {
+    body: TenantPayload;
+    path?: never;
+    query?: never;
+    url: '/tenant';
+};
+
+export type PostTenantResponses = {
+    /**
+     * Tenant create response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type PostTenantResponse = PostTenantResponses[keyof PostTenantResponses];
+
+export type DeleteTenantByIdData = {
+    body?: never;
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/tenant/{id}';
+};
+
+export type DeleteTenantByIdResponses = {
+    /**
+     * Tenant delete response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type DeleteTenantByIdResponse = DeleteTenantByIdResponses[keyof DeleteTenantByIdResponses];
+
+export type PutTenantByIdData = {
+    body: TenantPayload;
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/tenant/{id}';
+};
+
+export type PutTenantByIdResponses = {
+    /**
+     * Tenant update response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type PutTenantByIdResponse = PutTenantByIdResponses[keyof PutTenantByIdResponses];

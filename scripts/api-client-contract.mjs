@@ -65,17 +65,69 @@ function loadGeneratedSdkMap() {
   }
 
   const raw = fs.readFileSync(sdkPath, 'utf8');
+  const sourceFile = ts.createSourceFile(sdkPath, raw, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
   const map = new Map();
-  const regex =
-    /export const\s+([A-Za-z_][A-Za-z0-9_]*)\s*=\s*<[\s\S]*?>\s*\(options[\s\S]*?\)\s*=>\s*\(options[\s\S]*?\)\.([a-z]+)<[\s\S]*?\{\s*url:\s*'([^']+)'/g;
 
-  let match = regex.exec(raw);
-  while (match) {
-    map.set(match[1], {
-      method: String(match[2]).toUpperCase(),
-      path: normalizePath(match[3])
-    });
-    match = regex.exec(raw);
+  for (const statement of sourceFile.statements) {
+    if (!ts.isVariableStatement(statement)) {
+      continue;
+    }
+
+    const isExported = statement.modifiers?.some(modifier => modifier.kind === ts.SyntaxKind.ExportKeyword) ?? false;
+    if (!isExported) {
+      continue;
+    }
+
+    for (const declaration of statement.declarationList.declarations) {
+      if (!ts.isIdentifier(declaration.name) || !declaration.initializer) {
+        continue;
+      }
+
+      let initializer = declaration.initializer;
+      while (ts.isParenthesizedExpression(initializer)) {
+        initializer = initializer.expression;
+      }
+
+      if (!ts.isArrowFunction(initializer)) {
+        continue;
+      }
+
+      const body = initializer.body;
+      const callExpression = ts.isCallExpression(body)
+        ? body
+        : ts.isBlock(body)
+          ? body.statements.find(ts.isReturnStatement)?.expression
+          : null;
+
+      if (!callExpression || !ts.isCallExpression(callExpression)) {
+        continue;
+      }
+
+      const expression = callExpression.expression;
+      if (!ts.isPropertyAccessExpression(expression)) {
+        continue;
+      }
+
+      const method = expression.name.text.trim();
+      if (method === '') {
+        continue;
+      }
+
+      const objectLiteral = extractObjectLiteral(callExpression);
+      if (!objectLiteral) {
+        continue;
+      }
+
+      const endpointPath = extractUrl(objectLiteral, sourceFile);
+      if (!endpointPath) {
+        continue;
+      }
+
+      map.set(declaration.name.text, {
+        method: method.toUpperCase(),
+        path: endpointPath
+      });
+    }
   }
 
   return map;

@@ -1,15 +1,8 @@
+import type { CustomAxiosRequestConfig } from '@sa/axios';
 import { getServiceBaseURL } from '@/utils/service';
 import { request } from '../request';
-import {
-  createRequestContextHeaders,
-  expiredTokenCodes,
-  handleExpiredRequest,
-  modalLogoutCodes,
-  serviceSuccessCode,
-  showErrorMsg
-} from '../request/shared';
-import { client as generatedClient } from './generated/client.gen';
 import { createGeneratedCaller } from './generated-caller';
+import { client as generatedClient } from './generated/client.gen';
 
 const runtimeEnv = ((import.meta as ImportMeta & { env?: Partial<Env.ImportMeta> }).env ||
   {}) as Partial<Env.ImportMeta>;
@@ -19,18 +12,31 @@ const apifoxToken = runtimeEnv.DEV ? String(runtimeEnv.VITE_APIFOX_TOKEN || '').
 const defaultHeaders = apifoxToken ? { apifoxToken } : {};
 
 generatedClient.setConfig({
+  axios: request.instance,
   baseURL,
-  headers: defaultHeaders,
-  requestValidator: async rawOptions => {
-    const options = rawOptions as { headers?: Record<string, unknown> };
-    options.headers = createRequestContextHeaders(options.headers as Record<string, unknown>);
-  }
+  headers: defaultHeaders
 });
 
-export const callGenerated = createGeneratedCaller({
-  successCode: serviceSuccessCode,
-  modalLogoutCodes,
-  expiredTokenCodes,
-  handleExpiredRequest: () => handleExpiredRequest(request.state),
-  showErrorMsg: message => showErrorMsg(request.state, message)
-});
+export type GeneratedRequestConfig = Pick<
+  CustomAxiosRequestConfig,
+  | 'handleValidationErrorLocally'
+  | 'headers'
+  | 'onDownloadProgress'
+  | 'onUploadProgress'
+  | 'responseType'
+  | 'signal'
+  | 'timeout'
+  | 'withCredentials'
+>;
+
+export function buildGeneratedOptions<TOptions extends Record<string, unknown>>(
+  data: TOptions,
+  config?: GeneratedRequestConfig
+): TOptions & GeneratedRequestConfig {
+  return {
+    ...data,
+    ...(config ?? {})
+  };
+}
+
+export const callGenerated = createGeneratedCaller();

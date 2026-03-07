@@ -1,5 +1,27 @@
 import type { CustomAxiosRequestConfig } from '@sa/axios';
-import { request } from '../request';
+import {
+  deleteAuthSessionsBySessionId,
+  getAuthError,
+  getAuthGetUserInfo,
+  getAuthMenus,
+  getAuthProfile,
+  getAuthSessions,
+  getAuthTimezones,
+  postAuth2FaDisable,
+  postAuth2FaEnable,
+  postAuth2FaSetup,
+  postAuthForgotPassword,
+  postAuthLogin,
+  postAuthLogout,
+  postAuthRefreshToken,
+  postAuthRegister,
+  postAuthResetPassword,
+  putAuthPreferences,
+  putAuthPreferredLocale,
+  putAuthProfile,
+  putAuthSessionsBySessionIdAlias
+} from './generated';
+import { buildGeneratedOptions, callGenerated } from './generated-adapter';
 
 /**
  * Login
@@ -15,21 +37,25 @@ export function fetchLogin(
     locale?: App.I18n.LangType | null;
   },
   config?: CustomAxiosRequestConfig
-): ReturnType<typeof request<Api.Auth.LoginToken>> {
+) {
   const { userName, password, rememberMe, otpCode, locale } = payload;
 
-  return request<Api.Auth.LoginToken>({
-    url: '/auth/login',
-    method: 'post',
-    data: {
-      userName,
-      password,
-      rememberMe,
-      otpCode,
-      locale: locale || undefined
-    },
-    ...config
-  });
+  return callGenerated<Api.Auth.LoginToken>(() =>
+    postAuthLogin(
+      buildGeneratedOptions(
+        {
+          body: {
+            userName,
+            password,
+            rememberMe,
+            otpCode,
+            locale: locale || undefined
+          }
+        },
+        config
+      )
+    )
+  );
 }
 
 /**
@@ -38,12 +64,16 @@ export function fetchLogin(
  * @param payload Register payload
  */
 export function fetchRegister(payload: Api.Auth.RegisterPayload, config?: CustomAxiosRequestConfig) {
-  return request<Api.Auth.LoginToken>({
-    url: '/auth/register',
-    method: 'post',
-    data: payload,
-    ...config
-  });
+  return callGenerated<Api.Auth.LoginToken>(() =>
+    postAuthRegister(
+      buildGeneratedOptions(
+        {
+          body: payload
+        },
+        config
+      )
+    )
+  );
 }
 
 /**
@@ -52,12 +82,16 @@ export function fetchRegister(payload: Api.Auth.RegisterPayload, config?: Custom
  * @param payload Forgot-password payload
  */
 export function fetchForgotPassword(payload: Api.Auth.ForgotPasswordPayload, config?: CustomAxiosRequestConfig) {
-  return request<Api.Auth.ForgotPasswordResult>({
-    url: '/auth/forgot-password',
-    method: 'post',
-    data: payload,
-    ...config
-  });
+  return callGenerated<Api.Auth.ForgotPasswordResult>(() =>
+    postAuthForgotPassword(
+      buildGeneratedOptions(
+        {
+          body: payload
+        },
+        config
+      )
+    )
+  );
 }
 
 /**
@@ -66,33 +100,31 @@ export function fetchForgotPassword(payload: Api.Auth.ForgotPasswordPayload, con
  * @param payload Reset-password payload
  */
 export function fetchResetPassword(payload: Api.Auth.ResetPasswordPayload, config?: CustomAxiosRequestConfig) {
-  return request<Record<string, never>>({
-    url: '/auth/reset-password',
-    method: 'post',
-    data: payload,
-    ...config
-  });
+  return callGenerated<Record<string, never>>(() =>
+    postAuthResetPassword(
+      buildGeneratedOptions(
+        {
+          body: payload
+        },
+        config
+      )
+    )
+  );
 }
 
 /** Get user info */
-export function fetchGetUserInfo(): ReturnType<typeof request<Api.Auth.UserInfo>> {
-  return request<Api.Auth.UserInfo>({
-    url: '/auth/getUserInfo'
-  });
+export function fetchGetUserInfo() {
+  return callGenerated<Api.Auth.UserInfo>(() => getAuthGetUserInfo());
 }
 
 /** Get backend-driven menus and route rules */
 export function fetchGetUserMenus() {
-  return request<Pick<Api.Auth.UserInfo, 'menuScope' | 'menus' | 'routeRules'>>({
-    url: '/auth/menus'
-  });
+  return callGenerated<Pick<Api.Auth.UserInfo, 'menuScope' | 'menus' | 'routeRules'>>(() => getAuthMenus());
 }
 
 /** Get current user profile */
 export function fetchGetUserProfile() {
-  return request<Api.Auth.UserProfile>({
-    url: '/auth/profile'
-  });
+  return callGenerated<Api.Auth.UserProfile>(() => getAuthProfile());
 }
 
 /**
@@ -101,12 +133,16 @@ export function fetchGetUserProfile() {
  * @param data Payload
  */
 export function fetchUpdateUserProfile(data: Api.Auth.UpdateProfilePayload, config?: CustomAxiosRequestConfig) {
-  return request<Api.Auth.UserProfile>({
-    url: '/auth/profile',
-    method: 'put',
-    data,
-    ...config
-  });
+  return callGenerated<Api.Auth.UserProfile>(() =>
+    putAuthProfile(
+      buildGeneratedOptions(
+        {
+          body: data
+        },
+        config
+      )
+    )
+  );
 }
 
 /**
@@ -115,13 +151,15 @@ export function fetchUpdateUserProfile(data: Api.Auth.UpdateProfilePayload, conf
  * @param locale Locale
  */
 export function fetchUpdateLocale(locale: App.I18n.LangType) {
-  return request<{ locale: App.I18n.LangType; preferredLocale?: App.I18n.LangType }>({
-    url: '/auth/preferred-locale',
-    method: 'put',
-    data: {
-      locale
-    }
-  });
+  return callGenerated<{ locale: App.I18n.LangType; preferredLocale?: App.I18n.LangType }>(() =>
+    putAuthPreferredLocale(
+      buildGeneratedOptions({
+        body: {
+          locale
+        }
+      })
+    )
+  );
 }
 
 /** @deprecated Use `fetchUpdateLocale` */
@@ -135,58 +173,68 @@ export function fetchUpdatePreferredLocale(preferredLocale: App.I18n.LangType) {
  * @param data Preferences payload
  */
 export function fetchUpdateUserPreferences(data: Api.Auth.UpdatePreferencesPayload) {
-  return request<{ themeSchema?: UnionKey.ThemeScheme | null; timezone?: string }>({
-    url: '/auth/preferences',
-    method: 'put',
-    data
-  });
+  return callGenerated<{ themeSchema?: UnionKey.ThemeScheme | null; timezone?: string }>(() =>
+    putAuthPreferences(
+      buildGeneratedOptions({
+        body: data
+      })
+    )
+  );
 }
 
 /** Get timezone options for profile preferences */
 export function fetchGetTimezoneOptions() {
-  return request<{
+  return callGenerated<{
     defaultTimezone: string;
     records: Api.Auth.TimezoneOption[];
-  }>({
-    url: '/auth/timezones'
-  });
+  }>(() => getAuthTimezones());
 }
 
 /** Get current user auth sessions */
 export function fetchGetAuthSessions() {
-  return request<Api.Auth.AuthSessionList>({
-    url: '/auth/sessions'
-  });
+  return callGenerated<Api.Auth.AuthSessionList>(() => getAuthSessions());
 }
 
 /** Revoke an auth session by session id */
 export function fetchRevokeAuthSession(sessionId: string) {
-  return request<Api.Auth.RevokeAuthSessionResult>({
-    url: `/auth/sessions/${encodeURIComponent(sessionId)}`,
-    method: 'delete'
-  });
+  return callGenerated<Api.Auth.RevokeAuthSessionResult>(() =>
+    deleteAuthSessionsBySessionId(
+      buildGeneratedOptions({
+        path: {
+          sessionId
+        }
+      })
+    )
+  );
 }
 
 /** Logout current session */
 export function fetchLogout(refreshToken?: string) {
-  return request<{ userId: string }>({
-    url: '/auth/logout',
-    method: 'post',
-    data: refreshToken
-      ? {
-          refreshToken
-        }
-      : undefined
-  });
+  return callGenerated<{ userId: string }>(() =>
+    postAuthLogout(
+      buildGeneratedOptions({
+        body: refreshToken
+          ? {
+              refreshToken
+            }
+          : undefined
+      })
+    )
+  );
 }
 
 /** Update an auth session alias */
 export function fetchUpdateAuthSessionAlias(sessionId: string, data: Api.Auth.UpdateAuthSessionAliasPayload) {
-  return request<Api.Auth.UpdateAuthSessionAliasResult>({
-    url: `/auth/sessions/${encodeURIComponent(sessionId)}/alias`,
-    method: 'put',
-    data
-  });
+  return callGenerated<Api.Auth.UpdateAuthSessionAliasResult>(() =>
+    putAuthSessionsBySessionIdAlias(
+      buildGeneratedOptions({
+        path: {
+          sessionId
+        },
+        body: data
+      })
+    )
+  );
 }
 
 /**
@@ -195,13 +243,15 @@ export function fetchUpdateAuthSessionAlias(sessionId: string, data: Api.Auth.Up
  * @param refreshToken Refresh token
  */
 export function fetchRefreshToken(refreshToken: string) {
-  return request<Api.Auth.LoginToken>({
-    url: '/auth/refreshToken',
-    method: 'post',
-    data: {
-      refreshToken
-    }
-  });
+  return callGenerated<Api.Auth.LoginToken>(() =>
+    postAuthRefreshToken(
+      buildGeneratedOptions({
+        body: {
+          refreshToken
+        }
+      })
+    )
+  );
 }
 
 /**
@@ -211,20 +261,20 @@ export function fetchRefreshToken(refreshToken: string) {
  * @param msg error message
  */
 export function fetchCustomBackendError(code: string, msg: string) {
-  return request<unknown>({
-    url: '/auth/error',
-    params: { code, msg }
-  });
+  return callGenerated<unknown>(() =>
+    getAuthError(
+      buildGeneratedOptions({
+        query: { code, msg }
+      })
+    )
+  );
 }
 
 /**
  * Setup Two-Factor Authentication
  */
 export function fetchSetupTwoFactor() {
-  return request<{ secret: string; otpauthUrl: string; enabled: boolean }>({
-    url: '/auth/2fa/setup',
-    method: 'post'
-  });
+  return callGenerated<{ secret: string; otpauthUrl: string; enabled: boolean }>(() => postAuth2FaSetup());
 }
 
 /**
@@ -233,11 +283,13 @@ export function fetchSetupTwoFactor() {
  * @param otpCode OTP Code
  */
 export function fetchEnableTwoFactor(otpCode: string) {
-  return request<{ enabled: boolean }>({
-    url: '/auth/2fa/enable',
-    method: 'post',
-    data: { otpCode }
-  });
+  return callGenerated<{ enabled: boolean }>(() =>
+    postAuth2FaEnable(
+      buildGeneratedOptions({
+        body: { otpCode }
+      })
+    )
+  );
 }
 
 /**
@@ -246,9 +298,11 @@ export function fetchEnableTwoFactor(otpCode: string) {
  * @param otpCode OTP Code
  */
 export function fetchDisableTwoFactor(otpCode: string) {
-  return request<{ enabled: boolean }>({
-    url: '/auth/2fa/disable',
-    method: 'post',
-    data: { otpCode }
-  });
+  return callGenerated<{ enabled: boolean }>(() =>
+    postAuth2FaDisable(
+      buildGeneratedOptions({
+        body: { otpCode }
+      })
+    )
+  );
 }

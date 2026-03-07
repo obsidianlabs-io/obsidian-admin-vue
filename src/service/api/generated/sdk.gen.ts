@@ -2,7 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { GetAuthGetUserInfoData, GetAuthGetUserInfoResponses, GetPermissionListData, GetPermissionListResponses, GetRoleListData, GetRoleListResponses, GetTenantListData, GetTenantListResponses, GetUserListData, GetUserListResponses, PostAuth2FaDisableData, PostAuth2FaDisableResponses, PostAuth2FaEnableData, PostAuth2FaEnableResponses, PostAuth2FaSetupData, PostAuth2FaSetupResponses, PostAuthForgotPasswordData, PostAuthForgotPasswordResponses, PostAuthLoginData, PostAuthLoginResponses, PostAuthResetPasswordData, PostAuthResetPasswordResponses } from './types.gen';
+import type { DeleteAuthSessionsBySessionIdData, DeleteAuthSessionsBySessionIdResponses, DeletePermissionByIdData, DeletePermissionByIdResponses, DeleteRoleByIdData, DeleteRoleByIdResponses, DeleteTenantByIdData, DeleteTenantByIdResponses, DeleteUserByIdData, DeleteUserByIdResponses, GetAuthErrorData, GetAuthErrorResponses, GetAuthGetUserInfoData, GetAuthGetUserInfoResponses, GetAuthMeData, GetAuthMenusData, GetAuthMenusResponses, GetAuthMeResponses, GetAuthProfileData, GetAuthProfileResponses, GetAuthSessionsData, GetAuthSessionsResponses, GetAuthTimezonesData, GetAuthTimezonesResponses, GetPermissionAllData, GetPermissionAllResponses, GetPermissionListData, GetPermissionListResponses, GetRoleAllData, GetRoleAllResponses, GetRoleAssignablePermissionsData, GetRoleAssignablePermissionsResponses, GetRoleListData, GetRoleListResponses, GetTenantAllData, GetTenantAllResponses, GetTenantListData, GetTenantListResponses, GetUserListData, GetUserListResponses, PostAuth2FaDisableData, PostAuth2FaDisableResponses, PostAuth2FaEnableData, PostAuth2FaEnableResponses, PostAuth2FaSetupData, PostAuth2FaSetupResponses, PostAuthForgotPasswordData, PostAuthForgotPasswordResponses, PostAuthLoginData, PostAuthLoginResponses, PostAuthLogoutData, PostAuthLogoutResponses, PostAuthRefreshTokenData, PostAuthRefreshTokenResponses, PostAuthRegisterData, PostAuthRegisterResponses, PostAuthResetPasswordData, PostAuthResetPasswordResponses, PostPermissionData, PostPermissionResponses, PostRoleData, PostRoleResponses, PostTenantData, PostTenantResponses, PostUserData, PostUserResponses, PutAuthPreferencesData, PutAuthPreferencesResponses, PutAuthPreferredLocaleData, PutAuthPreferredLocaleResponses, PutAuthProfileData, PutAuthProfileResponses, PutAuthSessionsBySessionIdAliasData, PutAuthSessionsBySessionIdAliasResponses, PutPermissionByIdData, PutPermissionByIdResponses, PutRoleByIdData, PutRoleByIdPermissionsData, PutRoleByIdPermissionsResponses, PutRoleByIdResponses, PutTenantByIdData, PutTenantByIdResponses, PutUserByIdData, PutUserByIdResponses, PutUserByIdRoleData, PutUserByIdRoleResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
@@ -22,7 +22,60 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
  * Login
  */
 export const postAuthLogin = <ThrowOnError extends boolean = false>(options: Options<PostAuthLoginData, ThrowOnError>) => (options.client ?? client).post<PostAuthLoginResponses, unknown, ThrowOnError>({
+    responseType: 'json',
     url: '/auth/login',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Register a new user
+ */
+export const postAuthRegister = <ThrowOnError extends boolean = false>(options: Options<PostAuthRegisterData, ThrowOnError>) => (options.client ?? client).post<PostAuthRegisterResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/auth/register',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Send password reset link
+ */
+export const postAuthForgotPassword = <ThrowOnError extends boolean = false>(options: Options<PostAuthForgotPasswordData, ThrowOnError>) => (options.client ?? client).post<PostAuthForgotPasswordResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/auth/forgot-password',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Reset password with token
+ */
+export const postAuthResetPassword = <ThrowOnError extends boolean = false>(options: Options<PostAuthResetPasswordData, ThrowOnError>) => (options.client ?? client).post<PostAuthResetPasswordResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/auth/reset-password',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Refresh access token
+ */
+export const postAuthRefreshToken = <ThrowOnError extends boolean = false>(options: Options<PostAuthRefreshTokenData, ThrowOnError>) => (options.client ?? client).post<PostAuthRefreshTokenResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/auth/refreshToken',
     ...options,
     headers: {
         'Content-Type': 'application/json',
@@ -33,49 +86,409 @@ export const postAuthLogin = <ThrowOnError extends boolean = false>(options: Opt
 /**
  * Current user info
  */
-export const getAuthGetUserInfo = <ThrowOnError extends boolean = false>(options?: Options<GetAuthGetUserInfoData, ThrowOnError>) => (options?.client ?? client).get<GetAuthGetUserInfoResponses, unknown, ThrowOnError>({ url: '/auth/getUserInfo', ...options });
+export const getAuthGetUserInfo = <ThrowOnError extends boolean = false>(options?: Options<GetAuthGetUserInfoData, ThrowOnError>) => (options?.client ?? client).get<GetAuthGetUserInfoResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/auth/getUserInfo',
+    ...options
+});
 
 /**
- * User listing
+ * Current user menus and route rules
  */
-export const getUserList = <ThrowOnError extends boolean = false>(options?: Options<GetUserListData, ThrowOnError>) => (options?.client ?? client).get<GetUserListResponses, unknown, ThrowOnError>({ url: '/user/list', ...options });
+export const getAuthMenus = <ThrowOnError extends boolean = false>(options?: Options<GetAuthMenusData, ThrowOnError>) => (options?.client ?? client).get<GetAuthMenusResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/auth/menus',
+    ...options
+});
 
 /**
- * Role listing
+ * Get current user profile
  */
-export const getRoleList = <ThrowOnError extends boolean = false>(options?: Options<GetRoleListData, ThrowOnError>) => (options?.client ?? client).get<GetRoleListResponses, unknown, ThrowOnError>({ url: '/role/list', ...options });
+export const getAuthProfile = <ThrowOnError extends boolean = false>(options?: Options<GetAuthProfileData, ThrowOnError>) => (options?.client ?? client).get<GetAuthProfileResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/auth/profile',
+    ...options
+});
 
 /**
- * Permission listing
+ * Update current user profile
  */
-export const getPermissionList = <ThrowOnError extends boolean = false>(options?: Options<GetPermissionListData, ThrowOnError>) => (options?.client ?? client).get<GetPermissionListResponses, unknown, ThrowOnError>({ url: '/permission/list', ...options });
+export const putAuthProfile = <ThrowOnError extends boolean = false>(options: Options<PutAuthProfileData, ThrowOnError>) => (options.client ?? client).put<PutAuthProfileResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/auth/profile',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
 /**
- * Tenant listing
+ * Update preferred locale
  */
-export const getTenantList = <ThrowOnError extends boolean = false>(options?: Options<GetTenantListData, ThrowOnError>) => (options?.client ?? client).get<GetTenantListResponses, unknown, ThrowOnError>({ url: '/tenant/list', ...options });
+export const putAuthPreferredLocale = <ThrowOnError extends boolean = false>(options: Options<PutAuthPreferredLocaleData, ThrowOnError>) => (options.client ?? client).put<PutAuthPreferredLocaleResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/auth/preferred-locale',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
 /**
- * Send password reset link
+ * Update current user preferences
  */
-export const postAuthForgotPassword = <ThrowOnError extends boolean = false>(options?: Options<PostAuthForgotPasswordData, ThrowOnError>) => (options?.client ?? client).post<PostAuthForgotPasswordResponses, unknown, ThrowOnError>({ url: '/auth/forgot-password', ...options });
+export const putAuthPreferences = <ThrowOnError extends boolean = false>(options: Options<PutAuthPreferencesData, ThrowOnError>) => (options.client ?? client).put<PutAuthPreferencesResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/auth/preferences',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
 /**
- * Reset password with token
+ * List supported timezones
  */
-export const postAuthResetPassword = <ThrowOnError extends boolean = false>(options?: Options<PostAuthResetPasswordData, ThrowOnError>) => (options?.client ?? client).post<PostAuthResetPasswordResponses, unknown, ThrowOnError>({ url: '/auth/reset-password', ...options });
+export const getAuthTimezones = <ThrowOnError extends boolean = false>(options?: Options<GetAuthTimezonesData, ThrowOnError>) => (options?.client ?? client).get<GetAuthTimezonesResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/auth/timezones',
+    ...options
+});
+
+/**
+ * List current user auth sessions
+ */
+export const getAuthSessions = <ThrowOnError extends boolean = false>(options?: Options<GetAuthSessionsData, ThrowOnError>) => (options?.client ?? client).get<GetAuthSessionsResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/auth/sessions',
+    ...options
+});
+
+/**
+ * Update auth session alias
+ */
+export const putAuthSessionsBySessionIdAlias = <ThrowOnError extends boolean = false>(options: Options<PutAuthSessionsBySessionIdAliasData, ThrowOnError>) => (options.client ?? client).put<PutAuthSessionsBySessionIdAliasResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/auth/sessions/{sessionId}/alias',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Revoke an auth session
+ */
+export const deleteAuthSessionsBySessionId = <ThrowOnError extends boolean = false>(options: Options<DeleteAuthSessionsBySessionIdData, ThrowOnError>) => (options.client ?? client).delete<DeleteAuthSessionsBySessionIdResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/auth/sessions/{sessionId}',
+    ...options
+});
+
+/**
+ * Logout current session
+ */
+export const postAuthLogout = <ThrowOnError extends boolean = false>(options?: Options<PostAuthLogoutData, ThrowOnError>) => (options?.client ?? client).post<PostAuthLogoutResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/auth/logout',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options?.headers
+    }
+});
+
+/**
+ * Get current authenticated user
+ */
+export const getAuthMe = <ThrowOnError extends boolean = false>(options?: Options<GetAuthMeData, ThrowOnError>) => (options?.client ?? client).get<GetAuthMeResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/auth/me',
+    ...options
+});
+
+/**
+ * Return a custom backend error payload for testing
+ */
+export const getAuthError = <ThrowOnError extends boolean = false>(options: Options<GetAuthErrorData, ThrowOnError>) => (options.client ?? client).get<GetAuthErrorResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/auth/error',
+    ...options
+});
 
 /**
  * Generate TOTP secret
  */
-export const postAuth2FaSetup = <ThrowOnError extends boolean = false>(options?: Options<PostAuth2FaSetupData, ThrowOnError>) => (options?.client ?? client).post<PostAuth2FaSetupResponses, unknown, ThrowOnError>({ url: '/auth/2fa/setup', ...options });
+export const postAuth2FaSetup = <ThrowOnError extends boolean = false>(options?: Options<PostAuth2FaSetupData, ThrowOnError>) => (options?.client ?? client).post<PostAuth2FaSetupResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/auth/2fa/setup',
+    ...options
+});
 
 /**
  * Enable TOTP
  */
-export const postAuth2FaEnable = <ThrowOnError extends boolean = false>(options?: Options<PostAuth2FaEnableData, ThrowOnError>) => (options?.client ?? client).post<PostAuth2FaEnableResponses, unknown, ThrowOnError>({ url: '/auth/2fa/enable', ...options });
+export const postAuth2FaEnable = <ThrowOnError extends boolean = false>(options: Options<PostAuth2FaEnableData, ThrowOnError>) => (options.client ?? client).post<PostAuth2FaEnableResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/auth/2fa/enable',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
 
 /**
  * Disable TOTP
  */
-export const postAuth2FaDisable = <ThrowOnError extends boolean = false>(options?: Options<PostAuth2FaDisableData, ThrowOnError>) => (options?.client ?? client).post<PostAuth2FaDisableResponses, unknown, ThrowOnError>({ url: '/auth/2fa/disable', ...options });
+export const postAuth2FaDisable = <ThrowOnError extends boolean = false>(options: Options<PostAuth2FaDisableData, ThrowOnError>) => (options.client ?? client).post<PostAuth2FaDisableResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/auth/2fa/disable',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * User listing
+ */
+export const getUserList = <ThrowOnError extends boolean = false>(options?: Options<GetUserListData, ThrowOnError>) => (options?.client ?? client).get<GetUserListResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/user/list',
+    ...options
+});
+
+/**
+ * Create user
+ */
+export const postUser = <ThrowOnError extends boolean = false>(options: Options<PostUserData, ThrowOnError>) => (options.client ?? client).post<PostUserResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/user',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Delete user
+ */
+export const deleteUserById = <ThrowOnError extends boolean = false>(options: Options<DeleteUserByIdData, ThrowOnError>) => (options.client ?? client).delete<DeleteUserByIdResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/user/{id}',
+    ...options
+});
+
+/**
+ * Update user
+ */
+export const putUserById = <ThrowOnError extends boolean = false>(options: Options<PutUserByIdData, ThrowOnError>) => (options.client ?? client).put<PutUserByIdResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/user/{id}',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Assign role to user
+ */
+export const putUserByIdRole = <ThrowOnError extends boolean = false>(options: Options<PutUserByIdRoleData, ThrowOnError>) => (options.client ?? client).put<PutUserByIdRoleResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/user/{id}/role',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Role listing
+ */
+export const getRoleList = <ThrowOnError extends boolean = false>(options?: Options<GetRoleListData, ThrowOnError>) => (options?.client ?? client).get<GetRoleListResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/role/list',
+    ...options
+});
+
+/**
+ * List active roles for selectors
+ */
+export const getRoleAll = <ThrowOnError extends boolean = false>(options?: Options<GetRoleAllData, ThrowOnError>) => (options?.client ?? client).get<GetRoleAllResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/role/all',
+    ...options
+});
+
+/**
+ * List permissions assignable to roles
+ */
+export const getRoleAssignablePermissions = <ThrowOnError extends boolean = false>(options?: Options<GetRoleAssignablePermissionsData, ThrowOnError>) => (options?.client ?? client).get<GetRoleAssignablePermissionsResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/role/assignable-permissions',
+    ...options
+});
+
+/**
+ * Create role
+ */
+export const postRole = <ThrowOnError extends boolean = false>(options: Options<PostRoleData, ThrowOnError>) => (options.client ?? client).post<PostRoleResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/role',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Delete role
+ */
+export const deleteRoleById = <ThrowOnError extends boolean = false>(options: Options<DeleteRoleByIdData, ThrowOnError>) => (options.client ?? client).delete<DeleteRoleByIdResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/role/{id}',
+    ...options
+});
+
+/**
+ * Update role
+ */
+export const putRoleById = <ThrowOnError extends boolean = false>(options: Options<PutRoleByIdData, ThrowOnError>) => (options.client ?? client).put<PutRoleByIdResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/role/{id}',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Sync role permissions
+ */
+export const putRoleByIdPermissions = <ThrowOnError extends boolean = false>(options: Options<PutRoleByIdPermissionsData, ThrowOnError>) => (options.client ?? client).put<PutRoleByIdPermissionsResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/role/{id}/permissions',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Permission listing
+ */
+export const getPermissionList = <ThrowOnError extends boolean = false>(options?: Options<GetPermissionListData, ThrowOnError>) => (options?.client ?? client).get<GetPermissionListResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/permission/list',
+    ...options
+});
+
+/**
+ * List active permissions for selectors
+ */
+export const getPermissionAll = <ThrowOnError extends boolean = false>(options?: Options<GetPermissionAllData, ThrowOnError>) => (options?.client ?? client).get<GetPermissionAllResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/permission/all',
+    ...options
+});
+
+/**
+ * Create permission
+ */
+export const postPermission = <ThrowOnError extends boolean = false>(options: Options<PostPermissionData, ThrowOnError>) => (options.client ?? client).post<PostPermissionResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/permission',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Delete permission
+ */
+export const deletePermissionById = <ThrowOnError extends boolean = false>(options: Options<DeletePermissionByIdData, ThrowOnError>) => (options.client ?? client).delete<DeletePermissionByIdResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/permission/{id}',
+    ...options
+});
+
+/**
+ * Update permission
+ */
+export const putPermissionById = <ThrowOnError extends boolean = false>(options: Options<PutPermissionByIdData, ThrowOnError>) => (options.client ?? client).put<PutPermissionByIdResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/permission/{id}',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Tenant listing
+ */
+export const getTenantList = <ThrowOnError extends boolean = false>(options?: Options<GetTenantListData, ThrowOnError>) => (options?.client ?? client).get<GetTenantListResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/tenant/list',
+    ...options
+});
+
+/**
+ * List active tenants for selectors
+ */
+export const getTenantAll = <ThrowOnError extends boolean = false>(options?: Options<GetTenantAllData, ThrowOnError>) => (options?.client ?? client).get<GetTenantAllResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/tenant/all',
+    ...options
+});
+
+/**
+ * Create tenant
+ */
+export const postTenant = <ThrowOnError extends boolean = false>(options: Options<PostTenantData, ThrowOnError>) => (options.client ?? client).post<PostTenantResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/tenant',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Delete tenant
+ */
+export const deleteTenantById = <ThrowOnError extends boolean = false>(options: Options<DeleteTenantByIdData, ThrowOnError>) => (options.client ?? client).delete<DeleteTenantByIdResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/tenant/{id}',
+    ...options
+});
+
+/**
+ * Update tenant
+ */
+export const putTenantById = <ThrowOnError extends boolean = false>(options: Options<PutTenantByIdData, ThrowOnError>) => (options.client ?? client).put<PutTenantByIdResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/tenant/{id}',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});

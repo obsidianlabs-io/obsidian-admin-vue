@@ -1,36 +1,45 @@
 import type { CustomAxiosRequestConfig } from '@sa/axios';
-import { request } from '../request';
-import { buildResourceItemUrl } from './url';
+import {
+  deletePermissionById,
+  getPermissionAll,
+  getPermissionList,
+  postPermission,
+  putPermissionById
+} from './generated';
+import { buildGeneratedOptions, callGenerated } from './generated-adapter';
 
 /**
  * Get permission list
  *
  * @param params Query params
  */
-export function fetchGetPermissionList(
-  params: Api.Permission.PermissionListParams
-): ReturnType<typeof request<Api.Permission.PermissionList>> {
-  return request<Api.Permission.PermissionList>({
-    url: '/permission/list',
-    params
-  });
+export function fetchGetPermissionList(params: Api.Permission.PermissionListParams) {
+  return callGenerated<Api.Permission.PermissionList>(() =>
+    getPermissionList(
+      buildGeneratedOptions({
+        query: params
+      })
+    )
+  );
 }
 
 /** Get all active permissions */
 export function fetchGetAllPermissions() {
-  return request<{ records: Api.Permission.PermissionOption[] }>({
-    url: '/permission/all'
-  });
+  return callGenerated<{ records: Api.Permission.PermissionOption[] }>(() => getPermissionAll());
 }
 
 /** Create permission */
 export function fetchCreatePermission(data: Api.Permission.PermissionPayload, config?: CustomAxiosRequestConfig) {
-  return request<unknown>({
-    url: '/permission',
-    method: 'post',
-    data,
-    ...config
-  });
+  return callGenerated<unknown>(() =>
+    postPermission(
+      buildGeneratedOptions(
+        {
+          body: data
+        },
+        config
+      )
+    )
+  );
 }
 
 /** Update permission */
@@ -39,18 +48,26 @@ export function fetchUpdatePermission(
   data: Api.Permission.PermissionPayload,
   config?: CustomAxiosRequestConfig
 ) {
-  return request<unknown>({
-    url: buildResourceItemUrl('/permission', id),
-    method: 'put',
-    data,
-    ...config
-  });
+  return callGenerated<unknown>(() =>
+    putPermissionById(
+      buildGeneratedOptions(
+        {
+          path: { id },
+          body: data
+        },
+        config
+      )
+    )
+  );
 }
 
 /** Delete permission */
 export function fetchDeletePermission(id: number) {
-  return request<unknown>({
-    url: buildResourceItemUrl('/permission', id),
-    method: 'delete'
-  });
+  return callGenerated<unknown>(() =>
+    deletePermissionById(
+      buildGeneratedOptions({
+        path: { id }
+      })
+    )
+  );
 }

@@ -93,6 +93,8 @@ export interface RequestInstanceCommon<State extends Record<string, unknown>> {
    * if the request provide abort controller sign from config, it will not collect in the abort controller map
    */
   cancelAllRequest: () => void;
+  /** the underlying axios instance */
+  instance: AxiosInstance;
   /** you can set custom state in the request instance */
   state: State;
 }

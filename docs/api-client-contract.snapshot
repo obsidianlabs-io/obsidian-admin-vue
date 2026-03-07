@@ -20,9 +20,9 @@
 [src/service/api/auth.ts] fetchRefreshToken | POST /auth/refreshToken | response=Api.Auth.LoginToken | params=refreshToken:string
 [src/service/api/auth.ts] fetchRegister | POST /auth/register | response=Api.Auth.LoginToken | params=payload:Api.Auth.RegisterPayload, config:CustomAxiosRequestConfig
 [src/service/api/auth.ts] fetchResetPassword | POST /auth/reset-password | response=Record<string, never> | params=payload:Api.Auth.ResetPasswordPayload, config:CustomAxiosRequestConfig
-[src/service/api/auth.ts] fetchRevokeAuthSession | DELETE /auth/sessions/{expr1} | response=Api.Auth.RevokeAuthSessionResult | params=sessionId:string
+[src/service/api/auth.ts] fetchRevokeAuthSession | DELETE /auth/sessions/{sessionId} | response=Api.Auth.RevokeAuthSessionResult | params=sessionId:string
 [src/service/api/auth.ts] fetchSetupTwoFactor | POST /auth/2fa/setup | response={ secret: string; otpauthUrl: string; enabled: boolean } | params=-
-[src/service/api/auth.ts] fetchUpdateAuthSessionAlias | PUT /auth/sessions/{expr1}/alias | response=Api.Auth.UpdateAuthSessionAliasResult | params=sessionId:string, data:Api.Auth.UpdateAuthSessionAliasPayload
+[src/service/api/auth.ts] fetchUpdateAuthSessionAlias | PUT /auth/sessions/{sessionId}/alias | response=Api.Auth.UpdateAuthSessionAliasResult | params=sessionId:string, data:Api.Auth.UpdateAuthSessionAliasPayload
 [src/service/api/auth.ts] fetchUpdateLocale | PUT /auth/preferred-locale | response={ locale: App.I18n.LangType; preferredLocale?: App.I18n.LangType } | params=locale:App.I18n.LangType
 [src/service/api/auth.ts] fetchUpdateUserPreferences | PUT /auth/preferences | response={ themeSchema?: UnionKey.ThemeScheme | null; timezone?: string } | params=data:Api.Auth.UpdatePreferencesPayload
 [src/service/api/auth.ts] fetchUpdateUserProfile | PUT /auth/profile | response=Api.Auth.UserProfile | params=data:Api.Auth.UpdateProfilePayload, config:CustomAxiosRequestConfig

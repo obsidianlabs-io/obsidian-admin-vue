@@ -81,7 +81,7 @@ function isAllowedRequestImporter(filePath) {
 }
 
 function isAllowedGeneratedImporter(filePath) {
-  return isInside(generatedRoot, filePath) || allowedGeneratedImporters.has(filePath);
+  return isInside(apiRoot, filePath) || allowedGeneratedImporters.has(filePath);
 }
 
 function collectViolations() {

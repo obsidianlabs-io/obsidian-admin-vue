@@ -126,6 +126,7 @@ export function createRequest<ResponseData, ApiData, State extends Record<string
   } as RequestInstance<ApiData, State>;
 
   request.cancelAllRequest = cancelAllRequest;
+  request.instance = instance;
   request.state = {} as State;
 
   return request;
@@ -167,6 +168,7 @@ export function createFlatRequest<ResponseData, ApiData, State extends Record<st
   } as FlatRequestInstance<ResponseData, ApiData, State>;
 
   flatRequest.cancelAllRequest = cancelAllRequest;
+  flatRequest.instance = instance;
   flatRequest.state = {
     ...opts.defaultState
   } as State;

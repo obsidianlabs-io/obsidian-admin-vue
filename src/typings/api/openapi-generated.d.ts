@@ -82,5 +82,5 @@ declare namespace BackendContract {
 }
 
 declare namespace OpenAPIContract {
-  type SchemaName = 'ApiErrorResponse' | 'ApiResponse';
+  type SchemaName = 'ApiErrorResponse' | 'ApiResponse' | 'AssignUserRoleRequestBody' | 'EnableStatus' | 'ForgotPasswordRequestBody' | 'LoginRequestBody' | 'LogoutRequestBody' | 'PermissionPayload' | 'RefreshTokenRequestBody' | 'RegisterRequestBody' | 'ResetPasswordRequestBody' | 'RolePayload' | 'RoleSyncPermissionsRequestBody' | 'TenantPayload' | 'TwoFactorCodeRequestBody' | 'UpdatePreferredLocaleRequestBody' | 'UpdateProfileRequestBody' | 'UpdateSessionAliasRequestBody' | 'UpdateUserPreferencesRequestBody' | 'UserPayload';
 }
