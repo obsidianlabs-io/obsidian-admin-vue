@@ -188,11 +188,18 @@ const TagStub = defineComponent({
   }
 });
 
-function mountComponent() {
+function mountComponent(options?: {
+  operateType?: 'add' | 'edit';
+  readOnly?: boolean;
+  rowData?: Api.Tenant.TenantRecord | null;
+  visible?: boolean;
+}) {
   return mount(TenantOperateDrawer, {
     props: {
-      visible: true,
-      operateType: 'add'
+      visible: options?.visible ?? true,
+      operateType: options?.operateType ?? 'add',
+      readOnly: options?.readOnly ?? false,
+      rowData: options?.rowData ?? null
     },
     global: {
       stubs: {
@@ -223,6 +230,7 @@ describe('TenantOperateDrawer', () => {
     validate.mockResolvedValue(undefined);
     applyServerValidation.mockResolvedValue(true);
     fetchCreateTenant.mockResolvedValue({ error: undefined });
+    fetchUpdateTenant.mockResolvedValue({ error: undefined });
 
     Object.assign(window, {
       $message: {
@@ -290,5 +298,49 @@ describe('TenantOperateDrawer', () => {
     expect(applyServerValidation).toHaveBeenCalledWith(backendError);
     expect(success).not.toHaveBeenCalled();
     expect(wrapper.emitted('submitted')).toBeUndefined();
+  });
+
+  it('submits the edit flow through update api and keeps tenant code read-only', async () => {
+    const rowData = {
+      id: 42,
+      tenantCode: 'MAIN',
+      tenantName: 'Main Tenant',
+      status: '2'
+    } as Api.Tenant.TenantRecord;
+
+    const wrapper = mountComponent({
+      operateType: 'edit',
+      rowData,
+      visible: false
+    });
+
+    await wrapper.setProps({ visible: true });
+    await nextTick();
+
+    const inputs = wrapper.findAll('input');
+
+    expect(inputs).toHaveLength(2);
+    expect((inputs[0].element as HTMLInputElement).readOnly).toBe(true);
+    expect((inputs[0].element as HTMLInputElement).value).toBe('MAIN');
+
+    await inputs[1].setValue(' Updated Tenant ');
+    await nextTick();
+
+    await wrapper.get('[data-testid="modal-submit"]').trigger('click');
+    await nextTick();
+
+    expect(fetchUpdateTenant).toHaveBeenCalledWith(
+      42,
+      {
+        tenantCode: 'MAIN',
+        tenantName: 'Updated Tenant',
+        status: '2'
+      },
+      {
+        handleValidationErrorLocally: true
+      }
+    );
+    expect(success).toHaveBeenCalledWith('common.updateSuccess');
+    expect(wrapper.emitted('submitted')).toHaveLength(1);
   });
 });
