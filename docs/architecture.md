@@ -33,6 +33,8 @@
 - Keep route authorization logic centralized in one module.
 - Keep request models centralized in `src/typings/api/*`.
 - CI must run lint, typecheck, unit test, and contract gates.
+- Business code must not import the request entrypoint directly.
+- Business code must not import the generated SDK directly; go through `src/service/api/*` facades or `src/service/api/generated-adapter.ts`.
 - Keep delete/deactivate UX consistent via `docs/deletion-ui-guidelines.md`.
 - API-backed forms must use the shared server-validation path:
   - `useNaiveForm()`

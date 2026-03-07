@@ -42,11 +42,12 @@
     "pnpm": ">=10.5.0"
   },
   "scripts": {
+    "api:architecture:check": "node scripts/api-architecture-check.mjs",
     "api:types": "node scripts/generate-openapi-types.mjs && node scripts/generate-backend-types.mjs && pnpm openapi:client:official",
     "api:types:check": "pnpm api:types && git diff --exit-code src/typings/api/openapi-generated.d.ts src/typings/api/backend-generated.d.ts src/service/api/generated",
     "build": "vite build --mode prod",
     "build:test": "vite build --mode test",
-    "check": "pnpm i18n:types:check && pnpm typecheck && pnpm lint:check && pnpm format:check && pnpm contract:check",
+    "check": "pnpm i18n:types:check && pnpm typecheck && pnpm lint:check && pnpm format:check && pnpm contract:check && pnpm api:architecture:check",
     "check:ci": "pnpm check && pnpm typecheck:strict && pnpm test:unit && pnpm build",
     "cleanup": "sa cleanup",
     "commit": "sa git-commit",

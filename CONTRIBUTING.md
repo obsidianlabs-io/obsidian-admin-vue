@@ -25,6 +25,8 @@ pnpm dev
 - Keep the frontend contract-first
 - Prefer generated API types over handwritten duplicate DTO interfaces
 - Keep shared client abstractions backend-neutral; do not add Laravel-only coupling into generic frontend layers
+- Only `src/service/api/*` may import the request entrypoint directly
+- Do not import `src/service/api/generated/*` from business code; use facades or `generated-adapter.ts`
 - Prefer composables for reusable page logic
 - Keep route, permission, tenant, and table behavior deterministic across page modules
 - API-backed forms should use the shared server-validation path: `useNaiveForm()`, request config `handleValidationErrorLocally: true`, and `naiveForm.applyServerValidation(error)`
