@@ -28,6 +28,7 @@ All of these must pass on the release commit:
 pnpm check
 pnpm typecheck:api
 pnpm test:unit
+pnpm test:vue
 pnpm build
 ```
 

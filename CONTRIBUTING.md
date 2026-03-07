@@ -63,6 +63,7 @@ Run the relevant frontend gates before opening a pull request.
 pnpm check
 pnpm typecheck:api
 pnpm test:unit
+pnpm test:vue
 pnpm build
 ```
 

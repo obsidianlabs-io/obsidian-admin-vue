@@ -64,7 +64,7 @@ This checklist is for `/Users/zero/Documents/Project/WK/obsidian-admin-vue`.
 
 说明:
 
-- `Frontend Quality Gate / quality` 现在包含 `pnpm check`、`pnpm typecheck:strict`、`pnpm test:unit`、`pnpm build`
+- `Frontend Quality Gate / quality` 现在包含 `pnpm check`、`pnpm typecheck:strict`、`pnpm test:unit`、`pnpm test:vue`、`pnpm build`
 - 它应作为前端主 PR 门禁
 
 建议按需勾选:

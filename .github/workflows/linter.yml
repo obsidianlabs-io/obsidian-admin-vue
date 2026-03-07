@@ -27,6 +27,9 @@ jobs:
       - name: Unit tests
         run: pnpm test:unit
 
+      - name: Vue-layer tests (Vitest)
+        run: pnpm test:vue
+
       - name: Production build
         run: pnpm build
 

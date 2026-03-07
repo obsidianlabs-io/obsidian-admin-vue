@@ -35,6 +35,7 @@ This document defines the release process for `/Users/zero/Documents/Project/WK/
 pnpm check
 pnpm typecheck:api
 pnpm test:unit
+pnpm test:vue
 pnpm build
 ```
 
@@ -150,7 +151,7 @@ git push origin vX.Y.Z
 3. 准备 `docs/releases/vX.Y.Z.md`
 4. 跑 `pnpm check`
 5. 跑 `pnpm typecheck:api`
-6. 跑 `pnpm test:unit && pnpm build`
+6. 跑 `pnpm test:unit && pnpm test:vue && pnpm build`
 7. 确认工作区干净
 8. 推 `main`
 9. 打 tag 并推
