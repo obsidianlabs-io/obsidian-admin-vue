@@ -1,3 +1,4 @@
+import type { CustomAxiosRequestConfig } from '@sa/axios';
 import { request } from '../request';
 import { buildResourceItemUrl } from './url';
 
@@ -23,20 +24,22 @@ export function fetchGetAllTenants() {
 }
 
 /** Create tenant */
-export function fetchCreateTenant(data: Api.Tenant.TenantPayload) {
+export function fetchCreateTenant(data: Api.Tenant.TenantPayload, config?: CustomAxiosRequestConfig) {
   return request<unknown>({
     url: '/tenant',
     method: 'post',
-    data
+    data,
+    ...config
   });
 }
 
 /** Update tenant */
-export function fetchUpdateTenant(id: number, data: Api.Tenant.TenantPayload) {
+export function fetchUpdateTenant(id: number, data: Api.Tenant.TenantPayload, config?: CustomAxiosRequestConfig) {
   return request<unknown>({
     url: buildResourceItemUrl('/tenant', id),
     method: 'put',
-    data
+    data,
+    ...config
   });
 }
 

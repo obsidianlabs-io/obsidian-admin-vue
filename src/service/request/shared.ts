@@ -16,6 +16,9 @@ export const modalLogoutCodes = serviceCodeConfig.modalLogoutCodes;
 export const expiredTokenCodes = serviceCodeConfig.expiredTokenCodes;
 const tenantInactiveMessage = 'Tenant is inactive';
 const userInactiveMessage = 'User is inactive';
+const validationErrorCodes = ['1001', '1002'];
+
+export type ValidationErrorMap = Partial<Record<string, string[]>>;
 
 const backendMessageI18nMap: Partial<Record<string, App.I18n.I18nKey>> = {
   'User is inactive': 'page.login.common.userInactive',
@@ -58,6 +61,92 @@ function parseErrorPayload(error: unknown): { code: string; message: string } {
     code: String(response?.data?.code ?? ''),
     message: normalizeMessage(response?.data?.msg ?? '')
   };
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+}
+
+function toStringMessages(value: unknown): string[] {
+  if (typeof value === 'string') {
+    const message = value.trim();
+
+    return message ? [message] : [];
+  }
+
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value
+    .map(item => {
+      if (typeof item === 'string') {
+        return item.trim();
+      }
+
+      if (isRecord(item) && typeof item.message === 'string') {
+        return item.message.trim();
+      }
+
+      return '';
+    })
+    .filter(Boolean);
+}
+
+function normalizeValidationErrors(candidate: unknown): ValidationErrorMap {
+  if (!isRecord(candidate)) {
+    return {};
+  }
+
+  return Object.entries(candidate).reduce<ValidationErrorMap>((acc, [field, value]) => {
+    const messages = toStringMessages(value);
+
+    if (messages.length > 0) {
+      acc[field] = messages;
+    }
+
+    return acc;
+  }, {});
+}
+
+function extractValidationErrors(error: unknown): ValidationErrorMap {
+  if (!error || typeof error !== 'object') {
+    return {};
+  }
+
+  const response = (
+    error as {
+      response?: {
+        data?: {
+          errors?: unknown;
+          data?: {
+            errors?: unknown;
+          };
+        };
+      };
+    }
+  ).response;
+
+  return {
+    ...normalizeValidationErrors(response?.data?.errors),
+    ...normalizeValidationErrors(response?.data?.data?.errors)
+  };
+}
+
+export function resolveValidationErrors(error: unknown): ValidationErrorMap {
+  return extractValidationErrors(error);
+}
+
+export function isValidationErrorPayload(error: unknown): boolean {
+  if (!error || typeof error !== 'object') {
+    return false;
+  }
+
+  const payload = parseErrorPayload(error);
+  const response = (error as { response?: { status?: number } }).response;
+  const fieldErrors = extractValidationErrors(error);
+
+  return response?.status === 422 || validationErrorCodes.includes(payload.code) || Object.keys(fieldErrors).length > 0;
 }
 
 export function isTenantInactivePayload(code: unknown, message: unknown): boolean {

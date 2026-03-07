@@ -83,6 +83,7 @@ interface Model {
 }
 
 const model = ref<Model>(createDefaultModel());
+naiveForm.bindModelValidation(model, ['roleCode', 'roleName', 'level', 'status']);
 
 function createDefaultModel(): Model {
   const defaultLevel = Math.min(100, inputMaxAssignableRoleLevel.value);
@@ -178,12 +179,13 @@ function isLevelPresetDisabled(level: number) {
   return level > maxAssignableRoleLevel.value;
 }
 
-const rules: Record<'roleCode' | 'roleName' | 'level' | 'status', App.Global.FormRule> = {
+const baseRules: Record<'roleCode' | 'roleName' | 'level' | 'status', App.Global.FormRule> = {
   roleCode: defaultRequiredRule,
   roleName: defaultRequiredRule,
   level: roleLevelRule(),
   status: defaultRequiredRule
 };
+const rules = naiveForm.withServerValidationRules(baseRules, ['roleCode', 'roleName', 'level', 'status'] as const);
 
 async function getPermissionOptions() {
   permissions.value = [];
@@ -297,8 +299,12 @@ async function handleSubmit() {
 
   const { error } =
     props.operateType === 'add'
-      ? await fetchCreateRole(payload)
-      : await fetchUpdateRole(props.rowData?.id || 0, payload);
+      ? await fetchCreateRole(payload, { handleValidationErrorLocally: true })
+      : await fetchUpdateRole(props.rowData?.id || 0, payload, { handleValidationErrorLocally: true });
+
+  if (error) {
+    await naiveForm.applyServerValidation(error);
+  }
 
   if (!error) {
     window.$message?.success(props.operateType === 'add' ? $t('common.addSuccess') : $t('common.updateSuccess'));

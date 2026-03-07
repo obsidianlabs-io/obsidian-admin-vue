@@ -56,6 +56,7 @@ interface Model {
 }
 
 const model = ref<Model>(createDefaultModel());
+naiveForm.bindModelValidation(model, ['tenantCode', 'tenantName', 'status']);
 
 function createDefaultModel(): Model {
   return {
@@ -65,11 +66,12 @@ function createDefaultModel(): Model {
   };
 }
 
-const rules: Record<'tenantCode' | 'tenantName' | 'status', App.Global.FormRule> = {
+const baseRules: Record<'tenantCode' | 'tenantName' | 'status', App.Global.FormRule> = {
   tenantCode: defaultRequiredRule,
   tenantName: defaultRequiredRule,
   status: defaultRequiredRule
 };
+const rules = naiveForm.withServerValidationRules(baseRules, ['tenantCode', 'tenantName', 'status'] as const);
 
 function handleInitModel() {
   model.value = createDefaultModel();
@@ -102,8 +104,12 @@ async function handleSubmit() {
 
   const { error } =
     props.operateType === 'add'
-      ? await fetchCreateTenant(payload)
-      : await fetchUpdateTenant(props.rowData?.id || 0, payload);
+      ? await fetchCreateTenant(payload, { handleValidationErrorLocally: true })
+      : await fetchUpdateTenant(props.rowData?.id || 0, payload, { handleValidationErrorLocally: true });
+
+  if (error) {
+    await naiveForm.applyServerValidation(error);
+  }
 
   if (!error) {
     window.$message?.success(props.operateType === 'add' ? $t('common.addSuccess') : $t('common.updateSuccess'));

@@ -83,6 +83,7 @@ export type MappedType<R extends ResponseType, JsonType = any> = R extends keyof
 
 export type CustomAxiosRequestConfig<R extends ResponseType = 'json'> = Omit<AxiosRequestConfig, 'responseType'> & {
   responseType?: R;
+  handleValidationErrorLocally?: boolean;
 };
 
 export interface RequestInstanceCommon<State extends Record<string, unknown>> {

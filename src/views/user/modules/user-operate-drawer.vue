@@ -77,6 +77,7 @@ interface TeamOption {
 }
 
 const model = ref<UserFormModel>(createDefaultModel());
+naiveForm.bindModelValidation(model, ['userName', 'email', 'roleCode', 'status', 'password', 'confirmPassword']);
 
 function createDefaultModel(): UserFormModel {
   return {
@@ -127,7 +128,7 @@ const selectedTeamName = computed(() => {
   return team?.label || props.rowData?.teamName || $t('common.noData');
 });
 
-const rules = computed<
+const baseRules = computed<
   Partial<Record<'userName' | 'email' | 'roleCode' | 'status' | 'password' | 'confirmPassword', App.Global.FormRule[]>>
 >(() => {
   const confirmPasswordRule: App.Global.FormRule[] = [
@@ -198,6 +199,14 @@ const rules = computed<
     confirmPassword: confirmPasswordRule
   };
 });
+const rules = naiveForm.withServerValidationRules(baseRules, [
+  'userName',
+  'email',
+  'roleCode',
+  'status',
+  'password',
+  'confirmPassword'
+] as const);
 
 function handleInitModel() {
   model.value = createDefaultModel();
@@ -314,8 +323,12 @@ async function handleSubmit() {
 
   const { error } =
     props.operateType === 'add'
-      ? await fetchCreateUser(payload)
-      : await fetchUpdateUser(props.rowData?.id || 0, payload);
+      ? await fetchCreateUser(payload, { handleValidationErrorLocally: true })
+      : await fetchUpdateUser(props.rowData?.id || 0, payload, { handleValidationErrorLocally: true });
+
+  if (error) {
+    await naiveForm.applyServerValidation(error);
+  }
 
   if (!error) {
     window.$message?.success(props.operateType === 'add' ? $t('common.addSuccess') : $t('common.updateSuccess'));

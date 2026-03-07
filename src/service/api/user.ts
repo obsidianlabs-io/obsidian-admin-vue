@@ -1,3 +1,4 @@
+import type { CustomAxiosRequestConfig } from '@sa/axios';
 import { request } from '../request';
 import { buildResourceItemUrl } from './url';
 
@@ -14,20 +15,22 @@ export function fetchGetUserList(params: Api.User.UserListParams): ReturnType<ty
 }
 
 /** Create user */
-export function fetchCreateUser(data: Api.User.UserPayload) {
+export function fetchCreateUser(data: Api.User.UserPayload, config?: CustomAxiosRequestConfig) {
   return request<unknown>({
     url: '/user',
     method: 'post',
-    data
+    data,
+    ...config
   });
 }
 
 /** Update user */
-export function fetchUpdateUser(id: number, data: Api.User.UserPayload) {
+export function fetchUpdateUser(id: number, data: Api.User.UserPayload, config?: CustomAxiosRequestConfig) {
   return request<unknown>({
     url: buildResourceItemUrl('/user', id),
     method: 'put',
-    data
+    data,
+    ...config
   });
 }
 

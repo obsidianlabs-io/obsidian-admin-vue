@@ -1,3 +1,4 @@
+import type { CustomAxiosRequestConfig } from '@sa/axios';
 import { request } from '../request';
 import { buildResourceItemUrl } from './url';
 
@@ -29,20 +30,22 @@ export function fetchGetRoleAssignablePermissions() {
 }
 
 /** Create role */
-export function fetchCreateRole(data: Api.Role.RolePayload) {
+export function fetchCreateRole(data: Api.Role.RolePayload, config?: CustomAxiosRequestConfig) {
   return request<unknown>({
     url: '/role',
     method: 'post',
-    data
+    data,
+    ...config
   });
 }
 
 /** Update role */
-export function fetchUpdateRole(id: number, data: Api.Role.RolePayload) {
+export function fetchUpdateRole(id: number, data: Api.Role.RolePayload, config?: CustomAxiosRequestConfig) {
   return request<unknown>({
     url: buildResourceItemUrl('/role', id),
     method: 'put',
-    data
+    data,
+    ...config
   });
 }
 

@@ -12,6 +12,7 @@ import {
   isSessionEndingCode,
   isTenantInactivePayload,
   isUserInactivePayload,
+  isValidationErrorPayload,
   logoutCodes,
   modalLogoutCodes,
   serviceSuccessCode,
@@ -159,6 +160,13 @@ export const request = createFlatRequest(
       }
 
       if (passiveLogoutInProgress || shouldSkipGlobalErrorToast(error)) {
+        return;
+      }
+
+      const handleValidationErrorLocally = (error.config as { handleValidationErrorLocally?: boolean } | undefined)
+        ?.handleValidationErrorLocally;
+
+      if (handleValidationErrorLocally && isValidationErrorPayload(error)) {
         return;
       }
 
