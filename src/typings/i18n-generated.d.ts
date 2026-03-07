@@ -363,6 +363,7 @@ declare namespace App {
         };
         "bindWeChat": {
           "title": string;
+          "placeholderNotice": string;
         };
       };
       "dashboard": {
@@ -962,6 +963,7 @@ declare namespace App {
       | "page.language.translationValue"
       | "page.language.translationValuePlaceholder"
       | "page.language.viewTitle"
+      | "page.login.bindWeChat.placeholderNotice"
       | "page.login.bindWeChat.title"
       | "page.login.codeLogin.getCode"
       | "page.login.codeLogin.imageCodePlaceholder"

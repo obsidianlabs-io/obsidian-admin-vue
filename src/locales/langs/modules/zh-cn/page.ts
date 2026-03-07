@@ -70,7 +70,8 @@ const pageSection: App.I18n.Schema['page'] = {
       resetSuccess: '密码已重置，请重新登录。'
     },
     bindWeChat: {
-      title: '绑定微信'
+      title: '绑定微信',
+      placeholderNotice: '微信绑定在这个开源模板里仍是占位模块。请先接入真实社交登录契约，再对外开放。'
     }
   },
   dashboard: {

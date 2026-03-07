@@ -13,6 +13,8 @@ interface MockUserRecord {
 
 export interface MockApiState {
   users: MockUserRecord[];
+  currentUser: MockUserRecord;
+  resetTokens: Record<string, string>;
 }
 
 interface MockApiOptions {
@@ -50,6 +52,25 @@ function resolveRoleName(roleCode: string): string {
   return 'User';
 }
 
+function createAuthUserInfo(user: MockUserRecord, permissions: string[]) {
+  return {
+    userId: String(user.id),
+    userName: user.userName,
+    locale: 'en-US',
+    preferredLocale: 'en-US',
+    timezone: 'UTC',
+    themeSchema: 'light',
+    roles: [user.roleCode],
+    buttons: permissions,
+    currentTenantId: '',
+    currentTenantName: 'No Tenants',
+    tenants: [],
+    menuScope: 'platform',
+    menus: [],
+    routeRules: {}
+  };
+}
+
 async function fulfill(route: Route, payload: unknown, status = 200) {
   await route.fulfill({
     status,
@@ -58,7 +79,7 @@ async function fulfill(route: Route, payload: unknown, status = 200) {
   });
 }
 
-function createStaticHandlers(permissions: string[]): Record<string, StaticHandler> {
+function createStaticHandlers(permissions: string[], state: MockApiState): Record<string, StaticHandler> {
   return {
     'GET /theme/public-config': async route => {
       await fulfill(route, { code: '0000', msg: 'ok', data: { config: {}, effectiveConfig: {} } });
@@ -88,6 +109,17 @@ function createStaticHandlers(permissions: string[]): Record<string, StaticHandl
       });
     },
     'POST /auth/login': async route => {
+      const body = parseJsonBody(route);
+      const loginKey = String(body.userName || body.email || '')
+        .trim()
+        .toLowerCase();
+      const matchedUser =
+        state.users.find(
+          user => user.userName.trim().toLowerCase() === loginKey || user.email.trim().toLowerCase() === loginKey
+        ) || state.users[0];
+
+      state.currentUser = matchedUser;
+
       await fulfill(route, {
         code: '0000',
         msg: 'Login success',
@@ -101,22 +133,86 @@ function createStaticHandlers(permissions: string[]): Record<string, StaticHandl
       await fulfill(route, {
         code: '0000',
         msg: 'ok',
+        data: createAuthUserInfo(state.currentUser, permissions)
+      });
+    },
+    'POST /auth/register': async route => {
+      const body = parseJsonBody(route);
+      const nextId = state.users.length + 1;
+      const userName = String(body.name || `User${nextId}`);
+      const email = String(body.email || `user${nextId}@example.com`);
+      const newUser: MockUserRecord = {
+        id: nextId,
+        userName,
+        email,
+        roleCode: 'R_USER',
+        roleName: 'User',
+        status: '1',
+        createTime: nowString(),
+        updateTime: nowString()
+      };
+
+      state.users.push(newUser);
+      state.currentUser = newUser;
+
+      await fulfill(route, {
+        code: '0000',
+        msg: 'Register success',
         data: {
-          userId: '1',
-          userName: 'Super',
-          locale: 'en-US',
-          preferredLocale: 'en-US',
-          timezone: 'UTC',
-          themeSchema: 'light',
-          roles: ['R_SUPER'],
-          buttons: permissions,
-          currentTenantId: '',
-          currentTenantName: 'No Tenants',
-          tenants: [],
-          menuScope: 'platform',
-          menus: [],
-          routeRules: {}
+          token: `register-access-token-${nextId}`,
+          refreshToken: `register-refresh-token-${nextId}`
         }
+      });
+    },
+    'POST /auth/forgot-password': async route => {
+      const body = parseJsonBody(route);
+      const email = String(body.email || '')
+        .trim()
+        .toLowerCase();
+      const user = state.users.find(item => item.email.trim().toLowerCase() === email);
+      const token = user ? `reset-token-${user.id}` : undefined;
+
+      if (user && token) {
+        state.resetTokens[email] = token;
+      }
+
+      await fulfill(route, {
+        code: '0000',
+        msg: 'If the email exists, a reset link has been sent',
+        data: token ? { resetToken: token } : {}
+      });
+    },
+    'POST /auth/reset-password': async route => {
+      const body = parseJsonBody(route);
+      const email = String(body.email || '')
+        .trim()
+        .toLowerCase();
+      const token = String(body.token || '').trim();
+      const expectedToken = state.resetTokens[email];
+
+      if (!expectedToken || expectedToken !== token) {
+        await fulfill(
+          route,
+          {
+            code: '1002',
+            msg: 'Validation failed',
+            data: {
+              errors: {
+                token: ['Reset token is invalid']
+              }
+            }
+          },
+          422
+        );
+        return;
+      }
+
+      state.resetTokens[email] = '';
+
+      await fulfill(route, {
+        code: '0000',
+        msg: 'Password has been reset',
+        data: {}
       });
     },
     'PUT /auth/preferred-locale': async route => {
@@ -158,7 +254,7 @@ function createStaticHandlers(permissions: string[]): Record<string, StaticHandl
         }
       });
     },
-    'GET /user/list': async (route, state) => {
+    'GET /user/list': async route => {
       await fulfill(route, {
         code: '0000',
         msg: 'ok',
@@ -233,19 +329,21 @@ async function handleCreateUser(route: Route, state: MockApiState) {
 }
 
 export async function registerMockApi(page: Page, options: MockApiOptions = {}): Promise<MockApiState> {
+  const defaultUser: MockUserRecord = {
+    id: 1,
+    userName: 'Super',
+    email: 'super@soybean.local',
+    roleCode: 'R_SUPER',
+    roleName: 'Super Admin',
+    status: '1',
+    createTime: nowString(),
+    updateTime: nowString()
+  };
+
   const state: MockApiState = {
-    users: [
-      {
-        id: 1,
-        userName: 'Super',
-        email: 'super@soybean.local',
-        roleCode: 'R_SUPER',
-        roleName: 'Super Admin',
-        status: '1',
-        createTime: nowString(),
-        updateTime: nowString()
-      }
-    ]
+    users: [defaultUser],
+    currentUser: defaultUser,
+    resetTokens: {}
   };
 
   const permissions = options.userPermissions || [
@@ -259,7 +357,7 @@ export async function registerMockApi(page: Page, options: MockApiOptions = {}):
     'audit.policy.manage',
     'system.manage'
   ];
-  const staticHandlers = createStaticHandlers(permissions);
+  const staticHandlers = createStaticHandlers(permissions, state);
 
   await page.route('**/proxy-default/**', async route => {
     const url = new URL(route.request().url());

@@ -71,7 +71,9 @@ const pageSection: App.I18n.Schema['page'] = {
       resetSuccess: 'Password has been reset. Please sign in again.'
     },
     bindWeChat: {
-      title: 'Bind WeChat'
+      title: 'Bind WeChat',
+      placeholderNotice:
+        'WeChat binding is a template-only module. Connect it to a real social-auth contract before exposing it.'
     }
   },
   dashboard: {
