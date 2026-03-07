@@ -129,13 +129,13 @@ This checklist is for `/Users/zero/Documents/Project/WK/obsidian-admin-vue`.
 
 - tag 指向代码发布提交
 - GitHub Release 正文使用:
-  `/Users/zero/Documents/Project/WK/obsidian-admin-vue/docs/releases/v1.1.0.md`
+  `/Users/zero/Documents/Project/WK/obsidian-admin-vue/docs/releases/v1.1.1.md`
 - CHANGELOG 使用:
   `/Users/zero/Documents/Project/WK/obsidian-admin-vue/CHANGELOG.md`
 
 当前状态:
 
-- `v1.1.0` tag 已存在
+- 建议为当前 `main` 创建 `v1.1.1` tag
 
 ## 9. Organization Profile
 

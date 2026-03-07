@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.1.1] - 2026-03-07
+
+### ✨ Added
+- Added GitHub release metadata, repository setup checklist, and release notes documentation for open-source project operations.
+
+### 🔧 Changed
+- Refined the Chinese and English README homepage structure to better fit open-source repository visitors.
+- Updated frontend package metadata (`description`, `keywords`) to better match the current project positioning.
+
+### 🐞 Fixed
+- Synced generated frontend backend typings with the latest `obsidian-admin-laravel` DTO surface.
+- Excluded generated typing files from ESLint checks to remove persistent release-gate noise on generated artifacts.
+
 ## [1.1.0] - 2026-03-03
 
 ### ✨ Added

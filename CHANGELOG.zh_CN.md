@@ -7,6 +7,19 @@
 
 ---
 
+## [1.1.1] - 2026-03-07
+
+### ✨ 新增
+- 新增 GitHub Release 文案、仓库设置清单与发布说明文档，便于开源发布与仓库运营。
+
+### 🔧 调整
+- 重写中英文 README 首页结构，使其更适合作为开源仓库首页展示。
+- 调整前端 `package.json` 的项目元信息，使 `description` 与 `keywords` 更贴合当前项目定位。
+
+### 🐞 修复
+- 同步前端生成的 backend typings，覆盖最新 `obsidian-admin-laravel` DTO 边界。
+- 将生成型 typings 文件从 ESLint 检查中排除，移除 generated artifact 持续告警噪音。
+
 ## [1.1.0] - 2026-03-03
 
 ### ✨ 新增

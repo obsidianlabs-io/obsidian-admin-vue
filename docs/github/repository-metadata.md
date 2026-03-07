@@ -3,7 +3,7 @@
 ## Release Title
 
 ```text
-v1.1.0 · Tenant-aware admin frontend with contract-driven DX
+v1.1.1 · Release readiness and contract-sync patch
 ```
 
 ## Repository About

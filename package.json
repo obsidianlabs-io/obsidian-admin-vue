@@ -1,7 +1,7 @@
 {
   "name": "obsidian-admin-vue",
   "type": "module",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "packageManager": "pnpm@10.30.2",
   "description": "Production-ready Vue 3 admin frontend with generated API contracts, multi-tenant integration, Naive UI, Pinia, and UnoCSS.",
   "author": {
