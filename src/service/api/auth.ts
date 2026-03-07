@@ -1,3 +1,4 @@
+import type { CustomAxiosRequestConfig } from '@sa/axios';
 import { request } from '../request';
 
 /**
@@ -53,11 +54,12 @@ export function fetchGetUserProfile() {
  *
  * @param data Payload
  */
-export function fetchUpdateUserProfile(data: Api.Auth.UpdateProfilePayload) {
+export function fetchUpdateUserProfile(data: Api.Auth.UpdateProfilePayload, config?: CustomAxiosRequestConfig) {
   return request<Api.Auth.UserProfile>({
     url: '/auth/profile',
     method: 'put',
-    data
+    data,
+    ...config
   });
 }
 

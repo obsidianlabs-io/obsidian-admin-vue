@@ -67,6 +67,7 @@ interface Model {
 }
 
 const model = ref<Model>(createDefaultModel());
+naiveForm.bindModelValidation(model, ['organizationId', 'teamCode', 'teamName', 'status']);
 
 function resolveDefaultOrganizationId(): number | null {
   const first = props.organizationOptions[0];
@@ -85,12 +86,18 @@ function createDefaultModel(): Model {
   };
 }
 
-const rules: Record<'organizationId' | 'teamCode' | 'teamName' | 'status', App.Global.FormRule> = {
+const baseRules: Record<'organizationId' | 'teamCode' | 'teamName' | 'status', App.Global.FormRule> = {
   organizationId: defaultRequiredRule,
   teamCode: defaultRequiredRule,
   teamName: defaultRequiredRule,
   status: defaultRequiredRule
 };
+const rules = naiveForm.withServerValidationRules(baseRules, [
+  'organizationId',
+  'teamCode',
+  'teamName',
+  'status'
+] as const);
 
 const selectedOrganizationName = computed(() => {
   const current = model.value.organizationId;
@@ -145,8 +152,12 @@ async function handleSubmit() {
 
   const { error } =
     props.operateType === 'add'
-      ? await fetchCreateTeam(payload)
-      : await fetchUpdateTeam(props.rowData?.id || 0, payload);
+      ? await fetchCreateTeam(payload, { handleValidationErrorLocally: true })
+      : await fetchUpdateTeam(props.rowData?.id || 0, payload, { handleValidationErrorLocally: true });
+
+  if (error) {
+    await naiveForm.applyServerValidation(error);
+  }
 
   if (!error) {
     window.$message?.success(props.operateType === 'add' ? $t('common.addSuccess') : $t('common.updateSuccess'));

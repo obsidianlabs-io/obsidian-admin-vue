@@ -39,6 +39,8 @@ export function useProfileForm(options: UseProfileFormOptions) {
     confirmPassword: ''
   });
 
+  naiveForm.bindModelValidation(ref(model), ['userName', 'email', 'currentPassword', 'password', 'confirmPassword']);
+
   const hasChanges = computed(() => {
     if (!profile.value) return false;
 
@@ -54,7 +56,7 @@ export function useProfileForm(options: UseProfileFormOptions) {
     );
   });
 
-  const rules = computed<Record<FormRuleKey, App.Global.FormRule[]>>(() => {
+  const baseRules = computed<Record<FormRuleKey, App.Global.FormRule[]>>(() => {
     return {
       userName: formRules.userName,
       email: formRules.email,
@@ -116,6 +118,13 @@ export function useProfileForm(options: UseProfileFormOptions) {
       ]
     };
   });
+  const rules = naiveForm.withServerValidationRules(baseRules, [
+    'userName',
+    'email',
+    'currentPassword',
+    'password',
+    'confirmPassword'
+  ] as const);
 
   function resetPasswordFields() {
     model.currentPassword = '';
@@ -196,9 +205,16 @@ export function useProfileForm(options: UseProfileFormOptions) {
         payload.timezone = nextTimezone;
       }
 
-      const { data, error } = await fetchUpdateUserProfile(payload);
+      const { data, error } = await fetchUpdateUserProfile(payload, {
+        handleValidationErrorLocally: true
+      });
 
       if (error) {
+        await naiveForm.applyServerValidation(error, {
+          fieldAliases: {
+            password_confirmation: 'confirmPassword'
+          }
+        });
         return;
       }
 

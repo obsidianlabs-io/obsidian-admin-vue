@@ -1,3 +1,4 @@
+import type { CustomAxiosRequestConfig } from '@sa/axios';
 import { request } from '../request';
 import { buildResourceItemUrl } from './url';
 
@@ -17,20 +18,26 @@ export function fetchGetAllOrganizations() {
 }
 
 /** Create organization */
-export function fetchCreateOrganization(data: Api.Organization.OrganizationPayload) {
+export function fetchCreateOrganization(data: Api.Organization.OrganizationPayload, config?: CustomAxiosRequestConfig) {
   return request<unknown>({
     url: '/organization',
     method: 'post',
-    data
+    data,
+    ...config
   });
 }
 
 /** Update organization */
-export function fetchUpdateOrganization(id: number, data: Api.Organization.OrganizationPayload) {
+export function fetchUpdateOrganization(
+  id: number,
+  data: Api.Organization.OrganizationPayload,
+  config?: CustomAxiosRequestConfig
+) {
   return request<unknown>({
     url: buildResourceItemUrl('/organization', id),
     method: 'put',
-    data
+    data,
+    ...config
   });
 }
 

@@ -1,3 +1,4 @@
+import type { CustomAxiosRequestConfig } from '@sa/axios';
 import { request } from '../request';
 import { buildResourceItemUrl } from './url';
 
@@ -18,20 +19,22 @@ export function fetchGetAllTeams(params?: { organizationId?: number }) {
 }
 
 /** Create team */
-export function fetchCreateTeam(data: Api.Team.TeamPayload) {
+export function fetchCreateTeam(data: Api.Team.TeamPayload, config?: CustomAxiosRequestConfig) {
   return request<unknown>({
     url: '/team',
     method: 'post',
-    data
+    data,
+    ...config
   });
 }
 
 /** Update team */
-export function fetchUpdateTeam(id: number, data: Api.Team.TeamPayload) {
+export function fetchUpdateTeam(id: number, data: Api.Team.TeamPayload, config?: CustomAxiosRequestConfig) {
   return request<unknown>({
     url: buildResourceItemUrl('/team', id),
     method: 'put',
-    data
+    data,
+    ...config
   });
 }
 

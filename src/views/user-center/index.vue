@@ -78,7 +78,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="min-h-500px flex-col-stretch gap-16px overflow-x-hidden overflow-y-auto">
+  <NForm
+    :ref="naiveForm.formRef"
+    :model="model"
+    :rules="rules"
+    label-placement="top"
+    class="min-h-500px flex-col-stretch gap-16px overflow-x-hidden overflow-y-auto"
+  >
     <NCard :title="$t('common.userCenter')" :bordered="false" size="small" class="card-wrapper">
       <template #header-extra>
         <NSpace :size="12" align="center">
@@ -103,27 +109,25 @@ onMounted(() => {
         </NSpace>
       </template>
       <NSpin :show="loading">
-        <NForm :ref="naiveForm.formRef" :model="model" :rules="rules" label-placement="top">
-          <div class="form-row">
-            <NFormItem :label="$t('page.user.userName')" path="userName">
-              <NInput v-model:value="model.userName" :placeholder="$t('page.user.userNamePlaceholder')" />
-            </NFormItem>
-            <NFormItem :label="$t('common.email')" path="email">
-              <NInput v-model:value="model.email" :placeholder="$t('page.user.emailPlaceholder')" />
-            </NFormItem>
-          </div>
+        <div class="form-row">
+          <NFormItem :label="$t('page.user.userName')" path="userName">
+            <NInput v-model:value="model.userName" :placeholder="$t('page.user.userNamePlaceholder')" />
+          </NFormItem>
+          <NFormItem :label="$t('common.email')" path="email">
+            <NInput v-model:value="model.email" :placeholder="$t('page.user.emailPlaceholder')" />
+          </NFormItem>
+        </div>
 
-          <div class="form-row">
-            <NFormItem :label="$t('common.timezone')">
-              <NSelect
-                v-model:value="model.timezone"
-                filterable
-                :placeholder="$t('common.selectTimezone')"
-                :options="timezoneOptions"
-              />
-            </NFormItem>
-          </div>
-        </NForm>
+        <div class="form-row">
+          <NFormItem :label="$t('common.timezone')">
+            <NSelect
+              v-model:value="model.timezone"
+              filterable
+              :placeholder="$t('common.selectTimezone')"
+              :options="timezoneOptions"
+            />
+          </NFormItem>
+        </div>
       </NSpin>
     </NCard>
 
@@ -133,37 +137,35 @@ onMounted(() => {
           <template #header-extra>
             <span class="text-12px text-gray-400">{{ $t('page.userCenter.passwordHint') }}</span>
           </template>
-          <NForm :model="model" :rules="rules" label-placement="top" :show-require-mark="false">
-            <div class="form-row">
-              <NFormItem :label="$t('page.userCenter.currentPassword')" path="currentPassword">
-                <NInput
-                  v-model:value="model.currentPassword"
-                  type="password"
-                  show-password-on="click"
-                  :placeholder="$t('page.userCenter.currentPasswordPlaceholder')"
-                />
-              </NFormItem>
-            </div>
+          <div class="form-row">
+            <NFormItem :label="$t('page.userCenter.currentPassword')" path="currentPassword">
+              <NInput
+                v-model:value="model.currentPassword"
+                type="password"
+                show-password-on="click"
+                :placeholder="$t('page.userCenter.currentPasswordPlaceholder')"
+              />
+            </NFormItem>
+          </div>
 
-            <div class="form-row">
-              <NFormItem :label="$t('page.user.newPassword')" path="password">
-                <NInput
-                  v-model:value="model.password"
-                  type="password"
-                  show-password-on="click"
-                  :placeholder="$t('page.userCenter.newPasswordPlaceholder')"
-                />
-              </NFormItem>
-              <NFormItem :label="$t('page.user.confirmNewPassword')" path="confirmPassword">
-                <NInput
-                  v-model:value="model.confirmPassword"
-                  type="password"
-                  show-password-on="click"
-                  :placeholder="$t('page.userCenter.confirmNewPasswordPlaceholder')"
-                />
-              </NFormItem>
-            </div>
-          </NForm>
+          <div class="form-row">
+            <NFormItem :label="$t('page.user.newPassword')" path="password">
+              <NInput
+                v-model:value="model.password"
+                type="password"
+                show-password-on="click"
+                :placeholder="$t('page.userCenter.newPasswordPlaceholder')"
+              />
+            </NFormItem>
+            <NFormItem :label="$t('page.user.confirmNewPassword')" path="confirmPassword">
+              <NInput
+                v-model:value="model.confirmPassword"
+                type="password"
+                show-password-on="click"
+                :placeholder="$t('page.userCenter.confirmNewPasswordPlaceholder')"
+              />
+            </NFormItem>
+          </div>
         </NCollapseItem>
 
         <NCollapseItem :title="$t('page.userCenter.twoFactor.title')" name="two-factor">
@@ -418,7 +420,7 @@ onMounted(() => {
         />
       </NFormItem>
     </FormModalWrapper>
-  </div>
+  </NForm>
 </template>
 
 <style scoped>

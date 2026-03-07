@@ -56,6 +56,7 @@ interface Model {
 }
 
 const model = ref<Model>(createDefaultModel());
+naiveForm.bindModelValidation(model, ['organizationCode', 'organizationName', 'status']);
 
 function createDefaultModel(): Model {
   return {
@@ -67,11 +68,16 @@ function createDefaultModel(): Model {
   };
 }
 
-const rules: Record<'organizationCode' | 'organizationName' | 'status', App.Global.FormRule> = {
+const baseRules: Record<'organizationCode' | 'organizationName' | 'status', App.Global.FormRule> = {
   organizationCode: defaultRequiredRule,
   organizationName: defaultRequiredRule,
   status: defaultRequiredRule
 };
+const rules = naiveForm.withServerValidationRules(baseRules, [
+  'organizationCode',
+  'organizationName',
+  'status'
+] as const);
 
 function handleInitModel() {
   model.value = createDefaultModel();
@@ -108,8 +114,12 @@ async function handleSubmit() {
 
   const { error } =
     props.operateType === 'add'
-      ? await fetchCreateOrganization(payload)
-      : await fetchUpdateOrganization(props.rowData?.id || 0, payload);
+      ? await fetchCreateOrganization(payload, { handleValidationErrorLocally: true })
+      : await fetchUpdateOrganization(props.rowData?.id || 0, payload, { handleValidationErrorLocally: true });
+
+  if (error) {
+    await naiveForm.applyServerValidation(error);
+  }
 
   if (!error) {
     window.$message?.success(props.operateType === 'add' ? $t('common.addSuccess') : $t('common.updateSuccess'));

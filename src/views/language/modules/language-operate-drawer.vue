@@ -58,6 +58,7 @@ interface Model {
 }
 
 const model = ref<Model>(createDefaultModel());
+naiveForm.bindModelValidation(model, ['locale', 'translationKey', 'translationValue', 'status']);
 
 function createDefaultModel(): Model {
   return {
@@ -69,12 +70,18 @@ function createDefaultModel(): Model {
   };
 }
 
-const rules: Partial<Record<'locale' | 'translationKey' | 'translationValue' | 'status', App.Global.FormRule[]>> = {
+const baseRules: Partial<Record<'locale' | 'translationKey' | 'translationValue' | 'status', App.Global.FormRule[]>> = {
   locale: [defaultRequiredRule],
   translationKey: [defaultRequiredRule],
   translationValue: [defaultRequiredRule],
   status: [defaultRequiredRule]
 };
+const rules = naiveForm.withServerValidationRules(baseRules, [
+  'locale',
+  'translationKey',
+  'translationValue',
+  'status'
+] as const);
 
 function resolveDefaultLocale(): App.I18n.LangType {
   if (props.rowData?.locale) {
@@ -122,8 +129,14 @@ async function handleSubmit() {
 
   const { error } =
     props.operateType === 'add'
-      ? await fetchCreateLanguageTranslation(payload)
-      : await fetchUpdateLanguageTranslation(props.rowData?.id || 0, payload);
+      ? await fetchCreateLanguageTranslation(payload, { handleValidationErrorLocally: true })
+      : await fetchUpdateLanguageTranslation(props.rowData?.id || 0, payload, {
+          handleValidationErrorLocally: true
+        });
+
+  if (error) {
+    await naiveForm.applyServerValidation(error);
+  }
 
   if (!error) {
     window.$message?.success(props.operateType === 'add' ? $t('common.addSuccess') : $t('common.updateSuccess'));

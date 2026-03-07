@@ -1,3 +1,4 @@
+import type { CustomAxiosRequestConfig } from '@sa/axios';
 import { request } from '../request';
 import { buildResourceItemUrl } from './url';
 
@@ -23,20 +24,26 @@ export function fetchGetAllPermissions() {
 }
 
 /** Create permission */
-export function fetchCreatePermission(data: Api.Permission.PermissionPayload) {
+export function fetchCreatePermission(data: Api.Permission.PermissionPayload, config?: CustomAxiosRequestConfig) {
   return request<unknown>({
     url: '/permission',
     method: 'post',
-    data
+    data,
+    ...config
   });
 }
 
 /** Update permission */
-export function fetchUpdatePermission(id: number, data: Api.Permission.PermissionPayload) {
+export function fetchUpdatePermission(
+  id: number,
+  data: Api.Permission.PermissionPayload,
+  config?: CustomAxiosRequestConfig
+) {
   return request<unknown>({
     url: buildResourceItemUrl('/permission', id),
     method: 'put',
-    data
+    data,
+    ...config
   });
 }
 

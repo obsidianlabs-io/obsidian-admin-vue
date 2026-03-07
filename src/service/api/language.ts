@@ -1,3 +1,4 @@
+import type { CustomAxiosRequestConfig } from '@sa/axios';
 import { request } from '../request';
 import { buildResourceItemUrl } from './url';
 
@@ -36,20 +37,29 @@ export function fetchGetRuntimeLocaleMessages(params: Api.Language.RuntimeMessag
 }
 
 /** Create translation item */
-export function fetchCreateLanguageTranslation(data: Api.Language.TranslationPayload) {
+export function fetchCreateLanguageTranslation(
+  data: Api.Language.TranslationPayload,
+  config?: CustomAxiosRequestConfig
+) {
   return request<unknown>({
     url: '/language',
     method: 'post',
-    data
+    data,
+    ...config
   });
 }
 
 /** Update translation item */
-export function fetchUpdateLanguageTranslation(id: number, data: Api.Language.TranslationPayload) {
+export function fetchUpdateLanguageTranslation(
+  id: number,
+  data: Api.Language.TranslationPayload,
+  config?: CustomAxiosRequestConfig
+) {
   return request<unknown>({
     url: buildResourceItemUrl('/language', id),
     method: 'put',
-    data
+    data,
+    ...config
   });
 }
 
