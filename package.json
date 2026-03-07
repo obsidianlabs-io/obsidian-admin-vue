@@ -47,7 +47,7 @@
     "build": "vite build --mode prod",
     "build:test": "vite build --mode test",
     "check": "pnpm i18n:types:check && pnpm typecheck && pnpm lint:check && pnpm format:check && pnpm contract:check",
-    "check:ci": "pnpm check && pnpm test:unit",
+    "check:ci": "pnpm check && pnpm typecheck:strict && pnpm test:unit && pnpm build",
     "cleanup": "sa cleanup",
     "commit": "sa git-commit",
     "commit:zh": "sa git-commit -l=zh-cn",

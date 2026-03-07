@@ -62,6 +62,11 @@ This checklist is for `/Users/zero/Documents/Project/WK/obsidian-admin-vue`.
 - `Frontend Quality Gate / quality`
 - `Frontend Contract Gate / contract-check`
 
+说明:
+
+- `Frontend Quality Gate / quality` 现在包含 `pnpm check`、`pnpm typecheck:strict`、`pnpm test:unit`、`pnpm build`
+- 它应作为前端主 PR 门禁
+
 建议按需勾选:
 
 - `Frontend Quality Gate / e2e`

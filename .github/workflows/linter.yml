@@ -21,12 +21,14 @@ jobs:
       - name: Quality checks
         run: pnpm check
 
+      - name: Strict TypeScript check
+        run: pnpm typecheck:strict
+
       - name: Unit tests
         run: pnpm test:unit
 
-      - name: Strict TypeScript check (non-blocking)
-        continue-on-error: true
-        run: pnpm typecheck:strict
+      - name: Production build
+        run: pnpm build
 
   e2e:
     if: github.event_name == 'pull_request'

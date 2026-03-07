@@ -161,9 +161,3 @@ git push origin vX.Y.Z
 For the last pre-release pass, use:
 
 - `/Users/zero/Documents/Project/WK/obsidian-admin-vue/docs/release-final-checklist.md`
-
-## 12. Final Sign-Off
-
-For the last pre-release pass, use:
-
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/docs/release-final-checklist.md`
