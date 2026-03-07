@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { computed, reactive } from 'vue';
-import { useRouterPush } from '@/hooks/common/router';
+import { computed, ref } from 'vue';
+import { fetchRegister } from '@/service/api';
+import { useAuthStore } from '@/store/modules/auth';
 import { useFormRules, useNaiveForm } from '@/hooks/common/form';
-import { useCaptcha } from '@/hooks/business/captcha';
+import { useRouterPush } from '@/hooks/common/router';
 import { $t } from '@/locales';
 
 defineOptions({
@@ -10,38 +11,79 @@ defineOptions({
 });
 
 const { toggleLoginModule } = useRouterPush();
+const authStore = useAuthStore();
 const naiveForm = useNaiveForm();
-const { label, isCounting, loading, getCaptcha } = useCaptcha();
+const { formRules, createConfirmPwdRule } = useFormRules();
+const submitting = ref(false);
 
 interface FormModel {
-  phone: string;
-  code: string;
+  userName: string;
+  email: string;
   password: string;
   confirmPassword: string;
 }
 
-const model: FormModel = reactive({
-  phone: '',
-  code: '',
+const model = ref<FormModel>({
+  userName: '',
+  email: '',
   password: '',
   confirmPassword: ''
 });
 
-const rules = computed<Record<keyof FormModel, App.Global.FormRule[]>>(() => {
-  const { formRules, createConfirmPwdRule } = useFormRules();
+naiveForm.bindModelValidation(model, ['userName', 'email', 'password', 'confirmPassword']);
+const passwordValue = computed(() => model.value.password);
 
-  return {
-    phone: formRules.phone,
-    code: formRules.code,
-    password: formRules.pwd,
-    confirmPassword: createConfirmPwdRule(model.password)
-  };
-});
+const baseRules = computed<Record<keyof FormModel, App.Global.FormRule[]>>(() => ({
+  userName: formRules.userName,
+  email: formRules.email,
+  password: formRules.pwd,
+  confirmPassword: createConfirmPwdRule(passwordValue)
+}));
+const rules = naiveForm.withServerValidationRules(baseRules, ['userName', 'email', 'password', 'confirmPassword']);
 
 async function handleSubmit() {
   await naiveForm.validate();
-  // request to register
-  window.$message?.success($t('page.login.common.validateSuccess'));
+
+  submitting.value = true;
+
+  const { data, error } = await fetchRegister(
+    {
+      name: model.value.userName.trim(),
+      email: model.value.email.trim(),
+      password: model.value.password
+    },
+    { handleValidationErrorLocally: true }
+  );
+
+  if (error) {
+    await naiveForm.applyServerValidation(error, {
+      fieldAliases: {
+        name: 'userName'
+      }
+    });
+    submitting.value = false;
+    return;
+  }
+
+  const sessionEstablished = await authStore.establishSession(data, {
+    redirect: true,
+    rememberMe: false,
+    showWelcomeNotification: false
+  });
+
+  if (sessionEstablished) {
+    window.$notification?.success({
+      title: $t('page.login.register.successTitle'),
+      content: $t('page.login.register.successDesc'),
+      duration: 4500
+    });
+    submitting.value = false;
+    return;
+  }
+
+  window.$message?.success($t('page.login.register.successFallback'));
+  submitting.value = false;
+  await toggleLoginModule('pwd-login');
 }
 </script>
 
@@ -54,16 +96,11 @@ async function handleSubmit() {
     :show-label="false"
     @keyup.enter="handleSubmit"
   >
-    <NFormItem path="phone">
-      <NInput v-model:value="model.phone" :placeholder="$t('page.login.common.phonePlaceholder')" />
+    <NFormItem path="userName">
+      <NInput v-model:value="model.userName" :placeholder="$t('page.login.common.userNamePlaceholder')" />
     </NFormItem>
-    <NFormItem path="code">
-      <div class="w-full flex-y-center gap-16px">
-        <NInput v-model:value="model.code" :placeholder="$t('page.login.common.codePlaceholder')" />
-        <NButton size="large" :disabled="isCounting" :loading="loading" @click="getCaptcha(model.phone)">
-          {{ label }}
-        </NButton>
-      </div>
+    <NFormItem path="email">
+      <NInput v-model:value="model.email" :placeholder="$t('page.login.common.emailPlaceholder')" />
     </NFormItem>
     <NFormItem path="password">
       <NInput
@@ -82,7 +119,7 @@ async function handleSubmit() {
       />
     </NFormItem>
     <NSpace vertical :size="18" class="w-full">
-      <NButton type="primary" size="large" round block @click="handleSubmit">
+      <NButton type="primary" size="large" round block :loading="submitting" @click="handleSubmit">
         {{ $t('common.confirm') }}
       </NButton>
       <NButton size="large" round block @click="toggleLoginModule('pwd-login')">

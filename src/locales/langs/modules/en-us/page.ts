@@ -3,6 +3,7 @@ const pageSection: App.I18n.Schema['page'] = {
     common: {
       loginOrRegister: 'Login / Register',
       userNamePlaceholder: 'Please enter user name',
+      emailPlaceholder: 'Please enter email',
       phonePlaceholder: 'Please enter phone number',
       codePlaceholder: 'Please enter verification code',
       passwordPlaceholder: 'Please enter password',
@@ -45,16 +46,29 @@ const pageSection: App.I18n.Schema['page'] = {
       getCode: 'Get verification code',
       reGetCode: 'Reacquire after {time}s',
       sendCodeSuccess: 'Verification code sent successfully',
-      imageCodePlaceholder: 'Please enter image verification code'
+      imageCodePlaceholder: 'Please enter image verification code',
+      placeholderNotice:
+        'Verification-code login is a template-only module. Connect it to a real backend contract before exposing it.'
     },
     register: {
       title: 'Register',
       agreement: 'I have read and agree to',
       protocol: '《User Agreement》',
-      policy: '《Privacy Policy》'
+      policy: '《Privacy Policy》',
+      successTitle: 'Registration completed',
+      successDesc: 'Your account has been created and the current session is ready.',
+      successFallback: 'Registration completed. Please sign in with your new account.'
     },
     resetPwd: {
-      title: 'Reset Password'
+      title: 'Reset Password',
+      requestToken: 'Send reset link',
+      requestNewToken: 'Request a new token',
+      requestSuccess: 'If the email exists, a reset link has been sent.',
+      tokenPlaceholder: 'Please enter reset token',
+      tokenHint: 'Paste the reset token from the email or reset link to continue.',
+      prefilledTokenHint: 'A reset token was prefilled. Set a new password to continue.',
+      submitReset: 'Reset password',
+      resetSuccess: 'Password has been reset. Please sign in again.'
     },
     bindWeChat: {
       title: 'Bind WeChat'

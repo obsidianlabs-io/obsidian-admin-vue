@@ -46,6 +46,21 @@ declare namespace Api {
       refreshToken: string;
     }
 
+    type RegisterPayload = BackendGenerated.DTO.Auth.RegisterInputDTO;
+
+    type ForgotPasswordPayload = BackendGenerated.DTO.Auth.ForgotPasswordInputDTO;
+
+    interface ForgotPasswordResult {
+      resetToken?: string;
+    }
+
+    interface ResetPasswordPayload {
+      email: string;
+      token: string;
+      password: string;
+      password_confirmation: string;
+    }
+
     interface UserInfo {
       userId: string;
       userName: string;

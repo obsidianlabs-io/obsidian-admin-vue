@@ -34,6 +34,16 @@
 - Keep request models centralized in `src/typings/api/*`.
 - CI must run lint, typecheck, unit test, and contract gates.
 - Keep delete/deactivate UX consistent via `docs/deletion-ui-guidelines.md`.
+- API-backed forms must use the shared server-validation path:
+  - `useNaiveForm()`
+  - request config `handleValidationErrorLocally: true`
+  - `naiveForm.applyServerValidation(error)` for field-level replay
+
+## Auth module truth
+
+- `pwd-login`, `register`, and `reset-pwd` are aligned with the current backend contract.
+- `code-login` remains a template-only placeholder until a real verification-code auth API is introduced.
+- `bind-wechat` remains a placeholder until a real social-auth contract is introduced.
 
 ## Scaffolding workflow
 

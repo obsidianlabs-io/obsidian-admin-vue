@@ -97,6 +97,9 @@ We are unlikely to accept pull requests that:
 The current built-in auth pages are intentionally mixed in maturity:
 
 - `pwd-login` is wired to the real backend login contract
-- `code-login`, `register`, and `reset-pwd` are still template-level placeholder modules
+- `register` is wired to the real backend register contract
+- `reset-pwd` is wired to the real backend forgot/reset-password contract
+- `code-login` is still a template-level placeholder module
+- `bind-wechat` is still a template-level placeholder module
 
-Do not force those placeholder modules onto backend APIs unless the frontend field model and backend contract are aligned first.
+Do not force placeholder modules onto backend APIs unless the frontend field model and backend contract are aligned first.

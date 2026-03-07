@@ -2,6 +2,7 @@
 import { computed, reactive, ref } from 'vue';
 import { useAuthStore } from '@/store/modules/auth';
 import { useFormRules, useNaiveForm } from '@/hooks/common/form';
+import { useRouterPush } from '@/hooks/common/router';
 import { $t } from '@/locales';
 
 defineOptions({
@@ -11,6 +12,7 @@ defineOptions({
 const authStore = useAuthStore();
 const naiveForm = useNaiveForm();
 const { createRequiredRule } = useFormRules();
+const { toggleLoginModule } = useRouterPush();
 const emit = defineEmits<{
   (e: 'update:title', title: App.I18n.I18nKey | undefined): void;
 }>();
@@ -157,6 +159,14 @@ function handleBack() {
       <NSpace vertical :size="24" class="w-full">
         <div class="flex-y-center justify-between">
           <NCheckbox v-model:checked="model.rememberMe">{{ $t('page.login.pwdLogin.rememberMe') }}</NCheckbox>
+          <NSpace :size="4">
+            <NButton text type="primary" @click="toggleLoginModule('reset-pwd')">
+              {{ $t('page.login.pwdLogin.forgetPassword') }}
+            </NButton>
+            <NButton text type="primary" @click="toggleLoginModule('register')">
+              {{ $t('page.login.pwdLogin.register') }}
+            </NButton>
+          </NSpace>
         </div>
 
         <NButton type="primary" size="large" round block :loading="authStore.loginLoading" @click="handleSubmit">

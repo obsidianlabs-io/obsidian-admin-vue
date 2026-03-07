@@ -32,6 +32,48 @@ export function fetchLogin(
   });
 }
 
+/**
+ * Register
+ *
+ * @param payload Register payload
+ */
+export function fetchRegister(payload: Api.Auth.RegisterPayload, config?: CustomAxiosRequestConfig) {
+  return request<Api.Auth.LoginToken>({
+    url: '/auth/register',
+    method: 'post',
+    data: payload,
+    ...config
+  });
+}
+
+/**
+ * Send forgot-password request
+ *
+ * @param payload Forgot-password payload
+ */
+export function fetchForgotPassword(payload: Api.Auth.ForgotPasswordPayload, config?: CustomAxiosRequestConfig) {
+  return request<Api.Auth.ForgotPasswordResult>({
+    url: '/auth/forgot-password',
+    method: 'post',
+    data: payload,
+    ...config
+  });
+}
+
+/**
+ * Reset password
+ *
+ * @param payload Reset-password payload
+ */
+export function fetchResetPassword(payload: Api.Auth.ResetPasswordPayload, config?: CustomAxiosRequestConfig) {
+  return request<Record<string, never>>({
+    url: '/auth/reset-password',
+    method: 'post',
+    data: payload,
+    ...config
+  });
+}
+
 /** Get user info */
 export function fetchGetUserInfo(): ReturnType<typeof request<Api.Auth.UserInfo>> {
   return request<Api.Auth.UserInfo>({

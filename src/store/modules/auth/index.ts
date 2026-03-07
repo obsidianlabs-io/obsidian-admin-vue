@@ -198,29 +198,19 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
     }
 
     if (!error) {
-      const pass = await loginByToken(loginToken, rememberMe, loginSelectedLocale);
-
-      if (pass) {
-        // Check if the tab needs to be cleared
-        const isClear = checkTabClear();
-        let needRedirect = redirect;
-
-        if (isClear) {
-          // If the tab needs to be cleared,it means we don't need to redirect.
-          needRedirect = false;
-        }
-        await redirectFromLogin(needRedirect);
-
-        window.$notification?.success({
-          title: $t('page.login.common.loginSuccess'),
-          content: $t('page.login.common.welcomeBack', { userName: userInfo.userName }),
-          duration: 4500
-        });
-      }
+      const pass = await establishSession(loginToken, {
+        redirect,
+        rememberMe,
+        loginSelectedLocale,
+        showWelcomeNotification: true
+      });
 
       endLoading();
 
-      return { status: 'success', error: null };
+      return {
+        status: pass ? 'success' : 'error',
+        error: pass ? null : new Error('Failed to initialize session')
+      };
     }
     resetStore();
 
@@ -229,11 +219,17 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
     return { status: 'error', error };
   }
 
-  async function loginByToken(
+  async function establishSession(
     loginToken: Api.Auth.LoginToken,
-    rememberMe: boolean,
-    loginSelectedLocale: App.I18n.LangType | null
+    options: {
+      redirect?: boolean;
+      rememberMe?: boolean;
+      loginSelectedLocale?: App.I18n.LangType | null;
+      showWelcomeNotification?: boolean;
+    } = {}
   ) {
+    const { redirect = true, rememberMe = true, loginSelectedLocale = null, showWelcomeNotification = false } = options;
+
     // 1. stored in the localStorage, the later requests need it in headers
     setRememberMe(rememberMe);
     setAuthTokens(loginToken, rememberMe);
@@ -245,8 +241,29 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
     if (pass) {
       await syncLoginSelectedLocale(loginSelectedLocale);
 
+      const isClear = checkTabClear();
+      let needRedirect = redirect;
+
+      if (isClear) {
+        needRedirect = false;
+      }
+
+      if (redirect || isClear) {
+        await redirectFromLogin(needRedirect);
+      }
+
+      if (showWelcomeNotification) {
+        window.$notification?.success({
+          title: $t('page.login.common.loginSuccess'),
+          content: $t('page.login.common.welcomeBack', { userName: userInfo.userName }),
+          duration: 4500
+        });
+      }
+
       return true;
     }
+
+    await resetStore();
 
     return false;
   }
@@ -355,6 +372,7 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
     loginLoading,
     logout,
     resetStore,
+    establishSession,
     login,
     initUserInfo,
     switchTenant

@@ -295,6 +295,7 @@ declare namespace App {
         "common": {
           "loginOrRegister": string;
           "userNamePlaceholder": string;
+          "emailPlaceholder": string;
           "phonePlaceholder": string;
           "codePlaceholder": string;
           "passwordPlaceholder": string;
@@ -338,15 +339,27 @@ declare namespace App {
           "reGetCode": string;
           "sendCodeSuccess": string;
           "imageCodePlaceholder": string;
+          "placeholderNotice": string;
         };
         "register": {
           "title": string;
           "agreement": string;
           "protocol": string;
           "policy": string;
+          "successTitle": string;
+          "successDesc": string;
+          "successFallback": string;
         };
         "resetPwd": {
           "title": string;
+          "requestToken": string;
+          "requestNewToken": string;
+          "requestSuccess": string;
+          "tokenPlaceholder": string;
+          "tokenHint": string;
+          "prefilledTokenHint": string;
+          "submitReset": string;
+          "resetSuccess": string;
         };
         "bindWeChat": {
           "title": string;
@@ -952,6 +965,7 @@ declare namespace App {
       | "page.login.bindWeChat.title"
       | "page.login.codeLogin.getCode"
       | "page.login.codeLogin.imageCodePlaceholder"
+      | "page.login.codeLogin.placeholderNotice"
       | "page.login.codeLogin.reGetCode"
       | "page.login.codeLogin.sendCodeSuccess"
       | "page.login.codeLogin.title"
@@ -961,6 +975,7 @@ declare namespace App {
       | "page.login.common.confirm"
       | "page.login.common.confirmPasswordPlaceholder"
       | "page.login.common.emailNotVerified"
+      | "page.login.common.emailPlaceholder"
       | "page.login.common.invalidCredentials"
       | "page.login.common.loginOrRegister"
       | "page.login.common.loginSuccess"
@@ -994,8 +1009,19 @@ declare namespace App {
       | "page.login.register.agreement"
       | "page.login.register.policy"
       | "page.login.register.protocol"
+      | "page.login.register.successDesc"
+      | "page.login.register.successFallback"
+      | "page.login.register.successTitle"
       | "page.login.register.title"
+      | "page.login.resetPwd.prefilledTokenHint"
+      | "page.login.resetPwd.requestNewToken"
+      | "page.login.resetPwd.requestSuccess"
+      | "page.login.resetPwd.requestToken"
+      | "page.login.resetPwd.resetSuccess"
+      | "page.login.resetPwd.submitReset"
       | "page.login.resetPwd.title"
+      | "page.login.resetPwd.tokenHint"
+      | "page.login.resetPwd.tokenPlaceholder"
       | "page.organization.addTitle"
       | "page.organization.descriptionPlaceholder"
       | "page.organization.editTitle"
