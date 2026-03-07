@@ -1,167 +1,168 @@
 <div align="center">
 	<img src="./public/favicon.svg" width="160" />
 	<h1>Obsidian Admin Vue</h1>
-  <span>中文 | <a href="./README.en_US.md">English</a></span>
+	<span>中文 | <a href="./README.en_US.md">English</a></span>
 </div>
 
 ---
 
 [![license](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE)
+[![node](https://img.shields.io/badge/node-%3E%3D20.19.0-3c873a.svg)](https://nodejs.org/)
+[![pnpm](https://img.shields.io/badge/pnpm-%3E%3D10.5.0-f69220.svg)](https://pnpm.io/)
 
-## 简介
+## 项目定位
 
 > [!NOTE]
-> 本项目（`Obsidian Admin Vue`）是基于开源项目 [SoybeanAdmin](https://github.com/soybeanjs/soybean-admin) 深度重构的企业级单体前端框架。我们保留了其极其优秀的 UI 组件库、布局编排和 UnoCSS 完美配置，并在其之上彻底重写了底层的数据交互架构，专门服务于 Obsidian 生态的 SaaS 多租户隔离、严苛的 RBAC 权限体系，以及基于后端 Laravel 12 的强制类型安全 (API Contracts)。
+> `Obsidian Admin Vue` 是一个面向企业后台系统与 SaaS 平台的 Vue 3 管理前端基线。它基于 [SoybeanAdmin](https://github.com/soybeanjs/soybean-admin) 深度重构，保留其成熟的界面与布局体系，同时围绕 Obsidian 的多租户、契约驱动 API、运行时配置和长期维护需求，重建了更严格的前端工程边界。
 
-## 创始愿景
+如果你需要的是一个能长期演进、能和严格后端契约协同工作的管理后台前端，而不是只适合演示的模板，这个项目就是为此准备的。
 
-Obsidian 由 **Boss · Beyond · Black** 创立 —— 三股独特的力量因同一个愿景而凝聚在一起。
+## 为什么使用它
 
-**Boss** 象征着卓越的领导力与严谨的体系架构。
-**Beyond** 代表着无尽的创新与打破界限的勇气。
-**Black** 意味着极致的深度、精准与战略性的清晰度。
+- **契约驱动协作**: 基于 `@hey-api/openapi-ts` 和后端契约快照生成类型与 SDK，降低前后端漂移风险。
+- **多租户后台能力**: 原生支持租户上下文、租户切换、租户隔离视图与权限联动。
+- **运行时配置友好**: 支持运行时主题、国际化与配置化页面，适合与后端配置中心协同。
+- **工程门禁完整**: 集成 lint、typecheck、contract gate、unit test、conditional E2E 和 supply-chain 检查。
+- **适合长期维护**: 通过 composable、schema、生成脚本和模块化结构降低页面增长后的维护成本。
 
-尽管征途各自展开，我们共同铸就的基石恒久如初。
+## 核心能力
 
-Obsidian 持续进化 —— 扎根韧性与秩序，坚定迈向长期价值。
+### 基础框架
 
-## 特性
+- `Vue 3`、`Vite 7`、`TypeScript`、`Pinia`、`UnoCSS`
+- `pnpm workspace / monorepo` 结构
+- 严格 TypeScript 与 ESLint 规范
+- 自动化文件路由与权限路由体系
+- 响应式布局、主题系统、多语言支持
 
-### 基础框架能力
+### Obsidian 增强能力
 
-- **前沿技术栈**：采用 `Vue 3`、`Vite 7`、`TypeScript`、`Pinia` 和 `UnoCSS` 等现代化技术栈。
-- **清晰的项目架构**：采用 `pnpm workspace / monorepo` 架构，结构清晰，便于长期维护与扩展。
-- **严格的代码规范**：遵循 [SoybeanJS 规范](https://docs.soybeanjs.cn/zh/standard)，集成 `ESLint`、`Prettier` 与 `simple-git-hooks`。
-- **严格 TypeScript**：支持严格类型检查，提升代码可维护性与重构安全性。
-- **丰富主题配置**：内置多样主题配置，与 `UnoCSS` 深度结合。
-- **内置国际化方案**：轻松实现多语言支持。
-- **自动化文件路由系统**：自动生成路由导入、声明和类型。更多细节请查看 [Elegant Router](https://github.com/soybeanjs/elegant-router)。
-- **灵活的权限路由**：同时支持前端静态路由和后端动态路由。
-- **丰富的页面组件**：内置多样页面与组件，包括 `403`、`404`、`500` 页面，以及布局组件、标签组件、主题配置组件等。
-- **命令行工具**：内置高效命令行工具，支持 git 提交、删除文件、发布等操作。
-- **移动端适配**：支持响应式布局与移动端显示。
+- 基于 `@hey-api/openapi-ts` 的官方 SDK 生成
+- 前后端契约快照与兼容性门禁
+- 多租户租户上下文与 Header 切换
+- `Organization / Team / User / Role / Permission` 联动管理
+- `Laravel Echo / Pusher` 实时消息集成
+- Schema 驱动的 CRUD 页面能力
+- 运行时主题与语言配置协作
 
-### Obsidian 增强能力（核心差异化）
+### 工程质量
 
-- **端到端类型安全**：基于 `@hey-api/openapi-ts` 生成 SDK，强化前后端协作的类型一致性。
-- **前后端契约门禁**：内置 `Contract Gate` 与 `Compatibility Gate`，降低 API Schema 变更带来的破坏性风险。
-- **SaaS 多租户能力**：支持租户上下文、租户 Header 切换、租户维度访问控制与视图隔离。
-- **Organization / Team 管理能力**：新增组织与团队页面、搜索、抽屉操作与 API 对接，支持 Tenant 作用域下管理。
-- **用户组织/团队联动绑定**：用户创建/编辑支持组织与团队字段，团队选择自动约束组织一致性。
-- **实时更新能力**：基于 `Laravel Echo / Pusher` 的实时消息与状态同步能力。
-- **Schema 驱动界面能力**：支持 Schema 驱动的动态表单与表格，适配配置化 CRUD 场景。
-- **路由访问控制增强**：支持角色 / 权限 / 租户范围联合校验。
-- **运行时配置协作**：支持主题与国际化运行时配置，便于与后端配置中心联动。
-- **契约驱动开发体验**：推荐与 `Obsidian Admin Laravel` 后端配套使用，获得完整的契约驱动开发流程。
+- `pnpm check`
+- `pnpm typecheck:api`
+- `pnpm test:unit`
+- `pnpm test:e2e`
+- GitHub Actions: `Frontend Quality Gate` / `Frontend Contract Gate` / `Frontend Supply Chain`
 
-### 工程质量与交付能力
+## 适用场景
 
-- **类型检查与静态质量门禁**：`vue-tsc`、`ESLint`
-- **测试能力**：单元测试（Node test runner + `tsx`）与 E2E 测试（Playwright）
-- **供应链安全检查**：`pnpm audit`、Dependency Review
-- **CI 工作流**：GitHub Actions（`Lint` / `Contract Gate`（含 `Compatibility Gate`）/ `Supply Chain`）
+- 企业级管理后台
+- SaaS 控制台
+- 内部运营系统
+- 强依赖后端 OpenAPI / DTO 契约的前端项目
+- 需要长期演进的 Vue 单体前端
 
-## 使用
+## 快速开始
 
-**环境准备**
+### 环境要求
 
-确保你的环境满足以下要求：
+- `git`
+- `Node.js >= 20.19.0`
+- `pnpm >= 10.5.0`
 
-- **git**: 你需要git来克隆和管理项目版本。
-- **NodeJS**: >=20.19.0，推荐 20.19.0 或更高。
-- **pnpm**: >= 10.5.0，推荐 10.5.0 或更高。
-
-**克隆项目**
+### 克隆项目
 
 ```bash
 git clone https://github.com/obsidianlabs-io/obsidian-admin-vue.git
+cd obsidian-admin-vue
 ```
 
-**安装依赖**
+### 安装依赖
 
 ```bash
-pnpm i
+pnpm install
 ```
 
-> 由于本项目采用了 pnpm monorepo 的管理方式，因此请不要使用 npm 或 yarn 来安装依赖。
+> 项目使用 `pnpm workspace` 管理依赖，不建议使用 `npm` 或 `yarn`。
 
-**启动项目**
+### 本地开发
 
 ```bash
 pnpm dev
 ```
 
-**构建项目**
+### 构建
 
 ```bash
 pnpm build
 ```
 
-**代码质量检查（推荐）**
+## 推荐开发流程
 
-新增说明：
-
-- `pnpm i18n:types:check`
-- `pnpm check` 现在包含 `i18n/type/lint/format`
-- 可选：`pnpm format`
+### 本地质量检查
 
 ```bash
-# 生成并校验 i18n 类型（保持翻译 key 与类型同步）
+# 生成并校验 i18n 类型
 pnpm i18n:types:check
 
-# 本地统一检查入口（i18n 类型 + TypeScript + ESLint + Prettier）
+# 本地统一检查入口
 pnpm check
 
-# CI 一致性检查入口（check + unit tests）
+# CI 对齐检查
 pnpm check:ci
 
 # 自动格式化
 pnpm format
 ```
 
-**接口契约检查（推荐）**
+### API 契约流程
 
 ```bash
-# 检查前端 API 契约快照是否与当前代码一致
+# 校验前端 API 契约快照
 pnpm contract:check
 
 # 更新前端 API 契约快照
 pnpm contract:write
 
-# 与 Laravel 后端契约快照做兼容性比对（Compatibility Gate，需要 ../obsidian-admin-laravel/docs/api-contract.snapshot）
+# 与 Laravel 后端契约快照做兼容性比对
 pnpm contract:backend
 
-# 从 Laravel 后端（OpenAPI + 契约快照 + DTO + Resource）生成前端类型与官方 Axios SDK
+# 从 Laravel 后端生成前端类型与官方 Axios SDK
 pnpm api:types
 
-# 一键优先远程生成（优先读取 http://localhost:8080/docs/api.json，失败时回退本地 OpenAPI 文件）
+# 远程优先生成 API 类型
 pnpm generate-api
 
-# 仅使用官方 openapi-ts 生成 Axios SDK（输出到 src/service/api/generated）
+# 仅生成官方 openapi-ts Axios SDK
 pnpm openapi:client:official
 
-# 生成并校验类型文件是否已提交（CI 建议）
+# 生成并校验 API 类型是否已提交
 pnpm typecheck:api
-
-# 前端单元测试（Node test runner + tsx）
-pnpm test:unit
 ```
 
-CI 严格契约门禁（`.github/workflows/contract-gate.yml`，包含 `Contract Gate` 与 `Compatibility Gate`）会要求：
+严格契约门禁位于:
 
-- 仓库 Secret：`BACKEND_REPO_TOKEN`（私有后端仓库时必需；公有仓库可选）
-- 可选配置仓库 Variable：`BACKEND_REPO`（默认 `obsidianlabs-io/obsidian-admin-laravel`）
-- 若后端仓库缺少 `docs/api-contract.snapshot` 会直接失败（不再跳过）
+- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/.github/workflows/contract-gate.yml`
 
-## 鸣谢
+当前规则:
 
-Obsidian Admin Vue 的诞生离不开开源社区的无私奉献，我们是站在 **[SoybeanAdmin](https://github.com/soybeanjs/soybean-admin)** 巨人的肩膀上成长起来的。
+- `BACKEND_REPO` 可选，默认 `obsidianlabs-io/obsidian-admin-laravel`
+- `BACKEND_REPO_TOKEN` 仅在后端仓库为私有时需要
+- 若后端缺少 `docs/api-contract.snapshot`，工作流会直接失败
 
-我们之所以能拥有如此清新优雅的 UI 交互、顺滑的布局以及完美的 UnoCSS 基础库，全部归功于原 SoybeanJS 作者们精心打磨的开源代码。
-如果您觉得 Obsidian Admin Vue 的界面赏心悦目，我们强烈建议您前往支持并为原滋原味的 [SoybeanAdmin 仓库](https://github.com/soybeanjs/soybean-admin) 点亮一颗 ⭐️！
+## 推荐配套项目
+
+若你希望获得完整的契约驱动开发体验，建议与以下后端配套使用:
+
+- [Obsidian Admin Laravel](https://github.com/obsidianlabs-io/obsidian-admin-laravel)
+
+## 致谢
+
+Obsidian Admin Vue 基于 **[SoybeanAdmin](https://github.com/soybeanjs/soybean-admin)** 的优秀基础继续演进。
+
+我们保留并受益于其成熟的 UI 组件体系、布局能力和 UnoCSS 工程基础。若你认可本项目，也建议为原始的 SoybeanAdmin 仓库点亮一颗 Star。
 
 ## 开源协议
 
-本项目基于开源 [MIT License](./LICENSE) 协议发布。
+本项目基于 [MIT License](./LICENSE) 发布。
 
 _Copyright © 2026 Obsidian Labs & SoybeanJS Contributors._

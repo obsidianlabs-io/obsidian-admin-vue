@@ -1,167 +1,168 @@
 <div align="center">
 	<img src="./public/favicon.svg" width="160" />
 	<h1>Obsidian Admin Vue</h1>
-  <span><a href="./README.md">中文</a> | English</span>
+	<span><a href="./README.md">中文</a> | English</span>
 </div>
 
 ---
 
 [![license](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE)
+[![node](https://img.shields.io/badge/node-%3E%3D20.19.0-3c873a.svg)](https://nodejs.org/)
+[![pnpm](https://img.shields.io/badge/pnpm-%3E%3D10.5.0-f69220.svg)](https://pnpm.io/)
 
-## Introduction
+## Project Positioning
 
 > [!NOTE]
-> This project (`Obsidian Admin Vue`) is a deeply customized, **enterprise-grade modular monolith frontend**, derived from the open-source [SoybeanAdmin](https://github.com/soybeanjs/soybean-admin). While retaining its exceptional core UI features, layout orchestration, and UnoCSS configuration, the architecture has been rewritten to natively support the Obsidian ecosystem's exact Multi-Tenancy rules, RBAC, and strict Type-Safe Laravel 12 API Contracts.
+> `Obsidian Admin Vue` is a Vue 3 admin frontend baseline for enterprise back-office systems and SaaS platforms. It is deeply rebuilt on top of [SoybeanAdmin](https://github.com/soybeanjs/soybean-admin), preserving its mature UI and layout foundation while redefining the frontend architecture around multi-tenancy, contract-driven APIs, runtime configuration, and long-term maintainability.
 
-## The Vision
+If you need an admin frontend that can evolve with a serious backend contract, rather than a demo-first template, this project is built for that use case.
 
-Obsidian was founded by **Boss · Beyond · Black** — three distinct forces united by one vision.
+## Why Use It
 
-**Boss** embodied leadership and structure.
-**Beyond** represented innovation and the courage to challenge limits.
-**Black** stood for depth, precision, and strategic clarity.
+- **Contract-driven collaboration**: generates SDKs and typings from backend OpenAPI and contract snapshots to reduce frontend/backend drift.
+- **Multi-tenant admin behavior**: supports tenant context, tenant switching, tenant-isolated views, and permission-aware routing.
+- **Runtime-configuration friendly**: designed for runtime theme, i18n, and schema/config-driven page behavior.
+- **Complete engineering gates**: includes lint, typecheck, contract gates, unit tests, conditional E2E, and supply-chain checks.
+- **Maintainable at scale**: relies on composables, schema-driven patterns, and generation scripts to reduce repeated page-level boilerplate.
 
-Though our journeys unfold apart, the foundation we forged remains eternal.
+## Core Capabilities
 
-Obsidian continues to evolve — rooted in resilience and order, marching steadfast toward enduring value.
+### Foundation
 
-## Features
+- `Vue 3`, `Vite 7`, `TypeScript`, `Pinia`, `UnoCSS`
+- `pnpm workspace / monorepo` structure
+- strict TypeScript and ESLint conventions
+- automated file routing and permission routing
+- responsive layout, theme system, and i18n support
 
-### Foundation Capabilities
+### Obsidian Enhancements
 
-- **Modern tech stack**: built with `Vue 3`, `Vite 7`, `TypeScript`, `Pinia`, and `UnoCSS`.
-- **Clear project architecture**: organized as a `pnpm workspace / monorepo` for long-term maintainability and extension.
-- **Strict code standards**: follows the [SoybeanJS specification](https://docs.soybeanjs.cn/standard), with `ESLint`, `Prettier`, and `simple-git-hooks` integrated.
-- **Strict TypeScript**: supports strict type checking for safer refactoring and better maintainability.
-- **Rich theme configuration**: built-in theme options deeply integrated with `UnoCSS`.
-- **Built-in i18n solution**: easy multi-language support.
-- **Automated file routing system**: automatically generates route imports, declarations, and types. See [Elegant Router](https://github.com/soybeanjs/elegant-router) for details.
-- **Flexible permission routing**: supports both frontend static routes and backend dynamic routes.
-- **Rich page components**: includes multiple pages and components, such as `403`, `404`, `500`, layout components, tabs/tag components, and theme configuration components.
-- **Command-line tooling**: built-in tools for common workflows such as git commit, file cleanup, and release tasks.
-- **Mobile adaptation**: responsive layout support for mobile devices.
+- official SDK generation with `@hey-api/openapi-ts`
+- frontend/backend contract snapshot and compatibility gates
+- multi-tenant tenant context and header switching
+- linked `Organization / Team / User / Role / Permission` management flows
+- real-time integration with `Laravel Echo / Pusher`
+- schema-driven CRUD capabilities
+- runtime theme and language configuration collaboration
 
-### Obsidian Enhancements (Core Differentiators)
+### Engineering Quality
 
-- **End-to-end type safety**: SDK generation via `@hey-api/openapi-ts` improves frontend/backend type consistency.
-- **Frontend/backend contract gates**: built-in `Contract Gate` and `Compatibility Gate` checks reduce the risk of breaking API schema changes.
-- **SaaS multi-tenant support**: tenant context, tenant header switching, tenant-scoped access control, and view isolation.
-- **Organization / Team management**: includes dedicated pages, search panels, operation drawers, and tenant-scoped API integration.
-- **User organization/team binding flow**: user create/edit supports organization and team fields, with team-to-organization auto-constrain behavior.
-- **Real-time updates**: powered by `Laravel Echo / Pusher`.
-- **Schema-driven UI capabilities**: dynamic forms and tables for configurable CRUD interfaces.
-- **Enhanced route access control**: combined role / permission / tenant-scope checks.
-- **Runtime configuration collaboration**: supports runtime theme and i18n configuration, designed to work with backend config services.
-- **Contract-driven workflow**: recommended to be used together with `Obsidian Admin Laravel` for a complete contract-driven development experience.
+- `pnpm check`
+- `pnpm typecheck:api`
+- `pnpm test:unit`
+- `pnpm test:e2e`
+- GitHub Actions: `Frontend Quality Gate` / `Frontend Contract Gate` / `Frontend Supply Chain`
 
-### Engineering Quality & Delivery
+## Use Cases
 
-- **Type and static quality gates**: `vue-tsc`, `ESLint`
-- **Testing capabilities**: unit tests (Node test runner + `tsx`) and E2E testing (Playwright)
-- **Supply-chain security checks**: `pnpm audit`, Dependency Review
-- **CI workflows**: GitHub Actions (`Lint` / `Contract Gate` (including `Compatibility Gate`) / `Supply Chain`)
+- enterprise admin platforms
+- SaaS control panels
+- internal operations systems
+- frontend projects that depend on backend OpenAPI and DTO contracts
+- long-lived Vue admin applications
 
-## Usage
+## Quick Start
 
-**Environment Preparation**
+### Requirements
 
-Make sure your environment meets the following requirements:
+- `git`
+- `Node.js >= 20.19.0`
+- `pnpm >= 10.5.0`
 
-- **git**: you need git to clone and manage project versions.
-- **NodeJS**: >=20.19.0, recommended 20.19.0 or higher.
-- **pnpm**: >= 10.5.0, recommended 10.5.0 or higher.
-
-**Clone Project**
+### Clone
 
 ```bash
 git clone https://github.com/obsidianlabs-io/obsidian-admin-vue.git
+cd obsidian-admin-vue
 ```
 
-**Install Dependencies**
+### Install
 
 ```bash
-pnpm i
+pnpm install
 ```
 
-> Since this project uses the pnpm monorepo management method, please do not use npm or yarn to install dependencies.
+> This repository uses `pnpm workspace`. Avoid `npm` or `yarn` for dependency installation.
 
-**Start Project**
+### Development
 
 ```bash
 pnpm dev
 ```
 
-**Build Project**
+### Build
 
 ```bash
 pnpm build
 ```
 
-**Code Quality Checks (Recommended)**
+## Recommended Developer Workflow
 
-Updates:
-
-- `pnpm i18n:types:check`
-- `pnpm check` now includes `i18n/type/lint/format`
-- Optional: `pnpm format`
+### Local Quality Checks
 
 ```bash
-# Generate and verify i18n typings (keeps locale keys and types in sync)
+# Generate and verify i18n typings
 pnpm i18n:types:check
 
-# Unified local quality checks (i18n typings + TypeScript + ESLint + Prettier)
+# Unified local quality entrypoint
 pnpm check
 
-# CI parity checks (check + unit tests)
+# CI-parity local checks
 pnpm check:ci
 
-# Auto format
+# Auto-format supported files
 pnpm format
 ```
 
-**API Contract Checks (Recommended)**
+### API Contract Workflow
 
 ```bash
-# Ensure frontend API contract snapshot matches current code
+# Validate frontend API contract snapshot
 pnpm contract:check
 
 # Regenerate frontend API contract snapshot
 pnpm contract:write
 
-# Validate compatibility with the Laravel backend snapshot (Compatibility Gate; requires ../obsidian-admin-laravel/docs/api-contract.snapshot)
+# Validate compatibility with the Laravel backend snapshot
 pnpm contract:backend
 
-# Generate frontend API typings and official Axios SDK from backend (OpenAPI + contract snapshot + DTO + Resource)
+# Generate frontend typings and official Axios SDK from Laravel backend artifacts
 pnpm api:types
 
-# One-command remote-first generation (tries http://localhost:8080/docs/api.json, falls back to local OpenAPI file)
+# Remote-first API generation
 pnpm generate-api
 
-# Generate official openapi-ts Axios SDK only (output: src/service/api/generated)
+# Generate official openapi-ts Axios SDK only
 pnpm openapi:client:official
 
-# Generate and verify typings are committed (recommended for CI)
+# Generate and verify committed API typings
 pnpm typecheck:api
-
-# Frontend unit tests (Node test runner + tsx)
-pnpm test:unit
 ```
 
-Strict CI contract gate (`.github/workflows/contract-gate.yml`, including `Contract Gate` and `Compatibility Gate`) requires:
+Strict contract gating lives in:
 
-- Repository secret: `BACKEND_REPO_TOKEN` (required for private backend repos; optional for public backend repos)
-- Repository variable: `BACKEND_REPO` (optional, defaults to `obsidianlabs-io/obsidian-admin-laravel`)
-- Missing `docs/api-contract.snapshot` in the backend checkout fails the workflow (no skip path)
+- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/.github/workflows/contract-gate.yml`
+
+Current rules:
+
+- `BACKEND_REPO` is optional and defaults to `obsidianlabs-io/obsidian-admin-laravel`
+- `BACKEND_REPO_TOKEN` is only needed when the backend repository is private
+- missing `docs/api-contract.snapshot` in the backend checkout fails the workflow
+
+## Recommended Companion Backend
+
+For the full contract-driven workflow, pair this frontend with:
+
+- [Obsidian Admin Laravel](https://github.com/obsidianlabs-io/obsidian-admin-laravel)
 
 ## Acknowledgements
 
-Obsidian Admin Vue is deeply grateful to the open-source community, standing on the shoulders of the incredible **[SoybeanAdmin](https://github.com/soybeanjs/soybean-admin)**.
+Obsidian Admin Vue continues to build on the strong foundation of **[SoybeanAdmin](https://github.com/soybeanjs/soybean-admin)**.
 
-Our front-end aesthetics, elegant UI components, layout orchestration, and UnoCSS baseline would not have been possible without the meticulous engineering of the original SoybeanJS authors.
-If you find the interface and layout systems of Obsidian Admin Vue beautiful, we highly recommend you also star the original [SoybeanAdmin repository](https://github.com/soybeanjs/soybean-admin) to support their fantastic upstream work!
+Its UI components, layout system, and UnoCSS baseline provided the upstream foundation that made this project possible. If this project is useful to you, consider starring the original SoybeanAdmin repository as well.
 
 ## License
 
-This project is released under the [MIT License](./LICENSE).
+Released under the [MIT License](./LICENSE).
 
 _Copyright © 2026 Obsidian Labs & SoybeanJS Contributors._
