@@ -3,7 +3,7 @@
   "type": "module",
   "version": "1.1.0",
   "packageManager": "pnpm@10.30.2",
-  "description": "Obsidian Admin Vue administrative dashboard",
+  "description": "Production-ready Vue 3 admin frontend with generated API contracts, multi-tenant integration, Naive UI, Pinia, and UnoCSS.",
   "author": {
     "name": "Obsidian Labs",
     "email": "obsidianlabs.tech@gmail.com",
@@ -18,14 +18,24 @@
     "url": "https://github.com/obsidianlabs-io/obsidian-admin-vue/issues"
   },
   "keywords": [
-    "Vue3 admin ",
+    "admin",
+    "vue",
+    "vue3",
     "vue-admin-template",
-    "Vite7",
-    "TypeScript",
+    "vite",
+    "vite7",
+    "typescript",
     "naive-ui",
-    "naive-ui-admin",
-    "ant-design-vue v4",
-    "UnoCSS"
+    "pinia",
+    "unocss",
+    "openapi",
+    "hey-api",
+    "multi-tenant",
+    "saas",
+    "i18n",
+    "laravel-echo",
+    "pusher",
+    "playwright"
   ],
   "engines": {
     "node": ">=20.19.0",
@@ -135,6 +145,5 @@
   "simple-git-hooks": {
     "commit-msg": "pnpm sa git-commit-verify",
     "pre-commit": "pnpm check"
-  },
-  "website": "https://admin.soybeanjs.cn"
+  }
 }
