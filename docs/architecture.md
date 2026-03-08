@@ -36,6 +36,7 @@
 - CI must run lint, typecheck, unit test, and contract gates.
 - Business code must not import the request entrypoint directly.
 - Business code must not import the generated SDK directly; go through `src/service/api/*` facades or `src/service/api/generated-adapter.ts`.
+- `src/service/api/route.ts` is the current intentional exception because it targets template-local route endpoints, not the Laravel backend contract.
 - Keep delete/deactivate UX consistent via `docs/deletion-ui-guidelines.md`.
 - API-backed forms must use the shared server-validation path:
   - `useNaiveForm()`

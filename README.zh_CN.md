@@ -69,6 +69,13 @@
 - `Node.js >= 20.19.0`
 - `pnpm >= 10.5.0`
 
+## 关键文档
+
+- 版本兼容矩阵：[`docs/compatibility-matrix.md`](./docs/compatibility-matrix.md)
+- 前端架构说明：[`docs/architecture.md`](./docs/architecture.md)
+- 发布签发清单：[`docs/release-final-checklist.md`](./docs/release-final-checklist.md)
+- API 契约快照：[`docs/api-client-contract.snapshot`](./docs/api-client-contract.snapshot)
+
 ### 克隆项目
 
 ```bash

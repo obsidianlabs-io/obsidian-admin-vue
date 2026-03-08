@@ -69,6 +69,13 @@ If you need an admin frontend that can evolve with a serious backend contract, r
 - `Node.js >= 20.19.0`
 - `pnpm >= 10.5.0`
 
+## Key Docs
+
+- Compatibility matrix: [`docs/compatibility-matrix.md`](./docs/compatibility-matrix.md)
+- Frontend architecture: [`docs/architecture.md`](./docs/architecture.md)
+- Release sign-off checklist: [`docs/release-final-checklist.md`](./docs/release-final-checklist.md)
+- API contract snapshot: [`docs/api-client-contract.snapshot`](./docs/api-client-contract.snapshot)
+
 ### Clone
 
 ```bash
