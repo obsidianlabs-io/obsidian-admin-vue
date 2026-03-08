@@ -34,7 +34,7 @@ const pageSection: App.I18n.Schema['page'] = {
       superAdmin: '超级管理员',
       admin: '管理员',
       user: '普通用户',
-      superNoTenant: '超级管理员（无租户）',
+      superNoTenant: '超级管理员（平台）',
       adminMain: '管理员（主租户）',
       adminBranch: '管理员（分租户）',
       userMain: '用户（主租户）',

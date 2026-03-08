@@ -34,7 +34,7 @@ const pageSection: App.I18n.Schema['page'] = {
       superAdmin: 'Super Admin',
       admin: 'Admin',
       user: 'User',
-      superNoTenant: 'Super (No Tenant)',
+      superNoTenant: 'Super (Platform)',
       adminMain: 'Admin (Main)',
       adminBranch: 'Admin (Branch)',
       userMain: 'User (Main)',
