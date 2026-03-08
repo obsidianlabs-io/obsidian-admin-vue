@@ -26,7 +26,9 @@ export default defineConfig({
           { text: 'Overview', link: '/' },
           { text: 'Getting Started', link: '/getting-started' },
           { text: 'Backend Pairing', link: '/backend-pairing' },
+          { text: 'Demo', link: '/demo' },
           { text: 'Compatibility Matrix', link: '/compatibility-matrix' },
+          { text: 'Configuration', link: '/configuration' },
           { text: 'Deployment', link: '/deployment' },
           { text: 'Testing', link: '/testing' }
         ]
@@ -35,6 +37,7 @@ export default defineConfig({
         text: 'Architecture',
         items: [
           { text: 'Frontend Architecture', link: '/architecture' },
+          { text: 'API Layer Conventions', link: '/api-layer-conventions' },
           { text: 'Deletion UI Guidelines', link: '/deletion-ui-guidelines' }
         ]
       },
