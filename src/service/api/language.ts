@@ -1,6 +1,14 @@
 import type { CustomAxiosRequestConfig } from '@sa/axios';
-import { request } from '../request';
-import { buildResourceItemUrl } from './url';
+import {
+  deleteLanguageById,
+  getLanguageList,
+  getLanguageLocales,
+  getLanguageMessages,
+  getLanguageOptions,
+  postLanguage,
+  putLanguageById
+} from './generated';
+import { buildGeneratedOptions, callGenerated } from './generated-adapter';
 
 /**
  * Get language translation list
@@ -8,32 +16,34 @@ import { buildResourceItemUrl } from './url';
  * @param params Query params
  */
 export function fetchGetLanguageList(params: Api.Language.TranslationListParams) {
-  return request<Api.Language.TranslationList>({
-    url: '/language/list',
-    params
-  });
+  return callGenerated<Api.Language.TranslationList>(() =>
+    getLanguageList(
+      buildGeneratedOptions({
+        query: params
+      })
+    )
+  );
 }
 
 /** Get language options */
 export function fetchGetLanguageOptions() {
-  return request<{ records: Api.Language.LanguageOption[] }>({
-    url: '/language/options'
-  });
+  return callGenerated<{ records: Api.Language.LanguageOption[] }>(() => getLanguageOptions());
 }
 
 /** Get runtime active locale options */
 export function fetchGetRuntimeLocales() {
-  return request<{ records: Api.Language.LanguageOption[] }>({
-    url: '/language/locales'
-  });
+  return callGenerated<{ records: Api.Language.LanguageOption[] }>(() => getLanguageLocales());
 }
 
 /** Get runtime locale messages */
 export function fetchGetRuntimeLocaleMessages(params: Api.Language.RuntimeMessagesParams) {
-  return request<Api.Language.RuntimeMessagesPayload>({
-    url: '/language/messages',
-    params
-  });
+  return callGenerated<Api.Language.RuntimeMessagesPayload>(() =>
+    getLanguageMessages(
+      buildGeneratedOptions({
+        query: params
+      })
+    )
+  );
 }
 
 /** Create translation item */
@@ -41,12 +51,16 @@ export function fetchCreateLanguageTranslation(
   data: Api.Language.TranslationPayload,
   config?: CustomAxiosRequestConfig
 ) {
-  return request<unknown>({
-    url: '/language',
-    method: 'post',
-    data,
-    ...config
-  });
+  return callGenerated<unknown>(() =>
+    postLanguage(
+      buildGeneratedOptions(
+        {
+          body: data
+        },
+        config
+      )
+    )
+  );
 }
 
 /** Update translation item */
@@ -55,18 +69,26 @@ export function fetchUpdateLanguageTranslation(
   data: Api.Language.TranslationPayload,
   config?: CustomAxiosRequestConfig
 ) {
-  return request<unknown>({
-    url: buildResourceItemUrl('/language', id),
-    method: 'put',
-    data,
-    ...config
-  });
+  return callGenerated<unknown>(() =>
+    putLanguageById(
+      buildGeneratedOptions(
+        {
+          path: { id },
+          body: data
+        },
+        config
+      )
+    )
+  );
 }
 
 /** Delete translation item */
 export function fetchDeleteLanguageTranslation(id: number) {
-  return request<unknown>({
-    url: buildResourceItemUrl('/language', id),
-    method: 'delete'
-  });
+  return callGenerated<unknown>(() =>
+    deleteLanguageById(
+      buildGeneratedOptions({
+        path: { id }
+      })
+    )
+  );
 }

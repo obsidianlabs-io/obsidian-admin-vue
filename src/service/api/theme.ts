@@ -1,32 +1,28 @@
-import { request } from '../request';
+import { getThemeConfig, getThemePublicConfig, postThemeConfigReset, putThemeConfig } from './generated';
+import { buildGeneratedOptions, callGenerated } from './generated-adapter';
 
 /** Get current scope theme configuration */
 export function fetchGetThemeConfig() {
-  return request<Api.Theme.ScopeConfigPayload>({
-    url: '/theme/config'
-  });
+  return callGenerated<Api.Theme.ScopeConfigPayload>(() => getThemeConfig());
 }
 
 /** Get public theme configuration for guest pages like login */
 export function fetchGetPublicThemeConfig() {
-  return request<Api.Theme.ScopeConfigPayload>({
-    url: '/theme/public-config'
-  });
+  return callGenerated<Api.Theme.ScopeConfigPayload>(() => getThemePublicConfig());
 }
 
 /** Update current scope theme configuration */
 export function fetchUpdateThemeConfig(data: Partial<Api.Theme.Config>) {
-  return request<Api.Theme.ScopeConfigPayload>({
-    url: '/theme/config',
-    method: 'put',
-    data
-  });
+  return callGenerated<Api.Theme.ScopeConfigPayload>(() =>
+    putThemeConfig(
+      buildGeneratedOptions({
+        body: data
+      })
+    )
+  );
 }
 
 /** Reset current scope theme configuration to defaults */
 export function fetchResetThemeConfig() {
-  return request<Api.Theme.ScopeConfigPayload>({
-    url: '/theme/config/reset',
-    method: 'post'
-  });
+  return callGenerated<Api.Theme.ScopeConfigPayload>(() => postThemeConfigReset());
 }

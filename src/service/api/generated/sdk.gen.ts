@@ -2,7 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { DeleteAuthSessionsBySessionIdData, DeleteAuthSessionsBySessionIdResponses, DeletePermissionByIdData, DeletePermissionByIdResponses, DeleteRoleByIdData, DeleteRoleByIdResponses, DeleteTenantByIdData, DeleteTenantByIdResponses, DeleteUserByIdData, DeleteUserByIdResponses, GetAuthErrorData, GetAuthErrorResponses, GetAuthGetUserInfoData, GetAuthGetUserInfoResponses, GetAuthMeData, GetAuthMenusData, GetAuthMenusResponses, GetAuthMeResponses, GetAuthProfileData, GetAuthProfileResponses, GetAuthSessionsData, GetAuthSessionsResponses, GetAuthTimezonesData, GetAuthTimezonesResponses, GetPermissionAllData, GetPermissionAllResponses, GetPermissionListData, GetPermissionListResponses, GetRoleAllData, GetRoleAllResponses, GetRoleAssignablePermissionsData, GetRoleAssignablePermissionsResponses, GetRoleListData, GetRoleListResponses, GetTenantAllData, GetTenantAllResponses, GetTenantListData, GetTenantListResponses, GetUserListData, GetUserListResponses, PostAuth2FaDisableData, PostAuth2FaDisableResponses, PostAuth2FaEnableData, PostAuth2FaEnableResponses, PostAuth2FaSetupData, PostAuth2FaSetupResponses, PostAuthForgotPasswordData, PostAuthForgotPasswordResponses, PostAuthLoginData, PostAuthLoginResponses, PostAuthLogoutData, PostAuthLogoutResponses, PostAuthRefreshTokenData, PostAuthRefreshTokenResponses, PostAuthRegisterData, PostAuthRegisterResponses, PostAuthResetPasswordData, PostAuthResetPasswordResponses, PostPermissionData, PostPermissionResponses, PostRoleData, PostRoleResponses, PostTenantData, PostTenantResponses, PostUserData, PostUserResponses, PutAuthPreferencesData, PutAuthPreferencesResponses, PutAuthPreferredLocaleData, PutAuthPreferredLocaleResponses, PutAuthProfileData, PutAuthProfileResponses, PutAuthSessionsBySessionIdAliasData, PutAuthSessionsBySessionIdAliasResponses, PutPermissionByIdData, PutPermissionByIdResponses, PutRoleByIdData, PutRoleByIdPermissionsData, PutRoleByIdPermissionsResponses, PutRoleByIdResponses, PutTenantByIdData, PutTenantByIdResponses, PutUserByIdData, PutUserByIdResponses, PutUserByIdRoleData, PutUserByIdRoleResponses } from './types.gen';
+import type { DeleteAuthSessionsBySessionIdData, DeleteAuthSessionsBySessionIdResponses, DeleteLanguageByIdData, DeleteLanguageByIdResponses, DeleteOrganizationByIdData, DeleteOrganizationByIdResponses, DeletePermissionByIdData, DeletePermissionByIdResponses, DeleteRoleByIdData, DeleteRoleByIdResponses, DeleteTeamByIdData, DeleteTeamByIdResponses, DeleteTenantByIdData, DeleteTenantByIdResponses, DeleteUserByIdData, DeleteUserByIdResponses, GetAuthErrorData, GetAuthErrorResponses, GetAuthGetUserInfoData, GetAuthGetUserInfoResponses, GetAuthMeData, GetAuthMenusData, GetAuthMenusResponses, GetAuthMeResponses, GetAuthProfileData, GetAuthProfileResponses, GetAuthSessionsData, GetAuthSessionsResponses, GetAuthTimezonesData, GetAuthTimezonesResponses, GetLanguageListData, GetLanguageListResponses, GetLanguageLocalesData, GetLanguageLocalesResponses, GetLanguageMessagesData, GetLanguageMessagesResponses, GetLanguageOptionsData, GetLanguageOptionsResponses, GetOrganizationAllData, GetOrganizationAllResponses, GetOrganizationListData, GetOrganizationListResponses, GetPermissionAllData, GetPermissionAllResponses, GetPermissionListData, GetPermissionListResponses, GetRoleAllData, GetRoleAllResponses, GetRoleAssignablePermissionsData, GetRoleAssignablePermissionsResponses, GetRoleListData, GetRoleListResponses, GetTeamAllData, GetTeamAllResponses, GetTeamListData, GetTeamListResponses, GetTenantAllData, GetTenantAllResponses, GetTenantListData, GetTenantListResponses, GetThemeConfigData, GetThemeConfigResponses, GetThemePublicConfigData, GetThemePublicConfigResponses, GetUserListData, GetUserListResponses, PostAuth2FaDisableData, PostAuth2FaDisableResponses, PostAuth2FaEnableData, PostAuth2FaEnableResponses, PostAuth2FaSetupData, PostAuth2FaSetupResponses, PostAuthForgotPasswordData, PostAuthForgotPasswordResponses, PostAuthLoginData, PostAuthLoginResponses, PostAuthLogoutData, PostAuthLogoutResponses, PostAuthRefreshTokenData, PostAuthRefreshTokenResponses, PostAuthRegisterData, PostAuthRegisterResponses, PostAuthResetPasswordData, PostAuthResetPasswordResponses, PostLanguageData, PostLanguageResponses, PostOrganizationData, PostOrganizationResponses, PostPermissionData, PostPermissionResponses, PostRoleData, PostRoleResponses, PostTeamData, PostTeamResponses, PostTenantData, PostTenantResponses, PostThemeConfigResetData, PostThemeConfigResetResponses, PostUserData, PostUserResponses, PutAuthPreferencesData, PutAuthPreferencesResponses, PutAuthPreferredLocaleData, PutAuthPreferredLocaleResponses, PutAuthProfileData, PutAuthProfileResponses, PutAuthSessionsBySessionIdAliasData, PutAuthSessionsBySessionIdAliasResponses, PutLanguageByIdData, PutLanguageByIdResponses, PutOrganizationByIdData, PutOrganizationByIdResponses, PutPermissionByIdData, PutPermissionByIdResponses, PutRoleByIdData, PutRoleByIdPermissionsData, PutRoleByIdPermissionsResponses, PutRoleByIdResponses, PutTeamByIdData, PutTeamByIdResponses, PutTenantByIdData, PutTenantByIdResponses, PutThemeConfigData, PutThemeConfigResponses, PutUserByIdData, PutUserByIdResponses, PutUserByIdRoleData, PutUserByIdRoleResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
@@ -491,4 +491,221 @@ export const putTenantById = <ThrowOnError extends boolean = false>(options: Opt
         'Content-Type': 'application/json',
         ...options.headers
     }
+});
+
+/**
+ * Organization listing
+ */
+export const getOrganizationList = <ThrowOnError extends boolean = false>(options?: Options<GetOrganizationListData, ThrowOnError>) => (options?.client ?? client).get<GetOrganizationListResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/organization/list',
+    ...options
+});
+
+/**
+ * List active organizations for selectors
+ */
+export const getOrganizationAll = <ThrowOnError extends boolean = false>(options?: Options<GetOrganizationAllData, ThrowOnError>) => (options?.client ?? client).get<GetOrganizationAllResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/organization/all',
+    ...options
+});
+
+/**
+ * Create organization
+ */
+export const postOrganization = <ThrowOnError extends boolean = false>(options: Options<PostOrganizationData, ThrowOnError>) => (options.client ?? client).post<PostOrganizationResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/organization',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Delete organization
+ */
+export const deleteOrganizationById = <ThrowOnError extends boolean = false>(options: Options<DeleteOrganizationByIdData, ThrowOnError>) => (options.client ?? client).delete<DeleteOrganizationByIdResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/organization/{id}',
+    ...options
+});
+
+/**
+ * Update organization
+ */
+export const putOrganizationById = <ThrowOnError extends boolean = false>(options: Options<PutOrganizationByIdData, ThrowOnError>) => (options.client ?? client).put<PutOrganizationByIdResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/organization/{id}',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Team listing
+ */
+export const getTeamList = <ThrowOnError extends boolean = false>(options?: Options<GetTeamListData, ThrowOnError>) => (options?.client ?? client).get<GetTeamListResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/team/list',
+    ...options
+});
+
+/**
+ * List active teams for selectors
+ */
+export const getTeamAll = <ThrowOnError extends boolean = false>(options?: Options<GetTeamAllData, ThrowOnError>) => (options?.client ?? client).get<GetTeamAllResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/team/all',
+    ...options
+});
+
+/**
+ * Create team
+ */
+export const postTeam = <ThrowOnError extends boolean = false>(options: Options<PostTeamData, ThrowOnError>) => (options.client ?? client).post<PostTeamResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/team',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Delete team
+ */
+export const deleteTeamById = <ThrowOnError extends boolean = false>(options: Options<DeleteTeamByIdData, ThrowOnError>) => (options.client ?? client).delete<DeleteTeamByIdResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/team/{id}',
+    ...options
+});
+
+/**
+ * Update team
+ */
+export const putTeamById = <ThrowOnError extends boolean = false>(options: Options<PutTeamByIdData, ThrowOnError>) => (options.client ?? client).put<PutTeamByIdResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/team/{id}',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Language translation listing
+ */
+export const getLanguageList = <ThrowOnError extends boolean = false>(options?: Options<GetLanguageListData, ThrowOnError>) => (options?.client ?? client).get<GetLanguageListResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/language/list',
+    ...options
+});
+
+/**
+ * List language options for console selectors
+ */
+export const getLanguageOptions = <ThrowOnError extends boolean = false>(options?: Options<GetLanguageOptionsData, ThrowOnError>) => (options?.client ?? client).get<GetLanguageOptionsResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/language/options',
+    ...options
+});
+
+/**
+ * List runtime active locales
+ */
+export const getLanguageLocales = <ThrowOnError extends boolean = false>(options?: Options<GetLanguageLocalesData, ThrowOnError>) => (options?.client ?? client).get<GetLanguageLocalesResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/language/locales',
+    ...options
+});
+
+/**
+ * Get runtime locale messages
+ */
+export const getLanguageMessages = <ThrowOnError extends boolean = false>(options?: Options<GetLanguageMessagesData, ThrowOnError>) => (options?.client ?? client).get<GetLanguageMessagesResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/language/messages',
+    ...options
+});
+
+/**
+ * Create language translation
+ */
+export const postLanguage = <ThrowOnError extends boolean = false>(options: Options<PostLanguageData, ThrowOnError>) => (options.client ?? client).post<PostLanguageResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/language',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Delete language translation
+ */
+export const deleteLanguageById = <ThrowOnError extends boolean = false>(options: Options<DeleteLanguageByIdData, ThrowOnError>) => (options.client ?? client).delete<DeleteLanguageByIdResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/language/{id}',
+    ...options
+});
+
+/**
+ * Update language translation
+ */
+export const putLanguageById = <ThrowOnError extends boolean = false>(options: Options<PutLanguageByIdData, ThrowOnError>) => (options.client ?? client).put<PutLanguageByIdResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/language/{id}',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Get public theme configuration
+ */
+export const getThemePublicConfig = <ThrowOnError extends boolean = false>(options?: Options<GetThemePublicConfigData, ThrowOnError>) => (options?.client ?? client).get<GetThemePublicConfigResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/theme/public-config',
+    ...options
+});
+
+/**
+ * Get current scope theme configuration
+ */
+export const getThemeConfig = <ThrowOnError extends boolean = false>(options?: Options<GetThemeConfigData, ThrowOnError>) => (options?.client ?? client).get<GetThemeConfigResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/theme/config',
+    ...options
+});
+
+/**
+ * Update current scope theme configuration
+ */
+export const putThemeConfig = <ThrowOnError extends boolean = false>(options: Options<PutThemeConfigData, ThrowOnError>) => (options.client ?? client).put<PutThemeConfigResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/theme/config',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Reset current scope theme configuration
+ */
+export const postThemeConfigReset = <ThrowOnError extends boolean = false>(options?: Options<PostThemeConfigResetData, ThrowOnError>) => (options?.client ?? client).post<PostThemeConfigResetResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/theme/config/reset',
+    ...options
 });

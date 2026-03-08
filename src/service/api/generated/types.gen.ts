@@ -147,6 +147,65 @@ export type RoleSyncPermissionsRequestBody = {
     updateTime?: string;
 };
 
+export type OrganizationPayload = {
+    organizationCode: string;
+    organizationName: string;
+    description?: string;
+    status?: EnableStatus;
+    sort?: number;
+    version?: number;
+    updatedAt?: string;
+    updateTime?: string;
+};
+
+export type TeamPayload = {
+    organizationId: number;
+    teamCode: string;
+    teamName: string;
+    description?: string;
+    status?: EnableStatus;
+    sort?: number;
+    version?: number;
+    updatedAt?: string;
+    updateTime?: string;
+};
+
+export type LanguageTranslationPayload = {
+    locale: string;
+    translationKey: string;
+    translationValue: string;
+    description?: string;
+    status?: EnableStatus;
+    version?: number;
+    updatedAt?: string;
+    updateTime?: string;
+};
+
+export type ThemeConfigPayload = {
+    themeScheme?: 'light' | 'dark' | 'auto';
+    themeColor?: string;
+    themeRadius?: number;
+    headerHeight?: number;
+    siderWidth?: number;
+    siderCollapsedWidth?: number;
+    layoutMode?: string;
+    scrollMode?: string;
+    darkSider?: boolean;
+    themeSchemaVisible?: boolean;
+    headerFullscreenVisible?: boolean;
+    tabVisible?: boolean;
+    tabFullscreenVisible?: boolean;
+    breadcrumbVisible?: boolean;
+    footerVisible?: boolean;
+    footerHeight?: number;
+    multilingualVisible?: boolean;
+    globalSearchVisible?: boolean;
+    themeConfigVisible?: boolean;
+    pageAnimate?: boolean;
+    pageAnimateMode?: string;
+    fixedHeaderAndTab?: boolean;
+};
+
 /**
  * Optional tenant override for super-admin scope.
  */
@@ -903,3 +962,376 @@ export type PutTenantByIdResponses = {
 };
 
 export type PutTenantByIdResponse = PutTenantByIdResponses[keyof PutTenantByIdResponses];
+
+export type GetOrganizationListData = {
+    body?: never;
+    path?: never;
+    query?: {
+        current?: number;
+        size?: number;
+        cursor?: string;
+        keyword?: string;
+        status?: EnableStatus;
+    };
+    url: '/organization/list';
+};
+
+export type GetOrganizationListResponses = {
+    /**
+     * Organization list response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type GetOrganizationListResponse = GetOrganizationListResponses[keyof GetOrganizationListResponses];
+
+export type GetOrganizationAllData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/organization/all';
+};
+
+export type GetOrganizationAllResponses = {
+    /**
+     * Organization selector response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type GetOrganizationAllResponse = GetOrganizationAllResponses[keyof GetOrganizationAllResponses];
+
+export type PostOrganizationData = {
+    body: OrganizationPayload;
+    path?: never;
+    query?: never;
+    url: '/organization';
+};
+
+export type PostOrganizationResponses = {
+    /**
+     * Organization create response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type PostOrganizationResponse = PostOrganizationResponses[keyof PostOrganizationResponses];
+
+export type DeleteOrganizationByIdData = {
+    body?: never;
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/organization/{id}';
+};
+
+export type DeleteOrganizationByIdResponses = {
+    /**
+     * Organization delete response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type DeleteOrganizationByIdResponse = DeleteOrganizationByIdResponses[keyof DeleteOrganizationByIdResponses];
+
+export type PutOrganizationByIdData = {
+    body: OrganizationPayload;
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/organization/{id}';
+};
+
+export type PutOrganizationByIdResponses = {
+    /**
+     * Organization update response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type PutOrganizationByIdResponse = PutOrganizationByIdResponses[keyof PutOrganizationByIdResponses];
+
+export type GetTeamListData = {
+    body?: never;
+    path?: never;
+    query?: {
+        current?: number;
+        size?: number;
+        cursor?: string;
+        keyword?: string;
+        status?: EnableStatus;
+        organizationId?: number;
+    };
+    url: '/team/list';
+};
+
+export type GetTeamListResponses = {
+    /**
+     * Team list response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type GetTeamListResponse = GetTeamListResponses[keyof GetTeamListResponses];
+
+export type GetTeamAllData = {
+    body?: never;
+    path?: never;
+    query?: {
+        organizationId?: number;
+    };
+    url: '/team/all';
+};
+
+export type GetTeamAllResponses = {
+    /**
+     * Team selector response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type GetTeamAllResponse = GetTeamAllResponses[keyof GetTeamAllResponses];
+
+export type PostTeamData = {
+    body: TeamPayload;
+    path?: never;
+    query?: never;
+    url: '/team';
+};
+
+export type PostTeamResponses = {
+    /**
+     * Team create response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type PostTeamResponse = PostTeamResponses[keyof PostTeamResponses];
+
+export type DeleteTeamByIdData = {
+    body?: never;
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/team/{id}';
+};
+
+export type DeleteTeamByIdResponses = {
+    /**
+     * Team delete response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type DeleteTeamByIdResponse = DeleteTeamByIdResponses[keyof DeleteTeamByIdResponses];
+
+export type PutTeamByIdData = {
+    body: TeamPayload;
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/team/{id}';
+};
+
+export type PutTeamByIdResponses = {
+    /**
+     * Team update response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type PutTeamByIdResponse = PutTeamByIdResponses[keyof PutTeamByIdResponses];
+
+export type GetLanguageListData = {
+    body?: never;
+    path?: never;
+    query?: {
+        current?: number;
+        size?: number;
+        cursor?: string;
+        locale?: string;
+        keyword?: string;
+        status?: EnableStatus;
+    };
+    url: '/language/list';
+};
+
+export type GetLanguageListResponses = {
+    /**
+     * Language translation list response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type GetLanguageListResponse = GetLanguageListResponses[keyof GetLanguageListResponses];
+
+export type GetLanguageOptionsData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/language/options';
+};
+
+export type GetLanguageOptionsResponses = {
+    /**
+     * Language options response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type GetLanguageOptionsResponse = GetLanguageOptionsResponses[keyof GetLanguageOptionsResponses];
+
+export type GetLanguageLocalesData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/language/locales';
+};
+
+export type GetLanguageLocalesResponses = {
+    /**
+     * Runtime locales response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type GetLanguageLocalesResponse = GetLanguageLocalesResponses[keyof GetLanguageLocalesResponses];
+
+export type GetLanguageMessagesData = {
+    body?: never;
+    path?: never;
+    query?: {
+        locale?: string;
+        version?: string;
+    };
+    url: '/language/messages';
+};
+
+export type GetLanguageMessagesResponses = {
+    /**
+     * Runtime locale messages response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type GetLanguageMessagesResponse = GetLanguageMessagesResponses[keyof GetLanguageMessagesResponses];
+
+export type PostLanguageData = {
+    body: LanguageTranslationPayload;
+    path?: never;
+    query?: never;
+    url: '/language';
+};
+
+export type PostLanguageResponses = {
+    /**
+     * Language translation create response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type PostLanguageResponse = PostLanguageResponses[keyof PostLanguageResponses];
+
+export type DeleteLanguageByIdData = {
+    body?: never;
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/language/{id}';
+};
+
+export type DeleteLanguageByIdResponses = {
+    /**
+     * Language translation delete response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type DeleteLanguageByIdResponse = DeleteLanguageByIdResponses[keyof DeleteLanguageByIdResponses];
+
+export type PutLanguageByIdData = {
+    body: LanguageTranslationPayload;
+    path: {
+        id: number;
+    };
+    query?: never;
+    url: '/language/{id}';
+};
+
+export type PutLanguageByIdResponses = {
+    /**
+     * Language translation update response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type PutLanguageByIdResponse = PutLanguageByIdResponses[keyof PutLanguageByIdResponses];
+
+export type GetThemePublicConfigData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/theme/public-config';
+};
+
+export type GetThemePublicConfigResponses = {
+    /**
+     * Public theme configuration response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type GetThemePublicConfigResponse = GetThemePublicConfigResponses[keyof GetThemePublicConfigResponses];
+
+export type GetThemeConfigData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/theme/config';
+};
+
+export type GetThemeConfigResponses = {
+    /**
+     * Theme configuration response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type GetThemeConfigResponse = GetThemeConfigResponses[keyof GetThemeConfigResponses];
+
+export type PutThemeConfigData = {
+    body: ThemeConfigPayload;
+    path?: never;
+    query?: never;
+    url: '/theme/config';
+};
+
+export type PutThemeConfigResponses = {
+    /**
+     * Theme configuration update response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type PutThemeConfigResponse = PutThemeConfigResponses[keyof PutThemeConfigResponses];
+
+export type PostThemeConfigResetData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/theme/config/reset';
+};
+
+export type PostThemeConfigResetResponses = {
+    /**
+     * Theme configuration reset response wrapper
+     */
+    200: ApiResponse;
+};
+
+export type PostThemeConfigResetResponse = PostThemeConfigResetResponses[keyof PostThemeConfigResetResponses];

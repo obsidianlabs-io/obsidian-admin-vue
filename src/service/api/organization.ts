@@ -1,30 +1,41 @@
 import type { CustomAxiosRequestConfig } from '@sa/axios';
-import { request } from '../request';
-import { buildResourceItemUrl } from './url';
+import {
+  deleteOrganizationById,
+  getOrganizationAll,
+  getOrganizationList,
+  postOrganization,
+  putOrganizationById
+} from './generated';
+import { buildGeneratedOptions, callGenerated } from './generated-adapter';
 
 /** Get organization list */
 export function fetchGetOrganizationList(params: Api.Organization.OrganizationListParams) {
-  return request<Api.Organization.OrganizationList>({
-    url: '/organization/list',
-    params
-  });
+  return callGenerated<Api.Organization.OrganizationList>(() =>
+    getOrganizationList(
+      buildGeneratedOptions({
+        query: params
+      })
+    )
+  );
 }
 
 /** Get all active organizations */
 export function fetchGetAllOrganizations() {
-  return request<{ records: Api.Organization.OrganizationOption[] }>({
-    url: '/organization/all'
-  });
+  return callGenerated<{ records: Api.Organization.OrganizationOption[] }>(() => getOrganizationAll());
 }
 
 /** Create organization */
 export function fetchCreateOrganization(data: Api.Organization.OrganizationPayload, config?: CustomAxiosRequestConfig) {
-  return request<unknown>({
-    url: '/organization',
-    method: 'post',
-    data,
-    ...config
-  });
+  return callGenerated<unknown>(() =>
+    postOrganization(
+      buildGeneratedOptions(
+        {
+          body: data
+        },
+        config
+      )
+    )
+  );
 }
 
 /** Update organization */
@@ -33,18 +44,26 @@ export function fetchUpdateOrganization(
   data: Api.Organization.OrganizationPayload,
   config?: CustomAxiosRequestConfig
 ) {
-  return request<unknown>({
-    url: buildResourceItemUrl('/organization', id),
-    method: 'put',
-    data,
-    ...config
-  });
+  return callGenerated<unknown>(() =>
+    putOrganizationById(
+      buildGeneratedOptions(
+        {
+          path: { id },
+          body: data
+        },
+        config
+      )
+    )
+  );
 }
 
 /** Delete organization */
 export function fetchDeleteOrganization(id: number) {
-  return request<unknown>({
-    url: buildResourceItemUrl('/organization', id),
-    method: 'delete'
-  });
+  return callGenerated<unknown>(() =>
+    deleteOrganizationById(
+      buildGeneratedOptions({
+        path: { id }
+      })
+    )
+  );
 }
