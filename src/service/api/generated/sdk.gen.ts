@@ -2,7 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { DeleteAuthSessionsBySessionIdData, DeleteAuthSessionsBySessionIdResponses, DeleteLanguageByIdData, DeleteLanguageByIdResponses, DeleteOrganizationByIdData, DeleteOrganizationByIdResponses, DeletePermissionByIdData, DeletePermissionByIdResponses, DeleteRoleByIdData, DeleteRoleByIdResponses, DeleteTeamByIdData, DeleteTeamByIdResponses, DeleteTenantByIdData, DeleteTenantByIdResponses, DeleteUserByIdData, DeleteUserByIdResponses, GetAuthErrorData, GetAuthErrorResponses, GetAuthGetUserInfoData, GetAuthGetUserInfoResponses, GetAuthMeData, GetAuthMenusData, GetAuthMenusResponses, GetAuthMeResponses, GetAuthProfileData, GetAuthProfileResponses, GetAuthSessionsData, GetAuthSessionsResponses, GetAuthTimezonesData, GetAuthTimezonesResponses, GetLanguageListData, GetLanguageListResponses, GetLanguageLocalesData, GetLanguageLocalesResponses, GetLanguageMessagesData, GetLanguageMessagesResponses, GetLanguageOptionsData, GetLanguageOptionsResponses, GetOrganizationAllData, GetOrganizationAllResponses, GetOrganizationListData, GetOrganizationListResponses, GetPermissionAllData, GetPermissionAllResponses, GetPermissionListData, GetPermissionListResponses, GetRoleAllData, GetRoleAllResponses, GetRoleAssignablePermissionsData, GetRoleAssignablePermissionsResponses, GetRoleListData, GetRoleListResponses, GetTeamAllData, GetTeamAllResponses, GetTeamListData, GetTeamListResponses, GetTenantAllData, GetTenantAllResponses, GetTenantListData, GetTenantListResponses, GetThemeConfigData, GetThemeConfigResponses, GetThemePublicConfigData, GetThemePublicConfigResponses, GetUserListData, GetUserListResponses, PostAuth2FaDisableData, PostAuth2FaDisableResponses, PostAuth2FaEnableData, PostAuth2FaEnableResponses, PostAuth2FaSetupData, PostAuth2FaSetupResponses, PostAuthForgotPasswordData, PostAuthForgotPasswordResponses, PostAuthLoginData, PostAuthLoginResponses, PostAuthLogoutData, PostAuthLogoutResponses, PostAuthRefreshTokenData, PostAuthRefreshTokenResponses, PostAuthRegisterData, PostAuthRegisterResponses, PostAuthResetPasswordData, PostAuthResetPasswordResponses, PostLanguageData, PostLanguageResponses, PostOrganizationData, PostOrganizationResponses, PostPermissionData, PostPermissionResponses, PostRoleData, PostRoleResponses, PostTeamData, PostTeamResponses, PostTenantData, PostTenantResponses, PostThemeConfigResetData, PostThemeConfigResetResponses, PostUserData, PostUserResponses, PutAuthPreferencesData, PutAuthPreferencesResponses, PutAuthPreferredLocaleData, PutAuthPreferredLocaleResponses, PutAuthProfileData, PutAuthProfileResponses, PutAuthSessionsBySessionIdAliasData, PutAuthSessionsBySessionIdAliasResponses, PutLanguageByIdData, PutLanguageByIdResponses, PutOrganizationByIdData, PutOrganizationByIdResponses, PutPermissionByIdData, PutPermissionByIdResponses, PutRoleByIdData, PutRoleByIdPermissionsData, PutRoleByIdPermissionsResponses, PutRoleByIdResponses, PutTeamByIdData, PutTeamByIdResponses, PutTenantByIdData, PutTenantByIdResponses, PutThemeConfigData, PutThemeConfigResponses, PutUserByIdData, PutUserByIdResponses, PutUserByIdRoleData, PutUserByIdRoleResponses } from './types.gen';
+import type { DeleteAuthSessionsBySessionIdData, DeleteAuthSessionsBySessionIdResponses, DeleteLanguageByIdData, DeleteLanguageByIdResponses, DeleteOrganizationByIdData, DeleteOrganizationByIdResponses, DeletePermissionByIdData, DeletePermissionByIdResponses, DeleteRoleByIdData, DeleteRoleByIdResponses, DeleteSystemFeatureFlagsPurgeData, DeleteSystemFeatureFlagsPurgeResponses, DeleteTeamByIdData, DeleteTeamByIdResponses, DeleteTenantByIdData, DeleteTenantByIdResponses, DeleteUserByIdData, DeleteUserByIdResponses, GetAuditListData, GetAuditListResponses, GetAuditPolicyHistoryData, GetAuditPolicyHistoryResponses, GetAuditPolicyListData, GetAuditPolicyListResponses, GetAuthErrorData, GetAuthErrorResponses, GetAuthGetUserInfoData, GetAuthGetUserInfoResponses, GetAuthMeData, GetAuthMenusData, GetAuthMenusResponses, GetAuthMeResponses, GetAuthProfileData, GetAuthProfileResponses, GetAuthSessionsData, GetAuthSessionsResponses, GetAuthTimezonesData, GetAuthTimezonesResponses, GetLanguageListData, GetLanguageListResponses, GetLanguageLocalesData, GetLanguageLocalesResponses, GetLanguageMessagesData, GetLanguageMessagesResponses, GetLanguageOptionsData, GetLanguageOptionsResponses, GetOrganizationAllData, GetOrganizationAllResponses, GetOrganizationListData, GetOrganizationListResponses, GetPermissionAllData, GetPermissionAllResponses, GetPermissionListData, GetPermissionListResponses, GetRoleAllData, GetRoleAllResponses, GetRoleAssignablePermissionsData, GetRoleAssignablePermissionsResponses, GetRoleListData, GetRoleListResponses, GetSystemFeatureFlagsData, GetSystemFeatureFlagsResponses, GetSystemUiCrudSchemaByResourceData, GetSystemUiCrudSchemaByResourceResponses, GetTeamAllData, GetTeamAllResponses, GetTeamListData, GetTeamListResponses, GetTenantAllData, GetTenantAllResponses, GetTenantListData, GetTenantListResponses, GetThemeConfigData, GetThemeConfigResponses, GetThemePublicConfigData, GetThemePublicConfigResponses, GetUserListData, GetUserListResponses, PostAuth2FaDisableData, PostAuth2FaDisableResponses, PostAuth2FaEnableData, PostAuth2FaEnableResponses, PostAuth2FaSetupData, PostAuth2FaSetupResponses, PostAuthForgotPasswordData, PostAuthForgotPasswordResponses, PostAuthLoginData, PostAuthLoginResponses, PostAuthLogoutData, PostAuthLogoutResponses, PostAuthRefreshTokenData, PostAuthRefreshTokenResponses, PostAuthRegisterData, PostAuthRegisterResponses, PostAuthResetPasswordData, PostAuthResetPasswordResponses, PostLanguageData, PostLanguageResponses, PostOrganizationData, PostOrganizationResponses, PostPermissionData, PostPermissionResponses, PostRoleData, PostRoleResponses, PostTeamData, PostTeamResponses, PostTenantData, PostTenantResponses, PostThemeConfigResetData, PostThemeConfigResetResponses, PostUserData, PostUserResponses, PutAuditPolicyData, PutAuditPolicyResponses, PutAuthPreferencesData, PutAuthPreferencesResponses, PutAuthPreferredLocaleData, PutAuthPreferredLocaleResponses, PutAuthProfileData, PutAuthProfileResponses, PutAuthSessionsBySessionIdAliasData, PutAuthSessionsBySessionIdAliasResponses, PutLanguageByIdData, PutLanguageByIdResponses, PutOrganizationByIdData, PutOrganizationByIdResponses, PutPermissionByIdData, PutPermissionByIdResponses, PutRoleByIdData, PutRoleByIdPermissionsData, PutRoleByIdPermissionsResponses, PutRoleByIdResponses, PutSystemFeatureFlagsToggleData, PutSystemFeatureFlagsToggleResponses, PutTeamByIdData, PutTeamByIdResponses, PutTenantByIdData, PutTenantByIdResponses, PutThemeConfigData, PutThemeConfigResponses, PutUserByIdData, PutUserByIdResponses, PutUserByIdRoleData, PutUserByIdRoleResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
@@ -17,6 +17,90 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
      */
     meta?: Record<string, unknown>;
 };
+
+/**
+ * List feature flags
+ */
+export const getSystemFeatureFlags = <ThrowOnError extends boolean = false>(options?: Options<GetSystemFeatureFlagsData, ThrowOnError>) => (options?.client ?? client).get<GetSystemFeatureFlagsResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/system/feature-flags',
+    ...options
+});
+
+/**
+ * Toggle feature flag override
+ */
+export const putSystemFeatureFlagsToggle = <ThrowOnError extends boolean = false>(options: Options<PutSystemFeatureFlagsToggleData, ThrowOnError>) => (options.client ?? client).put<PutSystemFeatureFlagsToggleResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/system/feature-flags/toggle',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Remove feature flag override
+ */
+export const deleteSystemFeatureFlagsPurge = <ThrowOnError extends boolean = false>(options: Options<DeleteSystemFeatureFlagsPurgeData, ThrowOnError>) => (options.client ?? client).delete<DeleteSystemFeatureFlagsPurgeResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/system/feature-flags/purge',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * List audit logs
+ */
+export const getAuditList = <ThrowOnError extends boolean = false>(options?: Options<GetAuditListData, ThrowOnError>) => (options?.client ?? client).get<GetAuditListResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/audit/list',
+    ...options
+});
+
+/**
+ * List effective audit policies
+ */
+export const getAuditPolicyList = <ThrowOnError extends boolean = false>(options?: Options<GetAuditPolicyListData, ThrowOnError>) => (options?.client ?? client).get<GetAuditPolicyListResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/audit/policy/list',
+    ...options
+});
+
+/**
+ * Update audit policies
+ */
+export const putAuditPolicy = <ThrowOnError extends boolean = false>(options: Options<PutAuditPolicyData, ThrowOnError>) => (options.client ?? client).put<PutAuditPolicyResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/audit/policy',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * List audit policy history
+ */
+export const getAuditPolicyHistory = <ThrowOnError extends boolean = false>(options?: Options<GetAuditPolicyHistoryData, ThrowOnError>) => (options?.client ?? client).get<GetAuditPolicyHistoryResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/audit/policy/history',
+    ...options
+});
+
+/**
+ * Resolve CRUD schema
+ */
+export const getSystemUiCrudSchemaByResource = <ThrowOnError extends boolean = false>(options: Options<GetSystemUiCrudSchemaByResourceData, ThrowOnError>) => (options.client ?? client).get<GetSystemUiCrudSchemaByResourceResponses, unknown, ThrowOnError>({
+    responseType: 'json',
+    url: '/system/ui/crud-schema/{resource}',
+    ...options
+});
 
 /**
  * Login

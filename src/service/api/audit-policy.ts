@@ -1,12 +1,11 @@
-import { request } from '../request';
+import { getAuditPolicyHistory, getAuditPolicyList, putAuditPolicy } from './generated';
+import { buildGeneratedOptions, callGenerated } from './generated-adapter';
 
 /**
  * Get global audit policy list
  */
 export function fetchGetAuditPolicyList() {
-  return request<Api.AuditPolicy.ListResponse>({
-    url: '/audit/policy/list'
-  });
+  return callGenerated<Api.AuditPolicy.ListResponse>(() => getAuditPolicyList());
 }
 
 /**
@@ -15,10 +14,13 @@ export function fetchGetAuditPolicyList() {
  * @param params Query params
  */
 export function fetchGetAuditPolicyHistory(params: Api.AuditPolicy.HistoryParams) {
-  return request<Api.AuditPolicy.HistoryResponse>({
-    url: '/audit/policy/history',
-    params
-  });
+  return callGenerated<Api.AuditPolicy.HistoryResponse>(() =>
+    getAuditPolicyHistory(
+      buildGeneratedOptions({
+        query: params
+      })
+    )
+  );
 }
 
 /**
@@ -27,9 +29,11 @@ export function fetchGetAuditPolicyHistory(params: Api.AuditPolicy.HistoryParams
  * @param data Payload
  */
 export function fetchUpdateAuditPolicy(data: Api.AuditPolicy.UpdatePayload) {
-  return request<Api.AuditPolicy.UpdateResponse>({
-    url: '/audit/policy',
-    method: 'put',
-    data
-  });
+  return callGenerated<Api.AuditPolicy.UpdateResponse>(() =>
+    putAuditPolicy(
+      buildGeneratedOptions({
+        body: data
+      })
+    )
+  );
 }

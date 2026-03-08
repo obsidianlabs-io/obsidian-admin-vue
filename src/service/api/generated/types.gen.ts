@@ -206,6 +206,191 @@ export type ThemeConfigPayload = {
     fixedHeaderAndTab?: boolean;
 };
 
+export type FeatureFlagToggleRequestBody = {
+    key: string;
+    enabled: boolean;
+};
+
+export type FeatureFlagPurgeRequestBody = {
+    key: string;
+};
+
+export type FeatureFlagRecord = {
+    key?: string;
+    enabled?: boolean;
+    percentage?: number;
+    platform_only?: boolean;
+    tenant_only?: boolean;
+    role_codes?: Array<string>;
+    global_override?: boolean | null;
+};
+
+export type FeatureFlagListData = {
+    current?: number;
+    size?: number;
+    total?: number;
+    records?: Array<FeatureFlagRecord>;
+};
+
+export type FeatureFlagOverrideData = {
+    key?: string;
+    global_override?: boolean | null;
+};
+
+export type FeatureFlagListResponse = ApiResponse & {
+    data?: FeatureFlagListData;
+};
+
+export type FeatureFlagOverrideResponse = ApiResponse & {
+    data?: FeatureFlagOverrideData;
+};
+
+export type AuditLogRecord = {
+    id?: number;
+    action?: string;
+    logType?: 'login' | 'api' | 'operation' | 'data' | 'permission';
+    userName?: string;
+    tenantId?: string;
+    tenantName?: string;
+    auditableType?: string;
+    auditableId?: string;
+    target?: string;
+    oldValues?: {
+        [key: string]: unknown;
+    };
+    newValues?: {
+        [key: string]: unknown;
+    };
+    ipAddress?: string;
+    userAgent?: string;
+    requestId?: string;
+    createTime?: string;
+};
+
+export type AuditLogListData = {
+    current?: number;
+    size?: number;
+    total?: number;
+    records?: Array<AuditLogRecord>;
+};
+
+export type AuditLogListResponse = ApiResponse & {
+    data?: AuditLogListData;
+};
+
+export type AuditPolicyRecord = {
+    action?: string;
+    category?: string;
+    mandatory?: boolean;
+    locked?: boolean;
+    lockReason?: string;
+    description?: string;
+    enabled?: boolean;
+    samplingRate?: number;
+    retentionDays?: number;
+    source?: string;
+    defaultEnabled?: boolean;
+    defaultSamplingRate?: number;
+    defaultRetentionDays?: number;
+};
+
+export type AuditPolicyListData = {
+    records?: Array<AuditPolicyRecord>;
+};
+
+export type AuditPolicyPoliciesResponse = ApiResponse & {
+    data?: AuditPolicyListData;
+};
+
+export type AuditPolicyHistoryRecord = {
+    id?: string;
+    scope?: string;
+    changedByUserId?: string;
+    changedByUserName?: string;
+    changeReason?: string;
+    changedCount?: number;
+    changedActions?: Array<string>;
+    createdAt?: string;
+};
+
+export type AuditPolicyHistoryData = {
+    current?: number;
+    size?: number;
+    total?: number;
+    records?: Array<AuditPolicyHistoryRecord>;
+};
+
+export type AuditPolicyHistoryResponse = ApiResponse & {
+    data?: AuditPolicyHistoryData;
+};
+
+export type AuditPolicyChangeState = {
+    enabled?: boolean;
+    samplingRate?: number;
+    retentionDays?: number;
+};
+
+export type AuditPolicyChange = {
+    action?: string;
+    old?: AuditPolicyChangeState;
+    new?: AuditPolicyChangeState;
+};
+
+export type AuditPolicyUpdateRecord = {
+    action: string;
+    enabled: boolean;
+    samplingRate?: number | null;
+    retentionDays?: number | null;
+};
+
+export type AuditPolicyUpdateRequestBody = {
+    records: Array<AuditPolicyUpdateRecord>;
+    changeReason: string;
+};
+
+export type AuditPolicyUpdateData = {
+    updated?: number;
+    clearedTenantOverrides?: number;
+    revisionId?: string;
+    records?: Array<AuditPolicyRecord>;
+};
+
+export type AuditPolicyUpdateResponse = ApiResponse & {
+    data?: AuditPolicyUpdateData;
+};
+
+export type CrudSchemaSearchField = {
+    key?: string;
+    type?: string;
+    labelKey?: string;
+    placeholderKey?: string;
+    clearable?: boolean;
+    filterable?: boolean;
+    optionSource?: string;
+};
+
+export type CrudSchemaColumn = {
+    key?: string;
+    type?: string;
+    titleKey?: string;
+    align?: string;
+    width?: number;
+    minWidth?: number;
+    emptyLabelKey?: string;
+};
+
+export type CrudSchemaPayload = {
+    resource?: string;
+    permission?: string;
+    searchFields?: Array<CrudSchemaSearchField>;
+    columns?: Array<CrudSchemaColumn>;
+    scrollX?: number;
+};
+
+export type CrudSchemaResponse = ApiResponse & {
+    data?: CrudSchemaPayload;
+};
+
 /**
  * Optional tenant override for super-admin scope.
  */
@@ -214,6 +399,154 @@ export type TenantHeader = string;
 export type IdPath = number;
 
 export type SessionIdPath = string;
+
+export type GetSystemFeatureFlagsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        current?: number;
+        size?: number;
+        keyword?: string;
+    };
+    url: '/system/feature-flags';
+};
+
+export type GetSystemFeatureFlagsResponses = {
+    /**
+     * Feature flag list
+     */
+    200: FeatureFlagListResponse;
+};
+
+export type GetSystemFeatureFlagsResponse = GetSystemFeatureFlagsResponses[keyof GetSystemFeatureFlagsResponses];
+
+export type PutSystemFeatureFlagsToggleData = {
+    body: FeatureFlagToggleRequestBody;
+    path?: never;
+    query?: never;
+    url: '/system/feature-flags/toggle';
+};
+
+export type PutSystemFeatureFlagsToggleResponses = {
+    /**
+     * Feature flag override updated
+     */
+    200: FeatureFlagOverrideResponse;
+};
+
+export type PutSystemFeatureFlagsToggleResponse = PutSystemFeatureFlagsToggleResponses[keyof PutSystemFeatureFlagsToggleResponses];
+
+export type DeleteSystemFeatureFlagsPurgeData = {
+    body: FeatureFlagPurgeRequestBody;
+    path?: never;
+    query?: never;
+    url: '/system/feature-flags/purge';
+};
+
+export type DeleteSystemFeatureFlagsPurgeResponses = {
+    /**
+     * Feature flag override purged
+     */
+    200: FeatureFlagOverrideResponse;
+};
+
+export type DeleteSystemFeatureFlagsPurgeResponse = DeleteSystemFeatureFlagsPurgeResponses[keyof DeleteSystemFeatureFlagsPurgeResponses];
+
+export type GetAuditListData = {
+    body?: never;
+    path?: never;
+    query?: {
+        current?: number;
+        size?: number;
+        cursor?: string;
+        keyword?: string;
+        action?: string;
+        logType?: 'login' | 'api' | 'operation' | 'data' | 'permission';
+        userName?: string;
+        requestId?: string;
+        dateFrom?: string;
+        dateTo?: string;
+    };
+    url: '/audit/list';
+};
+
+export type GetAuditListResponses = {
+    /**
+     * Audit log list
+     */
+    200: AuditLogListResponse;
+};
+
+export type GetAuditListResponse = GetAuditListResponses[keyof GetAuditListResponses];
+
+export type GetAuditPolicyListData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/audit/policy/list';
+};
+
+export type GetAuditPolicyListResponses = {
+    /**
+     * Audit policies
+     */
+    200: AuditPolicyPoliciesResponse;
+};
+
+export type GetAuditPolicyListResponse = GetAuditPolicyListResponses[keyof GetAuditPolicyListResponses];
+
+export type PutAuditPolicyData = {
+    body: AuditPolicyUpdateRequestBody;
+    path?: never;
+    query?: never;
+    url: '/audit/policy';
+};
+
+export type PutAuditPolicyResponses = {
+    /**
+     * Audit policy updated
+     */
+    200: AuditPolicyUpdateResponse;
+};
+
+export type PutAuditPolicyResponse = PutAuditPolicyResponses[keyof PutAuditPolicyResponses];
+
+export type GetAuditPolicyHistoryData = {
+    body?: never;
+    path?: never;
+    query?: {
+        current?: number;
+        size?: number;
+    };
+    url: '/audit/policy/history';
+};
+
+export type GetAuditPolicyHistoryResponses = {
+    /**
+     * Audit policy history
+     */
+    200: AuditPolicyHistoryResponse;
+};
+
+export type GetAuditPolicyHistoryResponse = GetAuditPolicyHistoryResponses[keyof GetAuditPolicyHistoryResponses];
+
+export type GetSystemUiCrudSchemaByResourceData = {
+    body?: never;
+    path: {
+        resource: string;
+    };
+    query?: never;
+    url: '/system/ui/crud-schema/{resource}';
+};
+
+export type GetSystemUiCrudSchemaByResourceResponses = {
+    /**
+     * CRUD schema
+     */
+    200: CrudSchemaResponse;
+};
+
+export type GetSystemUiCrudSchemaByResourceResponse = GetSystemUiCrudSchemaByResourceResponses[keyof GetSystemUiCrudSchemaByResourceResponses];
 
 export type PostAuthLoginData = {
     body: LoginRequestBody;
