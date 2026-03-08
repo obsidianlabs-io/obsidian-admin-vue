@@ -132,3 +132,21 @@ test('pages preview can save a language record in demo runtime', async ({ page }
   await expect(modal).toBeHidden();
   await expect(page.getByRole('cell', { name: translationKey }).first()).toBeVisible();
 });
+
+test('pages preview can open the language edit drawer in demo runtime', async ({ page }) => {
+  await loginIntoDemoDashboard(page);
+
+  await page.goto('./#/language');
+
+  await expect(page.getByText(/^Language$|^语言管理$/).first()).toBeVisible();
+
+  await page.getByRole('button', { name: /^Edit$|^编辑$/ }).first().click();
+
+  const modal = page.locator('.n-modal').last();
+  await expect(modal).toBeVisible();
+  await expect(modal.getByText(/^Edit Translation$|^编辑翻译$/)).toBeVisible();
+  await expect(modal.getByPlaceholder(/Ex: route.user \/ common.search|例如：route.user \/ common.search/)).toHaveValue(
+    'login.button'
+  );
+  await expect(modal.locator('textarea').first()).toHaveValue(/Login|登录/);
+});
