@@ -110,6 +110,25 @@ pnpm docs:build
 
 This should stay green whenever docs, VitePress config, or docs workflow files change.
 
+## 9. Preview accessibility and visual baseline
+
+```bash
+pnpm test:ui-baseline
+```
+
+Use this when you change:
+
+- login or preview bootstrap UI
+- high-value list pages
+- drawers and modals
+- theme tokens or layout chrome that affect the public preview
+
+The baseline intentionally targets the static preview runtime so that:
+
+- accessibility checks stay deterministic
+- screenshot comparisons do not depend on a live backend
+- docs-site CI verifies the same public bundle that GitHub Pages serves
+
 ## Recommended workflow by change type
 
 ### If you changed docs only
@@ -132,6 +151,7 @@ pnpm check:ci
 pnpm check:ci
 pnpm test:e2e
 pnpm test:fullstack
+pnpm test:ui-baseline
 ```
 
 ### If you changed release or repository workflows

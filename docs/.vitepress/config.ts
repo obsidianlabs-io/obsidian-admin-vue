@@ -33,6 +33,7 @@ export default defineConfig({
           { text: 'Compatibility Matrix', link: '/compatibility-matrix' },
           { text: 'Configuration', link: '/configuration' },
           { text: 'Deployment', link: '/deployment' },
+          { text: 'Support Policy', link: '/support-policy' },
           { text: 'Testing', link: '/testing' },
           { text: 'Auth Flows', link: '/auth-flows' },
           { text: 'Open Source Launch Checklist', link: '/open-source-launch-checklist' },

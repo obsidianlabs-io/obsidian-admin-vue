@@ -17,6 +17,7 @@ Use it after implementation is complete and before tagging or publishing a relea
 - `CHANGELOG.zh_CN.md` is updated
 - the release note exists:
   - `docs/releases/vX.Y.Z.md`
+- `pnpm release:pairing vX.Y.Z` passes
 - repository metadata still matches current positioning:
   - `docs/github/repository-metadata.md`
 

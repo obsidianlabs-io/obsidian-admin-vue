@@ -73,6 +73,7 @@ If you need an admin frontend that can evolve with a serious backend contract, r
 ## Key Docs
 
 - Compatibility matrix: [`docs/compatibility-matrix.md`](./docs/compatibility-matrix.md)
+- Support policy: [`docs/support-policy.md`](./docs/support-policy.md)
 - Frontend architecture: [`docs/architecture.md`](./docs/architecture.md)
 - Full-stack evaluation: [`docs/full-stack-evaluation.md`](./docs/full-stack-evaluation.md)
 - Public preview guide: [`docs/demo.md`](./docs/demo.md)

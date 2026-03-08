@@ -42,4 +42,5 @@ yarn.lock
 .env.*.local
 docs/.vitepress/cache
 docs/.vitepress/dist
+.pages-dist
 build

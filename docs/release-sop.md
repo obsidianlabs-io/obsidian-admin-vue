@@ -38,6 +38,7 @@ pnpm test:unit
 pnpm test:vue
 pnpm build
 pnpm test:preview
+pnpm release:pairing vX.Y.Z
 ```
 
 说明:
@@ -168,10 +169,11 @@ git push origin vX.Y.Z
 4. 跑 `pnpm check`
 5. 跑 `pnpm typecheck:api`
 6. 跑 `pnpm test:unit && pnpm test:vue && pnpm build && pnpm test:preview`
-7. 确认工作区干净
-8. 推 `main`
-9. 打 tag 并推
-10. 创建 GitHub Release
+7. 跑 `pnpm release:pairing vX.Y.Z`
+8. 确认工作区干净
+9. 推 `main`
+10. 打 tag 并推
+11. 创建 GitHub Release
 
 ## 12. Final Sign-Off
 

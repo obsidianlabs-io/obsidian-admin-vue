@@ -19,6 +19,9 @@ jobs:
       - name: Setup frontend toolchain
         uses: ./.github/actions/setup-frontend
 
+      - name: Validate release pairing
+        run: pnpm release:pairing "${GITHUB_REF_NAME}"
+
       - name: Prepare release notes
         run: |
           VERSION_TAG="${GITHUB_REF_NAME}"

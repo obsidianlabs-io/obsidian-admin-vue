@@ -45,6 +45,9 @@ jobs:
       - name: Smoke test Pages preview
         run: pnpm exec playwright test --config playwright.preview.config.ts
 
+      - name: Accessibility and visual baseline
+        run: pnpm exec playwright test --config playwright.ui-baseline.config.ts
+
       - name: Upload Pages artifact
         if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v4
