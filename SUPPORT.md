@@ -1,6 +1,6 @@
 # Support
 
-This document explains how to get help for `/Users/zero/Documents/Project/WK/obsidian-admin-vue`.
+This document explains how to get help for `obsidian-admin-vue`.
 
 ## Scope
 
@@ -25,8 +25,8 @@ Support is not intended for:
 Please confirm all of the following first:
 
 1. You are testing against the latest `main` branch or the latest release tag.
-2. You have read `/Users/zero/Documents/Project/WK/obsidian-admin-vue/README.md`.
-3. You have checked `/Users/zero/Documents/Project/WK/obsidian-admin-vue/CONTRIBUTING.md`.
+2. You have read `README.md`.
+3. You have checked `CONTRIBUTING.md`.
 4. You ran the local quality gates:
 
 ```bash
@@ -47,9 +47,9 @@ pnpm api:types
 - Bug reports:
   [GitHub Issues](https://github.com/obsidianlabs-io/obsidian-admin-vue/issues)
 - Security reports:
-  See `/Users/zero/Documents/Project/WK/obsidian-admin-vue/SECURITY.md`
+  See `SECURITY.md`
 - Contribution process:
-  See `/Users/zero/Documents/Project/WK/obsidian-admin-vue/CONTRIBUTING.md`
+  See `CONTRIBUTING.md`
 
 ## How To Ask For Help Well
 

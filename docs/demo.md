@@ -10,8 +10,8 @@ That is intentional. This project is optimized for contract accuracy, multi-tena
 
 Use the repository locally with the companion backend:
 
-- frontend: `/Users/zero/Documents/Project/WK/obsidian-admin-vue`
-- backend: `/Users/zero/Documents/Project/WK/obsidian-admin-laravel`
+- frontend: ``
+- backend: `obsidian-admin-laravel`
 
 Start with:
 
@@ -22,8 +22,8 @@ pnpm dev
 
 Pair it with the Laravel backend described in:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/docs/backend-pairing.md`
-- `/Users/zero/Documents/Project/WK/obsidian-admin-laravel/docs/compatibility-matrix.md`
+- `docs/backend-pairing.md`
+- `obsidian-admin-laravel/docs/compatibility-matrix.md`
 
 ## What to inspect first
 

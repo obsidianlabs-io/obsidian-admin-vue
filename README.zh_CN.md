@@ -148,7 +148,7 @@ pnpm typecheck:api
 
 严格契约门禁位于:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/.github/workflows/contract-gate.yml`
+- `.github/workflows/contract-gate.yml`
 
 当前规则:
 

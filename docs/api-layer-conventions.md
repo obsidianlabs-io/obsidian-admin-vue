@@ -17,7 +17,7 @@ The app-facing contract should be:
 
 Generated files live in:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/service/api/generated`
+- `src/service/api/generated`
 
 These are machine-owned files. Do not hand-edit them.
 
@@ -25,8 +25,8 @@ These are machine-owned files. Do not hand-edit them.
 
 Normalization happens in:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/service/api/generated-adapter.ts`
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/service/api/generated-caller.ts`
+- `src/service/api/generated-adapter.ts`
+- `src/service/api/generated-caller.ts`
 
 This layer exists so generated SDK usage can fit the existing flat request flow without leaking generated-client details into business code.
 
@@ -34,10 +34,10 @@ This layer exists so generated SDK usage can fit the existing flat request flow 
 
 Application code should call:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/service/api/auth.ts`
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/service/api/user.ts`
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/service/api/role.ts`
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/service/api/tenant.ts`
+- `src/service/api/auth.ts`
+- `src/service/api/user.ts`
+- `src/service/api/role.ts`
+- `src/service/api/tenant.ts`
 - and other files under `src/service/api/*`
 
 These files are the stable app-facing API layer.
@@ -52,13 +52,13 @@ Business code must not:
 
 These rules are enforced by:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/scripts/api-architecture-check.mjs`
+- `scripts/api-architecture-check.mjs`
 
 ## Allowed exception
 
 The current intentional exception is:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/service/api/route.ts`
+- `src/service/api/route.ts`
 
 This file targets template-local route data rather than the Laravel backend contract.
 

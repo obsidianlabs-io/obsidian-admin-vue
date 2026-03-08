@@ -8,7 +8,7 @@ The current frontend integration is designed for system-level refresh events, no
 
 Core entrypoint:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/service/websocket/index.ts`
+- `src/service/websocket/index.ts`
 
 ## Transport model
 
@@ -34,18 +34,18 @@ The shared browser event emitted into the app is:
 
 Source:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/constants/event.ts`
+- `src/constants/event.ts`
 
 Backend broadcast source:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-laravel/app/Domains/System/Events/SystemRealtimeUpdated.php`
+- `obsidian-admin-laravel/app/Domains/System/Events/SystemRealtimeUpdated.php`
 
 ## Pages currently using realtime refresh
 
 Representative consumers:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/views/feature-flag/index.vue`
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/views/audit-policy/composables/use-audit-policy.ts`
+- `src/views/feature-flag/index.vue`
+- `src/views/audit-policy/composables/use-audit-policy.ts`
 
 Current behavior includes:
 
@@ -67,8 +67,8 @@ That is why pages should:
 
 The intended backend pair is:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-laravel/docs/octane.md`
-- `/Users/zero/Documents/Project/WK/obsidian-admin-laravel/composer.json`
+- `obsidian-admin-laravel/docs/octane.md`
+- `obsidian-admin-laravel/composer.json`
 
 The backend already ships the pieces needed for this stack:
 

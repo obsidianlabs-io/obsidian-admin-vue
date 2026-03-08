@@ -148,7 +148,7 @@ pnpm typecheck:api
 
 Strict contract gating lives in:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/.github/workflows/contract-gate.yml`
+- `.github/workflows/contract-gate.yml`
 
 Current rules:
 

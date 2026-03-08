@@ -8,8 +8,8 @@ This repository is intended to be a production-ready Vue 3 admin frontend baseli
 
 - Use Node `20.19+`
 - Use pnpm `10.5+`
-- Read `/Users/zero/Documents/Project/WK/obsidian-admin-vue/docs/architecture.md`
-- Read `/Users/zero/Documents/Project/WK/obsidian-admin-vue/docs/release-sop.md` if your change affects release gates
+- Read `docs/architecture.md`
+- Read `docs/release-sop.md` if your change affects release gates
 
 ## Local Setup
 
@@ -36,10 +36,10 @@ pnpm dev
 
 The following files are generated artifacts and should normally be updated through scripts, not manual edits:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/typings/api/openapi-generated.d.ts`
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/typings/api/backend-generated.d.ts`
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/service/api/generated`
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/typings/i18n-generated.d.ts`
+- `src/typings/api/openapi-generated.d.ts`
+- `src/typings/api/backend-generated.d.ts`
+- `src/service/api/generated`
+- `src/typings/i18n-generated.d.ts`
 
 If backend API contracts change, regenerate them with:
 

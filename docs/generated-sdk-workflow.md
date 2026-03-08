@@ -18,10 +18,10 @@ The intended chain is:
 
 Canonical files:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-laravel/docs/openapi.yaml`
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/service/api/generated`
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/service/api/generated-adapter.ts`
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/service/api/generated-caller.ts`
+- `obsidian-admin-laravel/docs/openapi.yaml`
+- `src/service/api/generated`
+- `src/service/api/generated-adapter.ts`
+- `src/service/api/generated-caller.ts`
 
 ## Commands
 
@@ -49,9 +49,9 @@ This repository generates:
 
 Generated outputs include:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/typings/api/openapi-generated.d.ts`
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/typings/api/backend-generated.d.ts`
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/service/api/generated`
+- `src/typings/api/openapi-generated.d.ts`
+- `src/typings/api/backend-generated.d.ts`
+- `src/service/api/generated`
 
 These files are machine-owned and should not be hand-edited.
 
@@ -61,7 +61,7 @@ Business code should not import the generated SDK directly.
 
 Instead, route usage through:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/service/api/*`
+- `src/service/api/*`
 
 Those facades are the stable app-facing API layer. They adapt generated operations into frontend-friendly behavior without leaking transport details into stores, composables, or views.
 
@@ -74,7 +74,7 @@ The repository already enforces the main rule:
 
 Gate:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/scripts/api-architecture-check.mjs`
+- `scripts/api-architecture-check.mjs`
 
 ## When to regenerate
 

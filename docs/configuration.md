@@ -6,7 +6,7 @@ This project is configured primarily through Vite environment variables and a sm
 
 The canonical frontend env types live in:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/typings/vite-env.d.ts`
+- `src/typings/vite-env.d.ts`
 
 ## Core application variables
 
@@ -32,9 +32,9 @@ These variables control how the frontend talks to backend services:
 
 These values are consumed by:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/service/request/index.ts`
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/service/request/context.ts`
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/utils/service.ts`
+- `src/service/request/index.ts`
+- `src/service/request/context.ts`
+- `src/utils/service.ts`
 
 ## Auth and route variables
 
@@ -58,7 +58,7 @@ Realtime behavior is optional and controlled by:
 
 These are used by:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/service/websocket/index.ts`
+- `src/service/websocket/index.ts`
 
 ## UX and storage variables
 
@@ -75,7 +75,7 @@ These are useful but not deployment-critical:
 
 Keep these rules:
 
-1. treat `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/typings/vite-env.d.ts` as the canonical env contract
+1. treat `src/typings/vite-env.d.ts` as the canonical env contract
 2. do not add undocumented `VITE_*` variables casually
 3. do not encode backend-specific behavior in random page code
 4. keep backend API behavior in the request layer or API facades

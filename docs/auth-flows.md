@@ -15,12 +15,12 @@ Supported flows:
 
 Key files:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/service/api/auth.ts`
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/store/modules/auth/index.ts`
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/views/_builtin/login/index.vue`
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/views/_builtin/login/modules/pwd-login.vue`
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/views/_builtin/login/modules/register.vue`
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/views/_builtin/login/modules/reset-pwd.vue`
+- `src/service/api/auth.ts`
+- `src/store/modules/auth/index.ts`
+- `src/views/_builtin/login/index.vue`
+- `src/views/_builtin/login/modules/pwd-login.vue`
+- `src/views/_builtin/login/modules/register.vue`
+- `src/views/_builtin/login/modules/reset-pwd.vue`
 
 ## Intentional placeholders
 
@@ -56,7 +56,7 @@ This keeps the page layer thin and prevents login UI state from being inferred f
 
 The intended backend pair is:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-laravel/docs/compatibility-matrix.md`
+- `obsidian-admin-laravel/docs/compatibility-matrix.md`
 
 When the backend auth contract changes, regenerate types first and treat the auth UI as contract-sensitive code.
 
@@ -64,7 +64,7 @@ When the backend auth contract changes, regenerate types first and treat the aut
 
 Representative coverage exists in:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/tests/e2e/auth-flows.spec.ts`
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/tests/vue/pwd-login.spec.ts`
+- `tests/e2e/auth-flows.spec.ts`
+- `tests/vue/pwd-login.spec.ts`
 
 For real auth changes, `pnpm check:ci` is the minimum trustworthy gate.

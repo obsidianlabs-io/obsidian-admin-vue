@@ -24,17 +24,17 @@ That is why the default compatibility target is the Laravel backend.
 
 The core contract chain is:
 
-1. backend OpenAPI: `/Users/zero/Documents/Project/WK/obsidian-admin-laravel/docs/openapi.yaml`
-2. frontend generated SDK: `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/service/api/generated`
-3. frontend facades: `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/service/api/*`
+1. backend OpenAPI: `obsidian-admin-laravel/docs/openapi.yaml`
+2. frontend generated SDK: `src/service/api/generated`
+3. frontend facades: `src/service/api/*`
 4. application usage from composables, stores, and views
 
 ## Compatibility policy
 
 Read the compatibility matrix before mixing versions:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/docs/compatibility-matrix.md`
-- `/Users/zero/Documents/Project/WK/obsidian-admin-laravel/docs/compatibility-matrix.md`
+- `docs/compatibility-matrix.md`
+- `obsidian-admin-laravel/docs/compatibility-matrix.md`
 
 Current stable pair:
 
@@ -49,6 +49,6 @@ You can still use this frontend with a different backend, but you should keep th
 - expose a stable OpenAPI document
 - keep validation errors field-addressable
 - keep auth/session/menu payloads consistent with your route/store model
-- treat `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/service/api/*` as the only app-facing API layer
+- treat `src/service/api/*` as the only app-facing API layer
 
 If your backend cannot provide those guarantees, this project will degrade into a hand-maintained admin frontend and you lose most of the long-term value.

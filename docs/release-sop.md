@@ -1,6 +1,6 @@
 # Release SOP
 
-This document defines the release process for `/Users/zero/Documents/Project/WK/obsidian-admin-vue`.
+This document defines the release process for `obsidian-admin-vue`.
 
 目标是确保 frontend 每次 release 都和 backend 契约、生成类型、GitHub Release 文案保持一致。
 
@@ -17,15 +17,15 @@ This document defines the release process for `/Users/zero/Documents/Project/WK/
 
 在创建 tag 前，先完成这些内容:
 
-- 更新 `/Users/zero/Documents/Project/WK/obsidian-admin-vue/package.json` 版本号
+- 更新 `package.json` 版本号
 - 更新:
-  `/Users/zero/Documents/Project/WK/obsidian-admin-vue/CHANGELOG.md`
+  `CHANGELOG.md`
 - 更新:
-  `/Users/zero/Documents/Project/WK/obsidian-admin-vue/CHANGELOG.zh_CN.md`
+  `CHANGELOG.zh_CN.md`
 - 准备当前版本 release note:
-  `/Users/zero/Documents/Project/WK/obsidian-admin-vue/docs/releases/vX.Y.Z.md`
+  `docs/releases/vX.Y.Z.md`
 - 如有需要，更新:
-  `/Users/zero/Documents/Project/WK/obsidian-admin-vue/docs/github/repository-metadata.md`
+  `docs/github/repository-metadata.md`
 
 ## 3. Required Release Gates
 
@@ -61,9 +61,9 @@ pnpm api:types
 
 需要重点确认的文件:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/typings/api/openapi-generated.d.ts`
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/typings/api/backend-generated.d.ts`
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/service/api/generated`
+- `src/typings/api/openapi-generated.d.ts`
+- `src/typings/api/backend-generated.d.ts`
+- `src/service/api/generated`
 
 ## 5. Check Repository State
 
@@ -113,9 +113,9 @@ git push origin vX.Y.Z
 
 - Tag 选择: `vX.Y.Z`
 - Title 使用:
-  `/Users/zero/Documents/Project/WK/obsidian-admin-vue/docs/github/repository-metadata.md`
+  `docs/github/repository-metadata.md`
 - Body 使用:
-  `/Users/zero/Documents/Project/WK/obsidian-admin-vue/docs/releases/vX.Y.Z.md`
+  `docs/releases/vX.Y.Z.md`
 
 ## 9. Update Repository Metadata
 
@@ -131,7 +131,7 @@ git push origin vX.Y.Z
 
 参考:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/docs/github/repository-setup-checklist.md`
+- `docs/github/repository-setup-checklist.md`
 
 ## 10. Post-Release Check
 
@@ -161,4 +161,4 @@ git push origin vX.Y.Z
 
 For the last pre-release pass, use:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/docs/release-final-checklist.md`
+- `docs/release-final-checklist.md`

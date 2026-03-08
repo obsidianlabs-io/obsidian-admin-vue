@@ -1,6 +1,6 @@
 # Release Final Checklist
 
-This is the last sign-off checklist for `/Users/zero/Documents/Project/WK/obsidian-admin-vue`.
+This is the last sign-off checklist for `obsidian-admin-vue`.
 
 Use it after implementation is complete and before tagging or publishing a release.
 
@@ -12,13 +12,13 @@ Use it after implementation is complete and before tagging or publishing a relea
 
 ## 2. Release Content
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/package.json` version is correct
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/CHANGELOG.md` is updated
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/CHANGELOG.zh_CN.md` is updated
+- `package.json` version is correct
+- `CHANGELOG.md` is updated
+- `CHANGELOG.zh_CN.md` is updated
 - the release note exists:
-  - `/Users/zero/Documents/Project/WK/obsidian-admin-vue/docs/releases/vX.Y.Z.md`
+  - `docs/releases/vX.Y.Z.md`
 - repository metadata still matches current positioning:
-  - `/Users/zero/Documents/Project/WK/obsidian-admin-vue/docs/github/repository-metadata.md`
+  - `docs/github/repository-metadata.md`
 
 ## 3. Required Frontend Gates
 
@@ -60,7 +60,7 @@ Confirm there is no drift in:
 
 Reference:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/docs/github/repository-setup-checklist.md`
+- `docs/github/repository-setup-checklist.md`
 
 ## 6. Push Order
 

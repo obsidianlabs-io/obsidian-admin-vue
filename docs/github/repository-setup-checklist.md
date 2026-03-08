@@ -1,6 +1,6 @@
 # GitHub Repository Setup Checklist
 
-This checklist is for `/Users/zero/Documents/Project/WK/obsidian-admin-vue`.
+This checklist is for `obsidian-admin-vue`.
 
 目标不是把 GitHub 选项全部打开，而是把这个前端仓库真正需要的设置一次配对，避免发布前遗漏。
 
@@ -19,7 +19,7 @@ This checklist is for `/Users/zero/Documents/Project/WK/obsidian-admin-vue`.
 
 来源文案:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/docs/github/repository-metadata.md`
+- `docs/github/repository-metadata.md`
 
 ## 2. Default Branch
 
@@ -81,16 +81,16 @@ This checklist is for `/Users/zero/Documents/Project/WK/obsidian-admin-vue`.
 
 对应 workflow:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/.github/workflows/linter.yml`
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/.github/workflows/contract-gate.yml`
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/.github/workflows/supply-chain.yml`
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/.github/workflows/docs-site.yml`
+- `.github/workflows/linter.yml`
+- `.github/workflows/contract-gate.yml`
+- `.github/workflows/supply-chain.yml`
+- `.github/workflows/docs-site.yml`
 
 ## 4.5. CODEOWNERS
 
 当前仓库已包含：
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/.github/CODEOWNERS`
+- `.github/CODEOWNERS`
 
 当前使用维护邮箱作为默认 owner，这样语法有效、不会依赖一个尚未创建的 GitHub team。
 
@@ -149,9 +149,9 @@ This checklist is for `/Users/zero/Documents/Project/WK/obsidian-admin-vue`.
 
 - tag 指向代码发布提交
 - GitHub Release 正文使用:
-  `/Users/zero/Documents/Project/WK/obsidian-admin-vue/docs/releases/v1.1.1.md`
+  `docs/releases/v1.1.1.md`
 - CHANGELOG 使用:
-  `/Users/zero/Documents/Project/WK/obsidian-admin-vue/CHANGELOG.md`
+  `CHANGELOG.md`
 
 当前状态:
 
@@ -161,7 +161,7 @@ This checklist is for `/Users/zero/Documents/Project/WK/obsidian-admin-vue`.
 
 当前仓库已包含：
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/.github/workflows/docs-site.yml`
+- `.github/workflows/docs-site.yml`
 
 建议在 `Settings -> Pages` 中确认：
 
@@ -187,7 +187,7 @@ This checklist is for `/Users/zero/Documents/Project/WK/obsidian-admin-vue`.
 
 可直接复制这个模板:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/docs/github/profile/README.md`
+- `docs/github/profile/README.md`
 
 ## 10. Recommended Cleanup Choices
 
@@ -227,4 +227,4 @@ This checklist is for `/Users/zero/Documents/Project/WK/obsidian-admin-vue`.
 
 内部发布流程文档:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/docs/release-sop.md`
+- `docs/release-sop.md`

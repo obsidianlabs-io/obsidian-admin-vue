@@ -11,9 +11,9 @@ This repository is versioned independently from `obsidian-admin-laravel`.
 
 ## Source of truth
 
-- Backend API contract: `/Users/zero/Documents/Project/WK/obsidian-admin-laravel/docs/openapi.yaml`
-- Frontend generated SDK: `/Users/zero/Documents/Project/WK/obsidian-admin-vue/src/service/api/generated`
-- Frontend API contract snapshot: `/Users/zero/Documents/Project/WK/obsidian-admin-vue/docs/api-client-contract.snapshot`
+- Backend API contract: `obsidian-admin-laravel/docs/openapi.yaml`
+- Frontend generated SDK: `src/service/api/generated`
+- Frontend API contract snapshot: `docs/api-client-contract.snapshot`
 
 ## Upgrade rule
 

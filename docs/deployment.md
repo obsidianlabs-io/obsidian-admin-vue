@@ -86,8 +86,8 @@ pnpm docs:preview
 
 GitHub Pages deployment is handled by:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/.github/workflows/docs-site.yml`
+- `.github/workflows/docs-site.yml`
 
 Repository-side setup is documented in:
 
-- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/docs/github/repository-setup-checklist.md`
+- `docs/github/repository-setup-checklist.md`
