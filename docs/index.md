@@ -42,7 +42,7 @@ Use this frontend with [Obsidian Admin Laravel](https://github.com/obsidianlabs-
 
 - Start with [Getting Started](/getting-started)
 - Review [Backend Pairing](/backend-pairing), [Demo](/demo), and [Compatibility Matrix](/compatibility-matrix)
-- Use [Configuration](/configuration) and [Deployment](/deployment) during setup
+- Use [Configuration](/configuration), [Deployment](/deployment), and [Auth Flows](/auth-flows) during setup
 - Read the [Frontend Architecture](/architecture), [Multi-Tenancy](/multi-tenancy), and [Realtime](/realtime)
-- Review [API Layer Conventions](/api-layer-conventions) before adding new backend calls
+- Review [Generated SDK Workflow](/generated-sdk-workflow) and [API Layer Conventions](/api-layer-conventions) before adding new backend calls
 - Use the [Release Final Checklist](/release-final-checklist) before publishing

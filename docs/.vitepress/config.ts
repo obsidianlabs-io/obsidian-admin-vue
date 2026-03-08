@@ -32,7 +32,8 @@ export default defineConfig({
           { text: 'Compatibility Matrix', link: '/compatibility-matrix' },
           { text: 'Configuration', link: '/configuration' },
           { text: 'Deployment', link: '/deployment' },
-          { text: 'Testing', link: '/testing' }
+          { text: 'Testing', link: '/testing' },
+          { text: 'Auth Flows', link: '/auth-flows' }
         ]
       },
       {
@@ -41,6 +42,7 @@ export default defineConfig({
           { text: 'Frontend Architecture', link: '/architecture' },
           { text: 'Multi-Tenancy', link: '/multi-tenancy' },
           { text: 'Realtime', link: '/realtime' },
+          { text: 'Generated SDK Workflow', link: '/generated-sdk-workflow' },
           { text: 'API Layer Conventions', link: '/api-layer-conventions' },
           { text: 'Deletion UI Guidelines', link: '/deletion-ui-guidelines' }
         ]
