@@ -51,4 +51,5 @@ Use this frontend with [Obsidian Admin Laravel](https://github.com/obsidianlabs-
 - Use [Open Source Launch Checklist](/open-source-launch-checklist) before promoting the backend and frontend as one stack
 - Use [Full-Stack Demo Environment](/full-stack-demo-environment) when you want to evolve from static preview into a hosted real-backend demo
 - Use [Demo Deployment Runbook](/demo-deployment-runbook) when you want the exact backend + frontend deployment sequence for the first live demo
+- Use [Evaluator Demo Validation](/evaluator-demo-validation) when you want the minimum acceptance checklist before sharing the hosted evaluator URL
 - Use the [Release Final Checklist](/release-final-checklist) before publishing
