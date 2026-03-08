@@ -33,6 +33,16 @@ It does not guarantee:
 
 That distinction must remain explicit until a real demo environment exists.
 
+## Ready-to-Use Repository Assets
+
+Use these repository assets for the first hosted demo rollout.
+
+- backend `docker-compose.demo.yml`
+- backend `.env.demo.example`
+- frontend `.env.demo-live.example`
+
+These are meant for a real hosted backend demo, not for the static GitHub Pages preview.
+
 ## Recommended Architecture
 
 Use this split.
@@ -106,6 +116,26 @@ Use all of these before promoting the demo URL.
 - backend health endpoints
 
 The full-stack demo should only be promoted after the existing pairing smoke is green against the same backend version.
+
+## Minimum Deployment Commands
+
+Backend demo stack:
+
+```bash
+cp .env.demo.example .env.demo
+docker compose -f docker-compose.demo.yml up -d
+docker compose -f docker-compose.demo.yml exec app php artisan key:generate --force
+docker compose -f docker-compose.demo.yml exec app php artisan migrate:fresh --seed --force
+```
+
+Frontend live-demo build:
+
+```bash
+cp .env.demo-live.example .env.demo-live
+pnpm build --mode demo-live
+```
+
+Deploy the built frontend bundle to static hosting and point it at the same backend domain configured in `.env.demo-live`.
 
 ## Suggested Rollout
 
