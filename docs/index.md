@@ -50,4 +50,5 @@ Use this frontend with [Obsidian Admin Laravel](https://github.com/obsidianlabs-
 - Review [Release Artifacts](/release-artifacts) when you want the downloadable bundles and supply-chain outputs
 - Use [Open Source Launch Checklist](/open-source-launch-checklist) before promoting the backend and frontend as one stack
 - Use [Full-Stack Demo Environment](/full-stack-demo-environment) when you want to evolve from static preview into a hosted real-backend demo
+- Use [Demo Deployment Runbook](/demo-deployment-runbook) when you want the exact backend + frontend deployment sequence for the first live demo
 - Use the [Release Final Checklist](/release-final-checklist) before publishing
