@@ -150,3 +150,25 @@ test('pages preview can open the language edit drawer in demo runtime', async ({
   );
   await expect(modal.locator('textarea').first()).toHaveValue(/Login|登录/);
 });
+
+test('pages preview can save an organization record in demo runtime', async ({ page }) => {
+  await loginIntoDemoDashboard(page);
+
+  await page.goto('./#/organization');
+
+  await expect(page.getByText(/^Organization$|^组织$/).first()).toBeVisible();
+
+  await page.getByRole('button', { name: /^Add$|^新增$/ }).click();
+
+  const modal = page.locator('.n-modal').last();
+  const organizationCode = 'ORG_PREVIEW_SMOKE';
+  const organizationName = 'Preview Organization';
+
+  await expect(modal).toBeVisible();
+  await modal.getByPlaceholder(/Ex: ORG_MAIN_HQ|例如：ORG_MAIN_HQ/).fill(organizationCode);
+  await modal.getByPlaceholder(/Ex: Main HQ|例如：主组织/).fill(organizationName);
+  await modal.getByRole('button', { name: /^Confirm$|^确定$/ }).click();
+
+  await expect(modal).toBeHidden();
+  await expect(page.getByRole('cell', { name: organizationCode }).first()).toBeVisible();
+});
