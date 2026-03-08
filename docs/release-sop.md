@@ -122,6 +122,10 @@ git push origin vX.Y.Z
 
 - 优先使用 `docs/releases/vX.Y.Z.md`
 - 只有在该文件缺失时，才回退到 `CHANGELOG.md`
+- release workflow 还会上传可下载 artifact：
+  - production app bundle
+  - demo preview bundle
+  - Pages bundle
 
 ## 9. Update Repository Metadata
 

@@ -74,9 +74,14 @@ If you need an admin frontend that can evolve with a serious backend contract, r
 
 - Compatibility matrix: [`docs/compatibility-matrix.md`](./docs/compatibility-matrix.md)
 - Frontend architecture: [`docs/architecture.md`](./docs/architecture.md)
+- Full-stack evaluation: [`docs/full-stack-evaluation.md`](./docs/full-stack-evaluation.md)
 - Public preview guide: [`docs/demo.md`](./docs/demo.md)
 - Release sign-off checklist: [`docs/release-final-checklist.md`](./docs/release-final-checklist.md)
 - API contract snapshot: [`docs/api-client-contract.snapshot`](./docs/api-client-contract.snapshot)
+
+## Public Docs
+
+- Docs URL: [https://obsidianlabs-io.github.io/obsidian-admin-vue/](https://obsidianlabs-io.github.io/obsidian-admin-vue/)
 
 ## Public Preview
 
@@ -110,6 +115,16 @@ pnpm dev
 ```bash
 pnpm build
 ```
+
+### Release Artifacts
+
+Stable release tags now publish downloadable frontend artifacts on the GitHub Release page:
+
+- production app bundle
+- demo preview bundle
+- Pages bundle (`docs + /preview/`)
+
+These are intended for evaluation, static preview hosting, and release verification. This repository remains an application template, not an npm-distributed UI package.
 
 ## Recommended Developer Workflow
 

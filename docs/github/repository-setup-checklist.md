@@ -160,6 +160,10 @@ This checklist is for `obsidian-admin-vue`.
 当前状态:
 
 - 建议为当前 `main` 创建 `v1.1.1` tag
+- release workflow 会在 GitHub Release 中上传：
+  - production app bundle
+  - demo preview bundle
+  - Pages bundle
 
 ## 8.5. GitHub Pages / Docs Site
 

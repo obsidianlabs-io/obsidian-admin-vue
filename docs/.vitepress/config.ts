@@ -28,6 +28,7 @@ export default defineConfig({
           { text: 'Overview', link: '/' },
           { text: 'Getting Started', link: '/getting-started' },
           { text: 'Backend Pairing', link: '/backend-pairing' },
+          { text: 'Full-Stack Evaluation', link: '/full-stack-evaluation' },
           { text: 'Demo', link: '/demo' },
           { text: 'Compatibility Matrix', link: '/compatibility-matrix' },
           { text: 'Configuration', link: '/configuration' },

@@ -100,6 +100,10 @@ After publishing, confirm:
 
 - tag exists remotely
 - GitHub Release is visible
+- GitHub Release contains:
+  - production app bundle
+  - demo preview bundle
+  - Pages bundle
 - `main` is still green
 - contract gate is still green
 

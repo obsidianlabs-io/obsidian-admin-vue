@@ -41,6 +41,7 @@ Use this frontend with [Obsidian Admin Laravel](https://github.com/obsidianlabs-
 ## What to read next
 
 - Start with [Getting Started](/getting-started)
+- Use [Full-Stack Evaluation](/full-stack-evaluation) when you want the shortest path for preview-only, backend-only, or paired local evaluation
 - Review [Backend Pairing](/backend-pairing), [Demo](/demo), and [Compatibility Matrix](/compatibility-matrix)
 - Try the [Public Preview](https://obsidianlabs-io.github.io/obsidian-admin-vue/preview/) after GitHub Pages is enabled
 - Use [Configuration](/configuration), [Deployment](/deployment), and [Auth Flows](/auth-flows) during setup
