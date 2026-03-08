@@ -1,3 +1,4 @@
+import process from 'node:process';
 import { defineConfig } from 'vitepress';
 
 const repo = 'https://github.com/obsidianlabs-io/obsidian-admin-vue';
@@ -38,6 +39,8 @@ export default defineConfig({
         text: 'Architecture',
         items: [
           { text: 'Frontend Architecture', link: '/architecture' },
+          { text: 'Multi-Tenancy', link: '/multi-tenancy' },
+          { text: 'Realtime', link: '/realtime' },
           { text: 'API Layer Conventions', link: '/api-layer-conventions' },
           { text: 'Deletion UI Guidelines', link: '/deletion-ui-guidelines' }
         ]

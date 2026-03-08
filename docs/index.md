@@ -41,8 +41,8 @@ Use this frontend with [Obsidian Admin Laravel](https://github.com/obsidianlabs-
 ## What to read next
 
 - Start with [Getting Started](/getting-started)
-- Review [Backend Pairing](/backend-pairing) and [Demo](/demo)
+- Review [Backend Pairing](/backend-pairing), [Demo](/demo), and [Compatibility Matrix](/compatibility-matrix)
 - Use [Configuration](/configuration) and [Deployment](/deployment) during setup
-- Read the [Frontend Architecture](/architecture) and [API Layer Conventions](/api-layer-conventions)
-- Review the [Compatibility Matrix](/compatibility-matrix)
+- Read the [Frontend Architecture](/architecture), [Multi-Tenancy](/multi-tenancy), and [Realtime](/realtime)
+- Review [API Layer Conventions](/api-layer-conventions) before adding new backend calls
 - Use the [Release Final Checklist](/release-final-checklist) before publishing
