@@ -4,6 +4,7 @@ const repo = 'https://github.com/obsidianlabs-io/obsidian-admin-vue';
 const backendRepo = 'https://github.com/obsidianlabs-io/obsidian-admin-laravel';
 
 export default defineConfig({
+  base: process.env.VITEPRESS_BASE || '/',
   title: 'Obsidian Admin Vue',
   description: 'Contract-driven Vue 3 admin frontend for enterprise back-office systems and SaaS platforms.',
   lang: 'en-US',
