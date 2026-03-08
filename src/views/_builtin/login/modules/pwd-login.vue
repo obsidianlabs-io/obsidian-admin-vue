@@ -166,9 +166,9 @@ function handleBack() {
           </div>
         </NAlert>
 
-        <div class="flex-y-center justify-between">
+        <div class="flex-y-center" :class="demoRuntime ? 'justify-start' : 'justify-between'">
           <NCheckbox v-model:checked="model.rememberMe">{{ $t('page.login.pwdLogin.rememberMe') }}</NCheckbox>
-          <NSpace :size="4">
+          <NSpace v-if="!demoRuntime" :size="4">
             <NButton text type="primary" @click="toggleLoginModule('reset-pwd')">
               {{ $t('page.login.pwdLogin.forgetPassword') }}
             </NButton>

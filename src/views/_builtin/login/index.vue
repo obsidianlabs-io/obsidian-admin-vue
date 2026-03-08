@@ -6,6 +6,7 @@ import { loginModuleRecord } from '@/constants/app';
 import { fetchGetPublicThemeConfig } from '@/service/api';
 import { useAppStore } from '@/store/modules/app';
 import { useThemeStore } from '@/store/modules/theme';
+import { isDemoRuntime } from '@/utils/runtime';
 import { $t } from '@/locales';
 import CodeLogin from './modules/code-login.vue';
 import PwdLogin from './modules/pwd-login.vue';
@@ -23,13 +24,14 @@ const props = defineProps<Props>();
 const appStore = useAppStore();
 const themeStore = useThemeStore();
 const loginThemeReady = ref(false);
+const demoRuntime = isDemoRuntime(import.meta.env);
 
 interface LoginModule {
   label: App.I18n.I18nKey;
   component: Component;
 }
 
-const moduleMap: Partial<Record<UnionKey.LoginModule, LoginModule>> = {
+const baseModuleMap: Record<UnionKey.LoginModule, LoginModule> = {
   'pwd-login': { label: loginModuleRecord['pwd-login'], component: PwdLogin },
   'code-login': { label: loginModuleRecord['code-login'], component: CodeLogin },
   register: { label: loginModuleRecord.register, component: Register },
@@ -37,7 +39,19 @@ const moduleMap: Partial<Record<UnionKey.LoginModule, LoginModule>> = {
   'bind-wechat': { label: loginModuleRecord['bind-wechat'], component: BindWechat }
 };
 
-const activeModule = computed(() => moduleMap[props.module || 'pwd-login'] || moduleMap['pwd-login']!);
+const moduleMap = computed<Partial<Record<UnionKey.LoginModule, LoginModule>>>(() => {
+  if (!demoRuntime) {
+    return baseModuleMap;
+  }
+
+  return {
+    'pwd-login': baseModuleMap['pwd-login'],
+    'code-login': baseModuleMap['code-login'],
+    'bind-wechat': baseModuleMap['bind-wechat']
+  };
+});
+
+const activeModule = computed(() => moduleMap.value[props.module || 'pwd-login'] || moduleMap.value['pwd-login']!);
 const showThemeSchemaSwitch = computed(() => loginThemeReady.value && themeStore.header.themeSchema.visible);
 const showLangSwitch = computed(() => loginThemeReady.value && themeStore.header.multilingual.visible);
 const showHeaderActions = computed(() => showThemeSchemaSwitch.value || showLangSwitch.value);
