@@ -3,7 +3,9 @@ import { BACKEND_ERROR_CODE, createFlatRequest, createRequest } from '@sa/axios'
 import { getToken } from '@/store/modules/auth/shared';
 import { useAuthStore } from '@/store/modules/auth';
 import { getServiceBaseURL } from '@/utils/service';
+import { isDemoRuntime } from '@/utils/runtime';
 import { $t } from '@/locales';
+import { createDemoAxiosAdapter } from '@/demo/backend';
 import {
   createRequestContextHeaders,
   expiredTokenCodes,
@@ -23,6 +25,8 @@ import type { RequestInstanceState } from './type';
 
 const runtimeEnv = ((import.meta as ImportMeta & { env?: Partial<Env.ImportMeta> }).env ||
   {}) as Partial<Env.ImportMeta>;
+const demoRuntime = isDemoRuntime(runtimeEnv);
+const demoAxiosAdapter = demoRuntime ? createDemoAxiosAdapter() : undefined;
 const isHttpProxy = runtimeEnv.DEV === true && runtimeEnv.VITE_HTTP_PROXY === 'Y';
 const { baseURL, otherBaseURL } = getServiceBaseURL(runtimeEnv as Env.ImportMeta, isHttpProxy);
 const apifoxToken = runtimeEnv.DEV ? String(runtimeEnv.VITE_APIFOX_TOKEN || '').trim() : '';
@@ -32,7 +36,8 @@ let passiveLogoutInProgress = false;
 export const request = createFlatRequest(
   {
     baseURL,
-    headers: defaultHeaders
+    headers: defaultHeaders,
+    adapter: demoAxiosAdapter
   },
   {
     defaultState: {
@@ -197,7 +202,8 @@ export const request = createFlatRequest(
 
 export const demoRequest = createRequest(
   {
-    baseURL: otherBaseURL.demo
+    baseURL: otherBaseURL.demo,
+    adapter: demoAxiosAdapter
   },
   {
     transform(response: AxiosResponse<App.Service.DemoResponse>) {

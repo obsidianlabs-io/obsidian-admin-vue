@@ -1,16 +1,32 @@
 # Demo
 
-## Current status
+## Public preview
 
-There is no permanent public demo instance yet.
+This repository now supports a static public preview mode.
 
-That is intentional. This project is optimized for contract accuracy, multi-tenant behavior, and release discipline. A misleading public demo with fake or drifting backend behavior would create more confusion than value.
+When GitHub Pages is enabled for the repository, the preview is published under:
+
+- `/preview/`
+
+The preview runs the real Vue application shell against an in-app demo backend. That means:
+
+- no live Laravel backend is required
+- auth, tenant switching, CRUD drawers, feature flags, audit pages, theme config, and i18n still behave like a real app
+- data is intentionally ephemeral and only meant for evaluation
 
 ## Recommended evaluation path
 
-Use the repository locally with the companion backend:
+Choose one of these two paths.
 
-- frontend: ``
+### 1. Public preview
+
+Use the hosted preview when you want to evaluate UX, flows, and runtime behavior quickly.
+
+### 2. Full stack local pairing
+
+Use the repository locally with the companion backend when you want contract-accurate backend integration:
+
+- frontend: `obsidian-admin-vue`
 - backend: `obsidian-admin-laravel`
 
 Start with:
@@ -35,25 +51,40 @@ If you are evaluating whether this project is suitable as an open-source admin b
 - audit policy and feature flag pages
 - runtime theme and i18n behavior
 
-## Local demo checklist
+## Local preview mode
 
-Before judging the frontend, run the release-grade frontend gate:
+Run the built-in preview runtime locally:
+
+```bash
+pnpm install
+pnpm dev:demo
+```
+
+For a production-style static build:
+
+```bash
+pnpm build:demo
+```
+
+## Local evaluation checklist
+
+Before judging the preview, run the release-grade frontend gate:
 
 ```bash
 pnpm check:ci
 ```
 
-If you are pairing with the Laravel backend, also confirm:
+If you are pairing with the Laravel backend instead of demo mode, also confirm:
 
 - backend release gate is green
 - frontend `pnpm typecheck:api` is green
 - generated SDK files are in sync with backend OpenAPI
 
-## Why there is no hosted public demo yet
+## Design constraints
 
-A serious admin template should not hide runtime truth.
+The preview intentionally avoids pretending to be production.
 
-This repository currently prioritizes:
+It prioritizes:
 
 - generated API contracts
 - reproducible CI gates
@@ -61,8 +92,8 @@ This repository currently prioritizes:
 - testable CRUD and auth flows
 - docs that match the actual repository state
 
-A public demo becomes valuable only when it is versioned, resettable, and contract-aligned with the published backend.
+That is why the preview is:
 
-## Planned direction
-
-The intended next step is a versioned public preview tied to the compatibility matrix, not an unversioned marketing demo.
+- versioned through the repository itself
+- resettable by rebuild
+- clearly separated from the Laravel-backed runtime

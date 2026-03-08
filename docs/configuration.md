@@ -13,6 +13,7 @@ The canonical frontend env types live in:
 These variables define the app shell and router behavior:
 
 - `VITE_BASE_URL`: frontend base path
+- `VITE_APP_RUNTIME`: `backend` or `demo`
 - `VITE_APP_TITLE`: document title / product title
 - `VITE_APP_DESC`: app description
 - `VITE_ROUTER_HISTORY_MODE`: `hash`, `history`, or `memory`
@@ -29,6 +30,8 @@ These variables control how the frontend talks to backend services:
 - `VITE_SERVICE_MODAL_LOGOUT_CODES`: codes that force modal logout
 - `VITE_SERVICE_EXPIRED_TOKEN_CODES`: codes that trigger token refresh logic
 - `VITE_HTTP_PROXY`: enable local Vite proxy mode in development
+
+When `VITE_APP_RUNTIME=demo`, the request layer is intercepted by the in-app demo backend. The same application shell still runs, but the runtime no longer depends on a live Laravel API.
 
 These values are consumed by:
 

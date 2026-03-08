@@ -3,6 +3,7 @@ import { computed, reactive, ref } from 'vue';
 import { useAuthStore } from '@/store/modules/auth';
 import { useFormRules, useNaiveForm } from '@/hooks/common/form';
 import { useRouterPush } from '@/hooks/common/router';
+import { isDemoRuntime } from '@/utils/runtime';
 import { $t } from '@/locales';
 
 defineOptions({
@@ -33,6 +34,7 @@ const model: FormModel = reactive({
 naiveForm.bindModelValidation(ref(model), ['userName', 'password', 'otpCode']);
 
 const showOtpField = ref(false);
+const demoRuntime = isDemoRuntime(import.meta.env);
 
 type FormRuleKey = 'userName' | 'password' | 'otpCode';
 
@@ -157,6 +159,13 @@ function handleBack() {
     </NFormItem>
     <template v-if="!showOtpField">
       <NSpace vertical :size="24" class="w-full">
+        <NAlert v-if="demoRuntime" type="info" :show-icon="false">
+          <div class="text-sm leading-6">
+            <div>{{ $t('page.login.pwdLogin.demoRuntimeNotice') }}</div>
+            <div class="text-xs text-#666">{{ $t('page.login.pwdLogin.demoRuntimeHint') }}</div>
+          </div>
+        </NAlert>
+
         <div class="flex-y-center justify-between">
           <NCheckbox v-model:checked="model.rememberMe">{{ $t('page.login.pwdLogin.rememberMe') }}</NCheckbox>
           <NSpace :size="4">

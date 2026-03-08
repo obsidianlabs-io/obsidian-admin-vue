@@ -39,7 +39,10 @@ const pageSection: App.I18n.Schema['page'] = {
       adminBranch: 'Admin (Branch)',
       userMain: 'User (Main)',
       userBranch: 'User (Branch)',
-      twoFactorOtpPlaceholder: 'Two-Factor OTP Code (6 digits)'
+      twoFactorOtpPlaceholder: 'Two-Factor OTP Code (6 digits)',
+      demoRuntimeNotice: 'Preview mode is running against the built-in demo backend.',
+      demoRuntimeHint:
+        'Use the quick accounts below. Preview data is resettable and not connected to a live Laravel API.'
     },
     codeLogin: {
       title: 'Verification Code Login',

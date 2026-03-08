@@ -142,10 +142,18 @@ const DividerStub = defineComponent({
   }
 });
 
+const AlertStub = defineComponent({
+  name: 'NAlert',
+  setup(_, { attrs, slots }) {
+    return () => h('div', attrs, slots.default?.());
+  }
+});
+
 function mountComponent() {
   return mount(PwdLogin, {
     global: {
       stubs: {
+        NAlert: AlertStub as Component,
         NButton: ButtonStub as Component,
         NCheckbox: CheckboxStub as Component,
         NDivider: DividerStub as Component,

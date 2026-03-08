@@ -12,6 +12,8 @@ declare namespace Env {
   interface ImportMeta extends ImportMetaEnv {
     /** The base url of the application */
     readonly VITE_BASE_URL: string;
+    /** The runtime mode of the application */
+    readonly VITE_APP_RUNTIME?: 'backend' | 'demo';
     /** The title of the application */
     readonly VITE_APP_TITLE: string;
     /** The description of the application */
@@ -106,6 +108,8 @@ declare namespace Env {
     readonly VITE_STORAGE_PREFIX?: string;
     /** Whether to automatically detect updates after configuring application packaging */
     readonly VITE_AUTOMATICALLY_DETECT_UPDATE?: CommonType.YesOrNo;
+    /** Whether websocket/realtime sync is enabled */
+    readonly VITE_REALTIME_ENABLED?: CommonType.YesOrNo;
     /** show proxy url log in terminal */
     readonly VITE_PROXY_LOG?: CommonType.YesOrNo;
     /** The launch editor */

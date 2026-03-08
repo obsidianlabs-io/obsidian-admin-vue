@@ -12,7 +12,7 @@ The result can be served from:
 
 - Nginx
 - CDN + object storage
-- GitHub Pages for docs only
+- GitHub Pages for docs + `/preview/` demo mode
 - any static hosting platform that can serve SPA routes correctly
 
 ## Environment modes
@@ -20,6 +20,7 @@ The result can be served from:
 The project currently uses these environment files:
 
 - `.env`
+- `.env.demo`
 - `.env.test`
 - `.env.prod`
 
@@ -33,6 +34,13 @@ If you need a local production preview:
 
 ```bash
 pnpm preview
+```
+
+If you want the hosted-preview runtime locally:
+
+```bash
+pnpm dev:demo
+pnpm build:demo
 ```
 
 ## Backend assumptions
@@ -73,7 +81,10 @@ Your host must:
 - avoid stale HTML during release rollouts
 - preserve the frontend base path if you deploy below `/`
 
-If you publish the docs site to GitHub Pages, the docs workflow already builds with the repository base path.
+If you publish the docs site to GitHub Pages, the workflow already builds:
+
+- docs site at the repository base path
+- demo preview at `/preview/`
 
 ## Docs site deployment
 

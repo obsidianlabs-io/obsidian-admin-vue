@@ -2,11 +2,6 @@ name: Frontend Docs Site
 
 on:
   pull_request:
-    paths:
-      - "docs/**"
-      - ".github/workflows/docs-site.yml"
-      - "package.json"
-      - "pnpm-lock.yaml"
   push:
     branches:
       - main
@@ -22,7 +17,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-docs:
+  build-site:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -36,15 +31,27 @@ jobs:
           VITEPRESS_BASE: /obsidian-admin-vue/
         run: pnpm docs:build
 
+      - name: Build demo preview
+        env:
+          VITE_BASE_URL: /obsidian-admin-vue/preview/
+        run: pnpm build:demo
+
+      - name: Assemble Pages bundle
+        run: |
+          rm -rf .pages-dist
+          mkdir -p .pages-dist/preview
+          cp -R docs/.vitepress/dist/. .pages-dist
+          cp -R demo-dist/. .pages-dist/preview
+
       - name: Upload Pages artifact
         if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
-          path: docs/.vitepress/dist
+          path: .pages-dist
 
   deploy-docs:
     if: github.event_name != 'pull_request'
-    needs: build-docs
+    needs: build-site
     runs-on: ubuntu-latest
     environment:
       name: github-pages

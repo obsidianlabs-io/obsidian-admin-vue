@@ -176,8 +176,11 @@ This checklist is for `obsidian-admin-vue`.
 说明：
 
 - docs site 使用 `VitePress`
-- `pull_request` 会构建 docs 以防止文档站损坏
+- `pull_request` 会构建 docs site 和 `/preview/` demo bundle
 - `push main` / `workflow_dispatch` 会发布到 GitHub Pages
+- 发布后的 Pages artifact 包含：
+  - docs site 根目录
+  - `/preview/` 下的静态 demo runtime
 
 ## 9. Organization Profile
 

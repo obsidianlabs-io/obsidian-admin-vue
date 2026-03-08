@@ -332,6 +332,8 @@ declare namespace App {
           "userMain": string;
           "userBranch": string;
           "twoFactorOtpPlaceholder": string;
+          "demoRuntimeNotice": string;
+          "demoRuntimeHint": string;
         };
         "codeLogin": {
           "title": string;
@@ -996,6 +998,8 @@ declare namespace App {
       | "page.login.pwdLogin.admin"
       | "page.login.pwdLogin.adminBranch"
       | "page.login.pwdLogin.adminMain"
+      | "page.login.pwdLogin.demoRuntimeHint"
+      | "page.login.pwdLogin.demoRuntimeNotice"
       | "page.login.pwdLogin.forgetPassword"
       | "page.login.pwdLogin.otherAccountLogin"
       | "page.login.pwdLogin.otherLoginMode"

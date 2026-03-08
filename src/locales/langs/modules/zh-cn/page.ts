@@ -39,7 +39,9 @@ const pageSection: App.I18n.Schema['page'] = {
       adminBranch: '管理员（分租户）',
       userMain: '用户（主租户）',
       userBranch: '用户（分租户）',
-      twoFactorOtpPlaceholder: '双重身份验证码 (6位数字)'
+      twoFactorOtpPlaceholder: '双重身份验证码 (6位数字)',
+      demoRuntimeNotice: '当前预览运行在内置 demo backend 上。',
+      demoRuntimeHint: '可直接使用下方快捷账号。预览数据可重置，不会连接真实 Laravel API。'
     },
     codeLogin: {
       title: '验证码登录',
