@@ -6,7 +6,9 @@ This repository now supports a static public preview mode.
 
 When GitHub Pages is enabled for the repository, the preview is published under:
 
-- `/preview/`
+- [https://obsidianlabs-io.github.io/obsidian-admin-vue/preview/](https://obsidianlabs-io.github.io/obsidian-admin-vue/preview/)
+
+If GitHub Pages has not been enabled yet, or the first Pages workflow has not finished, that URL will return `404`.
 
 The preview runs the real Vue application shell against an in-app demo backend. That means:
 

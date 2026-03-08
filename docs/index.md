@@ -13,11 +13,11 @@ hero:
       text: Quick Start
       link: /getting-started
     - theme: alt
+      text: Public Preview
+      link: https://obsidianlabs-io.github.io/obsidian-admin-vue/preview/
+    - theme: alt
       text: Compatibility Matrix
       link: /compatibility-matrix
-    - theme: alt
-      text: GitHub Repository
-      link: https://github.com/obsidianlabs-io/obsidian-admin-vue
 
 features:
   - title: Generated SDK first
@@ -42,6 +42,7 @@ Use this frontend with [Obsidian Admin Laravel](https://github.com/obsidianlabs-
 
 - Start with [Getting Started](/getting-started)
 - Review [Backend Pairing](/backend-pairing), [Demo](/demo), and [Compatibility Matrix](/compatibility-matrix)
+- Try the [Public Preview](https://obsidianlabs-io.github.io/obsidian-admin-vue/preview/) after GitHub Pages is enabled
 - Use [Configuration](/configuration), [Deployment](/deployment), and [Auth Flows](/auth-flows) during setup
 - Read the [Frontend Architecture](/architecture), [Multi-Tenancy](/multi-tenancy), and [Realtime](/realtime)
 - Review [Generated SDK Workflow](/generated-sdk-workflow) and [API Layer Conventions](/api-layer-conventions) before adding new backend calls

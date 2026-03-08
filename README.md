@@ -74,8 +74,15 @@ If you need an admin frontend that can evolve with a serious backend contract, r
 
 - Compatibility matrix: [`docs/compatibility-matrix.md`](./docs/compatibility-matrix.md)
 - Frontend architecture: [`docs/architecture.md`](./docs/architecture.md)
+- Public preview guide: [`docs/demo.md`](./docs/demo.md)
 - Release sign-off checklist: [`docs/release-final-checklist.md`](./docs/release-final-checklist.md)
 - API contract snapshot: [`docs/api-client-contract.snapshot`](./docs/api-client-contract.snapshot)
+
+## Public Preview
+
+- Preview URL: [https://obsidianlabs-io.github.io/obsidian-admin-vue/preview/](https://obsidianlabs-io.github.io/obsidian-admin-vue/preview/)
+
+> The preview is published through GitHub Pages. If Pages has not been enabled for the repository yet, this URL will return `404` until the first Pages deployment finishes.
 
 ### Clone
 

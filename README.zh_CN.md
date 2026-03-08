@@ -73,8 +73,15 @@
 
 - 版本兼容矩阵：[`docs/compatibility-matrix.md`](./docs/compatibility-matrix.md)
 - 前端架构说明：[`docs/architecture.md`](./docs/architecture.md)
+- 公开预览说明：[`docs/demo.md`](./docs/demo.md)
 - 发布签发清单：[`docs/release-final-checklist.md`](./docs/release-final-checklist.md)
 - API 契约快照：[`docs/api-client-contract.snapshot`](./docs/api-client-contract.snapshot)
+
+## 公开预览
+
+- 预览地址：[https://obsidianlabs-io.github.io/obsidian-admin-vue/preview/](https://obsidianlabs-io.github.io/obsidian-admin-vue/preview/)
+
+> 预览通过 GitHub Pages 发布。若仓库还未启用 Pages，或第一次 Pages 工作流尚未完成，这个地址会先返回 `404`。
 
 ### 克隆项目
 
