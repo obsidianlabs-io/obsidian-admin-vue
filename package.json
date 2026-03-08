@@ -124,7 +124,7 @@
     "@soybeanjs/eslint-config": "1.7.5",
     "@types/node": "25.3.3",
     "@types/nprogress": "0.2.3",
-    "@unocss/eslint-config": "66.6.3",
+    "@unocss/eslint-config": "66.6.6",
     "@unocss/preset-icons": "66.6.3",
     "@unocss/preset-uno": "66.6.3",
     "@unocss/preset-wind3": "66.6.3",
