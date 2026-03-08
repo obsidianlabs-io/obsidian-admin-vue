@@ -267,7 +267,7 @@ const defaultThemeConfig: Api.Theme.Config = {
   siderCollapsedWidth: 64,
   layoutMode: 'vertical',
   scrollMode: 'content',
-  darkSider: false,
+  darkSider: true,
   themeSchemaVisible: true,
   headerFullscreenVisible: true,
   tabVisible: true,
@@ -1102,9 +1102,246 @@ export class DemoBackend {
       }));
   }
 
+  private buildUserMenus(user: DemoUserRecord, scopedTenant: DemoTenantRecord | null): Api.Auth.MenuItem[] {
+    const menuScope: Api.Auth.MenuScope = scopedTenant ? 'tenant' : 'platform';
+    const permissionSet = new Set(this.rolePermissions(user.roleCode));
+    const can = (permission: string) => permissionSet.has(permission);
+
+    const createMenu = (options: {
+      key: string;
+      order: number;
+      scope?: Api.Auth.MenuItem['scope'];
+      routeKey?: import('@elegant-router/types').RouteKey;
+      routePath?: import('@elegant-router/types').RoutePath;
+      label?: string;
+      i18nKey?: App.I18n.I18nKey;
+      icon?: string;
+      children?: Api.Auth.MenuItem[];
+    }): Api.Auth.MenuItem => ({
+      key: options.key,
+      routeKey: options.routeKey ?? null,
+      routePath: options.routePath ?? null,
+      label: options.label ?? options.key,
+      i18nKey: options.i18nKey ?? null,
+      icon: options.icon ?? null,
+      order: options.order,
+      scope: options.scope ?? 'both',
+      featureFlag: null,
+      children: options.children ?? []
+    });
+
+    const accessChildren: Api.Auth.MenuItem[] = [];
+    if (can('user.view')) {
+      accessChildren.push(
+        createMenu({
+          key: 'user',
+          routeKey: 'user',
+          routePath: '/user',
+          i18nKey: 'route.user',
+          icon: 'mdi:account-outline',
+          order: 1
+        })
+      );
+    }
+    if (can('role.view')) {
+      accessChildren.push(
+        createMenu({
+          key: 'role',
+          routeKey: 'role',
+          routePath: '/role',
+          i18nKey: 'route.role',
+          icon: 'mdi:account-key-outline',
+          order: 2
+        })
+      );
+    }
+    if (can('permission.view')) {
+      accessChildren.push(
+        createMenu({
+          key: 'permission',
+          routeKey: 'permission',
+          routePath: '/permission',
+          i18nKey: 'route.permission',
+          icon: 'mdi:shield-key-outline',
+          order: 3
+        })
+      );
+    }
+    if (can('organization.view')) {
+      accessChildren.push(
+        createMenu({
+          key: 'organization',
+          routeKey: 'organization',
+          routePath: '/organization',
+          i18nKey: 'route.organization',
+          icon: 'mdi:domain',
+          order: 4
+        })
+      );
+    }
+    if (can('team.view')) {
+      accessChildren.push(
+        createMenu({
+          key: 'team',
+          routeKey: 'team',
+          routePath: '/team',
+          i18nKey: 'route.team',
+          icon: 'mdi:account-group-outline',
+          order: 5
+        })
+      );
+    }
+
+    const systemChildren: Api.Auth.MenuItem[] = [];
+    if (can('feature.flag.view')) {
+      systemChildren.push(
+        createMenu({
+          key: 'feature-flag',
+          routeKey: 'feature-flag',
+          routePath: '/feature-flag',
+          i18nKey: 'route.feature-flag',
+          icon: 'mdi:toggle-switch-outline',
+          order: 1
+        })
+      );
+    }
+    if (can('theme.config.view')) {
+      systemChildren.push(
+        createMenu({
+          key: 'theme-config',
+          routeKey: 'theme-config',
+          routePath: '/theme-config',
+          i18nKey: 'route.theme-config',
+          icon: 'mdi:palette-outline',
+          order: 2
+        })
+      );
+    }
+    if (can('language.view')) {
+      systemChildren.push(
+        createMenu({
+          key: 'language',
+          routeKey: 'language',
+          routePath: '/language',
+          i18nKey: 'route.language',
+          icon: 'mdi:translate',
+          order: 3
+        })
+      );
+    }
+    if (can('audit.policy.view')) {
+      systemChildren.push(
+        createMenu({
+          key: 'audit-policy',
+          routeKey: 'audit-policy',
+          routePath: '/audit-policy',
+          i18nKey: 'route.audit-policy',
+          icon: 'mdi:file-document-edit-outline',
+          order: 4
+        })
+      );
+    }
+    if (can('audit.view')) {
+      systemChildren.push(
+        createMenu({
+          key: 'audit',
+          routeKey: 'audit',
+          routePath: '/audit',
+          i18nKey: 'route.audit',
+          icon: 'mdi:file-search-outline',
+          order: 5
+        })
+      );
+    }
+
+    const menus: Api.Auth.MenuItem[] = [
+      createMenu({
+        key: 'dashboard',
+        routeKey: 'dashboard',
+        routePath: '/dashboard',
+        i18nKey: 'route.dashboard',
+        icon: 'mdi:view-dashboard-outline',
+        order: 1
+      })
+    ];
+
+    if (menuScope === 'platform' && can('tenant.view')) {
+      menus.push(
+        createMenu({
+          key: 'tenant',
+          routeKey: 'tenant',
+          routePath: '/tenant',
+          i18nKey: 'route.tenant',
+          icon: 'mdi:office-building-outline',
+          order: 2,
+          scope: 'platform'
+        })
+      );
+    }
+
+    if (accessChildren.length > 0) {
+      menus.push(
+        createMenu({
+          key: 'access-management',
+          i18nKey: 'menu.accessManagement',
+          label: 'Access Management',
+          icon: 'mdi:shield-account-outline',
+          order: 3,
+          children: accessChildren
+        })
+      );
+    }
+
+    if (systemChildren.length > 0) {
+      menus.push(
+        createMenu({
+          key: 'platform-settings',
+          i18nKey: 'menu.systemSettings',
+          label: 'System Settings',
+          icon: 'mdi:cog-outline',
+          order: 4,
+          children: systemChildren
+        })
+      );
+    }
+
+    return menus;
+  }
+
+  private buildRouteRules(user: DemoUserRecord): Api.Auth.RouteRuleMap {
+    const permissionSet = new Set(this.rolePermissions(user.roleCode));
+    const can = (permission: string) => permissionSet.has(permission);
+
+    const createRule = (enabled: boolean, permissions: string[]): Api.Auth.RouteRule => ({
+      enabled,
+      permissions,
+      roles: [],
+      noTenantOnly: false,
+      tenantOnly: false
+    });
+
+    return {
+      dashboard: createRule(true, []),
+      tenant: createRule(can('tenant.view'), ['tenant.view']),
+      organization: createRule(can('organization.view'), ['organization.view']),
+      team: createRule(can('team.view'), ['team.view']),
+      user: createRule(can('user.view'), ['user.view']),
+      role: createRule(can('role.view'), ['role.view']),
+      permission: createRule(can('permission.view'), ['permission.view']),
+      language: createRule(can('language.view'), ['language.view']),
+      'theme-config': createRule(can('theme.config.view'), ['theme.config.view']),
+      'feature-flag': createRule(can('feature.flag.view'), ['feature.flag.view']),
+      'audit-policy': createRule(can('audit.policy.view'), ['audit.policy.view']),
+      audit: createRule(can('audit.view'), ['audit.view'])
+    };
+  }
+
   private userInfo(headers: Record<string, string>): Api.Auth.UserInfo {
     const user = this.requireCurrentUser(headers);
     const scopedTenant = this.resolveTenantScope(headers, user);
+    const menus = this.buildUserMenus(user, scopedTenant);
+    const routeRules = this.buildRouteRules(user);
+
     return {
       userId: String(user.id),
       userName: user.userName,
@@ -1123,8 +1360,8 @@ export class DemoBackend {
         tenantName: item.tenantName
       })),
       menuScope: scopedTenant ? 'tenant' : 'platform',
-      menus: [],
-      routeRules: {}
+      menus,
+      routeRules
     };
   }
 
