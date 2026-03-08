@@ -39,6 +39,54 @@ jobs:
           NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
         run: pnpm audit --prod --audit-level=high
 
+  sbom:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+
+      - name: Setup frontend toolchain
+        uses: ./.github/actions/setup-frontend
+
+      - name: Generate runtime SBOM
+        run: |
+          mkdir -p build
+          pnpm dlx @cyclonedx/cdxgen \
+            -o build/frontend-sbom.cyclonedx.json \
+            --no-install-deps \
+            --spec-version 1.6 \
+            --profile generic \
+            .
+
+      - name: Upload SBOM artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-sbom-cyclonedx
+          path: build/frontend-sbom.cyclonedx.json
+          if-no-files-found: error
+
+  attest-sbom:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    needs: sbom
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    steps:
+      - name: Download SBOM artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-sbom-cyclonedx
+          path: build
+
+      - name: Attest frontend SBOM artifact
+        uses: actions/attest-build-provenance@b3e506e8c389afc651c5bacf2b8f2a1ea0557215
+        with:
+          subject-path: build/frontend-sbom.cyclonedx.json
+
   attest-dist:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest

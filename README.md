@@ -52,6 +52,7 @@ If you need an admin frontend that can evolve with a serious backend contract, r
 - `pnpm test:unit`
 - `pnpm test:e2e`
 - GitHub Actions: `Frontend Quality Gate` / `Frontend Contract Gate` / `Frontend Supply Chain`
+- CycloneDX SBOM artifact + attestation for release-grade dependency inventory
 
 ## Use Cases
 

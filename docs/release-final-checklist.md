@@ -32,6 +32,10 @@ pnpm test:vue
 pnpm build
 ```
 
+- `Frontend Supply Chain` is green
+- the `frontend-sbom-cyclonedx` artifact exists for the release commit
+- the SBOM artifact has an attestation on the push workflow
+
 If login, table behavior, or contract-driven flows changed, also run:
 
 ```bash

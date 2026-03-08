@@ -71,6 +71,7 @@ This checklist is for `obsidian-admin-vue`.
 
 - `Frontend Quality Gate / e2e`
 - `Frontend Supply Chain / npm-audit`
+- `Frontend Supply Chain / sbom`
 
 不建议设为 required:
 
@@ -111,6 +112,7 @@ This checklist is for `obsidian-admin-vue`.
 
 - `release.yml` 需要使用 `GITHUB_TOKEN` 创建 Release
 - `supply-chain.yml` 的 attestation 需要 workflow 权限完整可用
+- `supply-chain.yml` 现在还会生成、上传并 attestate `frontend-sbom-cyclonedx` artifact
 
 ## 6. Repository Variables And Secrets
 
