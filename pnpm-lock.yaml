@@ -300,8 +300,8 @@ importers:
         specifier: 1.8.0
         version: 1.8.0
       npm-check-updates:
-        specifier: 19.3.1
-        version: 19.3.1
+        specifier: 19.6.3
+        version: 19.6.3
       picomatch:
         specifier: 4.0.3
         version: 4.0.3
@@ -3946,8 +3946,8 @@ packages:
     resolution: {integrity: sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==}
     engines: {node: '>=0.10.0'}
 
-  npm-check-updates@19.3.1:
-    resolution: {integrity: sha512-v92fHH8fmf9VVmQwwL5JWpX8GDEe8BDyrz4w3GF6D6JBUZKpQNcTfBBgxVkCcAPzVUjCHSZEXYmZAAKfLTsDBA==}
+  npm-check-updates@19.6.3:
+    resolution: {integrity: sha512-VAt9Bp26eLaymZ0nZyh5n/by+YZIuegXlvWR0yv1zBqd984f8VnEnBbn+1lS3nN5LyEjn62BJ+yYgzNSpb6Gzg==}
     engines: {node: '>=20.0.0', npm: '>=8.12.1'}
     hasBin: true
 
@@ -4218,6 +4218,10 @@ packages:
 
   postcss@8.5.6:
     resolution: {integrity: sha512-3Ybi1tAuwAP9s0r1UQ2J4n5Y0G05bJkpUIO0/bI9MhwmD70S5aTWbXGBwxHrelT+XM1k6dM0pk+SwNkpTRN7Pg==}
+    engines: {node: ^10 || ^12 || >=14}
+
+  postcss@8.5.8:
+    resolution: {integrity: sha512-OW/rX8O/jXnm82Ey1k44pObPtdblfiuWnrd8X7GJ7emImCOstunGbXUpp7HdBrFQX6rJzn3sPT397Wp5aCwCHg==}
     engines: {node: ^10 || ^12 || >=14}
 
   posthtml-parser@0.2.1:
@@ -9266,7 +9270,7 @@ snapshots:
 
   normalize-path@3.0.0: {}
 
-  npm-check-updates@19.3.1: {}
+  npm-check-updates@19.6.3: {}
 
   npm-run-path@6.0.0:
     dependencies:
@@ -9526,9 +9530,9 @@ snapshots:
     dependencies:
       postcss: 5.2.18
 
-  postcss-scss@4.0.9(postcss@8.5.6):
+  postcss-scss@4.0.9(postcss@8.5.8):
     dependencies:
-      postcss: 8.5.6
+      postcss: 8.5.8
 
   postcss-selector-parser@7.1.1:
     dependencies:
@@ -9545,6 +9549,12 @@ snapshots:
       supports-color: 3.2.3
 
   postcss@8.5.6:
+    dependencies:
+      nanoid: 3.3.11
+      picocolors: 1.1.1
+      source-map-js: 1.2.1
+
+  postcss@8.5.8:
     dependencies:
       nanoid: 3.3.11
       picocolors: 1.1.1
@@ -10121,8 +10131,8 @@ snapshots:
       eslint-scope: 8.4.0
       eslint-visitor-keys: 4.2.1
       espree: 10.4.0
-      postcss: 8.5.6
-      postcss-scss: 4.0.9(postcss@8.5.6)
+      postcss: 8.5.8
+      postcss-scss: 4.0.9(postcss@8.5.8)
       postcss-selector-parser: 7.1.1
 
   svg-baker@1.7.0:
