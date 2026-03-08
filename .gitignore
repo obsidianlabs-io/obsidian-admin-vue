@@ -39,3 +39,5 @@ yarn.lock
 *.tsbuildinfo
 .env.local
 .env.*.local
+docs/.vitepress/cache
+docs/.vitepress/dist

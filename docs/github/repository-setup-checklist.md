@@ -84,6 +84,7 @@ This checklist is for `/Users/zero/Documents/Project/WK/obsidian-admin-vue`.
 - `/Users/zero/Documents/Project/WK/obsidian-admin-vue/.github/workflows/linter.yml`
 - `/Users/zero/Documents/Project/WK/obsidian-admin-vue/.github/workflows/contract-gate.yml`
 - `/Users/zero/Documents/Project/WK/obsidian-admin-vue/.github/workflows/supply-chain.yml`
+- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/.github/workflows/docs-site.yml`
 
 ## 4.5. CODEOWNERS
 
@@ -155,6 +156,25 @@ This checklist is for `/Users/zero/Documents/Project/WK/obsidian-admin-vue`.
 当前状态:
 
 - 建议为当前 `main` 创建 `v1.1.1` tag
+
+## 8.5. GitHub Pages / Docs Site
+
+当前仓库已包含：
+
+- `/Users/zero/Documents/Project/WK/obsidian-admin-vue/.github/workflows/docs-site.yml`
+
+建议在 `Settings -> Pages` 中确认：
+
+- Source:
+  `GitHub Actions`
+- Custom domain:
+  按需配置，没有正式域名就先留空
+
+说明：
+
+- docs site 使用 `VitePress`
+- `pull_request` 会构建 docs 以防止文档站损坏
+- `push main` / `workflow_dispatch` 会发布到 GitHub Pages
 
 ## 9. Organization Profile
 
