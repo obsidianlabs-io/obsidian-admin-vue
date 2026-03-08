@@ -172,3 +172,25 @@ test('pages preview can save an organization record in demo runtime', async ({ p
   await expect(modal).toBeHidden();
   await expect(page.getByRole('cell', { name: organizationCode }).first()).toBeVisible();
 });
+
+test('pages preview can save a team record in demo runtime', async ({ page }) => {
+  await loginIntoDemoDashboard(page);
+
+  await page.goto('./#/team');
+
+  await expect(page.getByText(/^Team$|^团队$/).first()).toBeVisible();
+
+  await page.getByRole('button', { name: /^Add$|^新增$/ }).click();
+
+  const modal = page.locator('.n-modal').last();
+  const teamCode = 'TEAM_PREVIEW_SMOKE';
+  const teamName = 'Preview Team';
+
+  await expect(modal).toBeVisible();
+  await modal.getByPlaceholder(/Ex: TEAM_MAIN_PLATFORM|例如：TEAM_MAIN_PLATFORM/).fill(teamCode);
+  await modal.getByPlaceholder(/Ex: Main Platform Team|例如：主平台团队/).fill(teamName);
+  await modal.getByRole('button', { name: /^Confirm$|^确定$/ }).click();
+
+  await expect(modal).toBeHidden();
+  await expect(page.getByRole('cell', { name: teamCode }).first()).toBeVisible();
+});
