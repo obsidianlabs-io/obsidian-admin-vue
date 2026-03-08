@@ -94,3 +94,20 @@ test('pages preview can open the audit detail modal in demo runtime', async ({ p
   await expect(modal.getByText(/127.0.0.1/).first()).toBeVisible();
   await expect(modal.locator('textarea').last()).toHaveValue(/Demo Runtime/);
 });
+
+test('pages preview can open the language drawer in demo runtime', async ({ page }) => {
+  await loginIntoDemoDashboard(page);
+
+  await page.goto('./#/language');
+
+  await expect(page.getByText(/^Language$|^语言管理$/).first()).toBeVisible();
+
+  await page.getByRole('button', { name: /^Add$|^新增$/ }).click();
+
+  const modal = page.locator('.n-modal').last();
+
+  await expect(modal).toBeVisible();
+  await expect(modal.getByText(/^Add Translation$|^新增翻译$/)).toBeVisible();
+  await expect(modal.getByPlaceholder(/Ex: route.user \/ common.search|例如：route.user \/ common.search/)).toBeVisible();
+  await expect(modal.getByPlaceholder(/Translation text shown in UI|界面显示的翻译文本/)).toBeVisible();
+});
