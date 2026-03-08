@@ -66,6 +66,7 @@ This checklist is for `obsidian-admin-vue`.
 
 - `Frontend Quality Gate / quality` 现在包含 `pnpm check`、`pnpm typecheck:strict`、`pnpm test:unit`、`pnpm test:vue`、`pnpm build`
 - 它应作为前端主 PR 门禁
+- `Frontend Docs Site` 现在会对 Pages artifact 内的 `/preview/` 运行 Playwright smoke，不只是构建成功
 
 建议按需勾选:
 

@@ -57,7 +57,7 @@ export default defineConfig(configEnv => {
               return undefined;
             }
 
-            if (/\/node_modules\/(naive-ui|@css-render|css-render)\//.test(normalizedId)) {
+            if (/\/node_modules\/(naive-ui)\//.test(normalizedId)) {
               return 'vendor-naive';
             }
 

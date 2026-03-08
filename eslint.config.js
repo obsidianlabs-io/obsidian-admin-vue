@@ -4,6 +4,10 @@ export default defineConfig(
   { vue: true, unocss: true },
   {
     ignores: [
+      'demo-dist/**',
+      'debug-demo/**',
+      '.pages-dist/**',
+      'test-results/**',
       'src/service/api/generated/**',
       'src/typings/api/openapi-generated.d.ts',
       'src/typings/api/backend-generated.d.ts',

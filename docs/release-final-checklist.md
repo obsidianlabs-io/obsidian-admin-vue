@@ -30,11 +30,13 @@ pnpm typecheck:api
 pnpm test:unit
 pnpm test:vue
 pnpm build
+pnpm test:preview
 ```
 
 - `Frontend Supply Chain` is green
 - the `frontend-sbom-cyclonedx` artifact exists for the release commit
 - the SBOM artifact has an attestation on the push workflow
+- the Pages preview smoke is green if demo/docs runtime changed
 
 If login, table behavior, or contract-driven flows changed, also run:
 

@@ -1,7 +1,6 @@
 import type { AxiosResponse } from 'axios';
 import { BACKEND_ERROR_CODE, createFlatRequest, createRequest } from '@sa/axios';
 import { getToken } from '@/store/modules/auth/shared';
-import { useAuthStore } from '@/store/modules/auth';
 import { getServiceBaseURL } from '@/utils/service';
 import { isDemoRuntime } from '@/utils/runtime';
 import { $t } from '@/locales';
@@ -33,6 +32,12 @@ const apifoxToken = runtimeEnv.DEV ? String(runtimeEnv.VITE_APIFOX_TOKEN || '').
 const defaultHeaders = apifoxToken ? { apifoxToken } : {};
 let passiveLogoutInProgress = false;
 
+async function resolveAuthStore() {
+  const { useAuthStore } = await import('@/store/modules/auth');
+
+  return useAuthStore();
+}
+
 export const request = createFlatRequest(
   {
     baseURL,
@@ -58,7 +63,7 @@ export const request = createFlatRequest(
       return String(response.data.code) === serviceSuccessCode;
     },
     async onBackendFail(response, instance) {
-      const authStore = useAuthStore();
+      const authStore = await resolveAuthStore();
       const responseCode = String(response.data.code);
       const responseMessage = String(response.data.msg || '');
       const isLogoutRequest = String(response.config?.url || '').includes('/auth/logout');

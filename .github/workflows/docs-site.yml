@@ -37,11 +37,13 @@ jobs:
         run: pnpm build:demo
 
       - name: Assemble Pages bundle
-        run: |
-          rm -rf .pages-dist
-          mkdir -p .pages-dist/preview
-          cp -R docs/.vitepress/dist/. .pages-dist
-          cp -R demo-dist/. .pages-dist/preview
+        run: pnpm pages:bundle
+
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Smoke test Pages preview
+        run: pnpm exec playwright test --config playwright.preview.config.ts
 
       - name: Upload Pages artifact
         if: github.event_name != 'pull_request'

@@ -1,8 +1,6 @@
-import { useAuthStore } from '@/store/modules/auth';
 import { getCurrentTenantId, getRefreshToken, getToken, updateAuthTokens } from '@/store/modules/auth/shared';
 import { resolvePreferredLocale } from '@/locales/default-locale';
 import { $t } from '@/locales';
-import { fetchRefreshToken } from '../api';
 import { resolveValidationErrors } from './validation';
 import type { RequestInstanceState } from './type';
 import { buildRequestContextHeaders, resolveServiceCodeConfig } from './context';
@@ -124,6 +122,10 @@ export function createRequestContextHeaders(initialHeaders: Record<string, unkno
 
 /** refresh token */
 async function handleRefreshToken() {
+  const [{ useAuthStore }, { fetchRefreshToken }] = await Promise.all([
+    import('@/store/modules/auth'),
+    import('@/service/api/auth')
+  ]);
   const { resetStore } = useAuthStore();
 
   const rToken = getRefreshToken();
