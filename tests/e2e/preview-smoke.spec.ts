@@ -66,3 +66,13 @@ test('pages preview can toggle a feature flag in demo runtime', async ({ page })
 
   await expect(featureRow.getByText(/Force OFF|强制关闭/)).toBeVisible();
 });
+
+test('pages preview can load the audit log table in demo runtime', async ({ page }) => {
+  await loginIntoDemoDashboard(page);
+
+  await page.goto('./#/audit');
+
+  await expect(page.getByText(/^Audit Logs$|^审计日志$/).first()).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'auth.login' }).first()).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'demo-login-1' }).first()).toBeVisible();
+});
