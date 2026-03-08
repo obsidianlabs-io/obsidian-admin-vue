@@ -87,7 +87,22 @@ These cover golden paths such as:
 - core CRUD behavior
 - audit-policy path validation
 
-## 7. Docs site verification
+## 7. Full-stack pairing smoke
+
+```bash
+pnpm test:fullstack
+```
+
+Use this when you want the real frontend running against a seeded Laravel backend instead of the built-in mock runtime.
+
+It covers:
+
+- login against the real backend
+- super-admin tenant switching
+- user page access against seeded RBAC data
+- drawer and role-option loading over the real API
+
+## 8. Docs site verification
 
 ```bash
 pnpm docs:build
@@ -111,11 +126,12 @@ pnpm typecheck:api
 pnpm check:ci
 ```
 
-### If you changed pages, drawers, forms, or composables
+### If you changed pages, drawers, forms, composables, or login/auth flows
 
 ```bash
 pnpm check:ci
 pnpm test:e2e
+pnpm test:fullstack
 ```
 
 ### If you changed release or repository workflows

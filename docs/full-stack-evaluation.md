@@ -78,6 +78,22 @@ pnpm typecheck:api
 
 If this command fails, do not treat the current pair as validated until generated API files are synced.
 
+### Step 4. Run the automated pairing smoke
+
+In the frontend repository:
+
+```bash
+pnpm test:fullstack
+```
+
+This boots the real Vue app in test mode and verifies:
+
+- login with the seeded `Super / 123456` account
+- tenant switching from platform scope to `Main Tenant`
+- access to the real `/user` page
+- opening the add-user drawer and loading role options from the real backend
+
+
 ## Recommended evaluation order
 
 Use this order if you are evaluating adoption:

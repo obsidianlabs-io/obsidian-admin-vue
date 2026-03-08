@@ -71,6 +71,7 @@ This checklist is for `obsidian-admin-vue`.
 建议按需勾选:
 
 - `Frontend Quality Gate / e2e`
+- `Full-Stack Pairing / pairing-smoke`
 - `Frontend Supply Chain / npm-audit`
 - `Frontend Supply Chain / sbom`
 
@@ -85,6 +86,7 @@ This checklist is for `obsidian-admin-vue`.
 
 - `.github/workflows/linter.yml`
 - `.github/workflows/contract-gate.yml`
+- `.github/workflows/full-stack-pairing.yml`
 - `.github/workflows/supply-chain.yml`
 - `.github/workflows/docs-site.yml`
 

@@ -79,6 +79,7 @@
     "preview:demo": "vite preview --mode demo --outDir demo-dist",
     "release": "sa release",
     "test:e2e": "playwright test",
+    "test:fullstack": "playwright test --config playwright.fullstack.config.ts",
     "test:preview": "VITEPRESS_BASE=/obsidian-admin-vue/ pnpm docs:build && VITE_BASE_URL=/obsidian-admin-vue/preview/ pnpm build:demo && pnpm pages:bundle && playwright test --config playwright.preview.config.ts",
     "test:unit": "node scripts/run-unit-tests.mjs",
     "test:vue": "vitest run",
