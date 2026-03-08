@@ -111,3 +111,24 @@ test('pages preview can open the language drawer in demo runtime', async ({ page
   await expect(modal.getByPlaceholder(/Ex: route.user \/ common.search|例如：route.user \/ common.search/)).toBeVisible();
   await expect(modal.getByPlaceholder(/Translation text shown in UI|界面显示的翻译文本/)).toBeVisible();
 });
+
+test('pages preview can save a language record in demo runtime', async ({ page }) => {
+  await loginIntoDemoDashboard(page);
+
+  await page.goto('./#/language');
+
+  await expect(page.getByText(/^Language$|^语言管理$/).first()).toBeVisible();
+
+  await page.getByRole('button', { name: /^Add$|^新增$/ }).click();
+
+  const modal = page.locator('.n-modal').last();
+  const translationKey = 'preview.language.smoke';
+  const translationValue = 'Preview language smoke';
+
+  await modal.getByPlaceholder(/Ex: route.user \/ common.search|例如：route.user \/ common.search/).fill(translationKey);
+  await modal.getByPlaceholder(/Translation text shown in UI|界面显示的翻译文本/).fill(translationValue);
+  await modal.getByRole('button', { name: /^Confirm$|^确定$/ }).click();
+
+  await expect(modal).toBeHidden();
+  await expect(page.getByRole('cell', { name: translationKey }).first()).toBeVisible();
+});
