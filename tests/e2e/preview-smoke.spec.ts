@@ -76,3 +76,21 @@ test('pages preview can load the audit log table in demo runtime', async ({ page
   await expect(page.getByRole('cell', { name: 'auth.login' }).first()).toBeVisible();
   await expect(page.getByRole('cell', { name: 'demo-login-1' }).first()).toBeVisible();
 });
+
+test('pages preview can open the audit detail modal in demo runtime', async ({ page }) => {
+  await loginIntoDemoDashboard(page);
+
+  await page.goto('./#/audit');
+
+  await expect(page.getByText(/^Audit Logs$|^审计日志$/).first()).toBeVisible();
+
+  await page.getByRole('button', { name: /^View$|^查看$/ }).first().click();
+
+  const modal = page.locator('.n-modal').last();
+
+  await expect(modal).toBeVisible();
+  await expect(modal.getByText(/auth.login/).first()).toBeVisible();
+  await expect(modal.getByText(/Super/).first()).toBeVisible();
+  await expect(modal.getByText(/127.0.0.1/).first()).toBeVisible();
+  await expect(modal.locator('textarea').last()).toHaveValue(/Demo Runtime/);
+});
