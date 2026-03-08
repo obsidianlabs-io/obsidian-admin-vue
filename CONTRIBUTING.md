@@ -31,6 +31,7 @@ pnpm dev
 - Keep route, permission, tenant, and table behavior deterministic across page modules
 - API-backed forms should use the shared server-validation path: `useNaiveForm()`, request config `handleValidationErrorLocally: true`, and `naiveForm.applyServerValidation(error)`
 - Avoid editing generated API files by hand unless the workflow explicitly requires format-only normalization
+- Public-facing docs and GitHub templates must use repo-relative paths or public URLs, never machine-specific absolute paths
 
 ## Generated Files Policy
 
@@ -65,6 +66,7 @@ pnpm typecheck:api
 pnpm test:unit
 pnpm test:vue
 pnpm build
+pnpm path-safety:check
 ```
 
 ### E2E
