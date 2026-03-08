@@ -152,6 +152,7 @@ This checklist is for `obsidian-admin-vue`.
   `docs/releases/v1.1.1.md`
 - CHANGELOG 使用:
   `CHANGELOG.md`
+- `release.yml` 会优先读取 `docs/releases/<tag>.md`，缺失时才回退到 `CHANGELOG.md`
 
 当前状态:
 

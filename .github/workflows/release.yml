@@ -16,10 +16,35 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
-        with:
-          node-version-file: .nvmrc
+      - name: Prepare release notes
+        run: |
+          VERSION_TAG="${GITHUB_REF_NAME}"
+          VERSION="${VERSION_TAG#v}"
+          RELEASE_NOTE_PATH="docs/releases/${VERSION_TAG}.md"
 
-      - run: npx --yes githublogen@0.4.0-beta.1
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          if [ -f "${RELEASE_NOTE_PATH}" ]; then
+            cp "${RELEASE_NOTE_PATH}" RELEASE_NOTES.md
+            exit 0
+          fi
+
+          awk -v ver="$VERSION" '
+            $0 ~ "^## \\[" ver "\\]" {capture=1; print; next}
+            capture && $0 ~ "^## \\[" {exit}
+            capture {print}
+          ' CHANGELOG.md > RELEASE_NOTES.md
+
+          if [ ! -s RELEASE_NOTES.md ]; then
+            {
+              echo "## ${GITHUB_REF_NAME}"
+              echo
+              echo "Release notes fallback. See CHANGELOG.md for details, or add ${RELEASE_NOTE_PATH}."
+            } > RELEASE_NOTES.md
+          fi
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: RELEASE_NOTES.md
+          append_body: false
+          generate_release_notes: false
+          make_latest: true
