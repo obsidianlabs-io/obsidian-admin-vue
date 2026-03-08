@@ -25,7 +25,10 @@ export default defineConfig({
         items: [
           { text: 'Overview', link: '/' },
           { text: 'Getting Started', link: '/getting-started' },
-          { text: 'Compatibility Matrix', link: '/compatibility-matrix' }
+          { text: 'Backend Pairing', link: '/backend-pairing' },
+          { text: 'Compatibility Matrix', link: '/compatibility-matrix' },
+          { text: 'Deployment', link: '/deployment' },
+          { text: 'Testing', link: '/testing' }
         ]
       },
       {
