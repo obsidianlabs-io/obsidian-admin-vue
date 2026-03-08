@@ -76,6 +76,7 @@ If you need an admin frontend that can evolve with a serious backend contract, r
 - Frontend architecture: [`docs/architecture.md`](./docs/architecture.md)
 - Full-stack evaluation: [`docs/full-stack-evaluation.md`](./docs/full-stack-evaluation.md)
 - Public preview guide: [`docs/demo.md`](./docs/demo.md)
+- Release artifacts: [`docs/release-artifacts.md`](./docs/release-artifacts.md)
 - Release sign-off checklist: [`docs/release-final-checklist.md`](./docs/release-final-checklist.md)
 - API contract snapshot: [`docs/api-client-contract.snapshot`](./docs/api-client-contract.snapshot)
 
@@ -123,6 +124,12 @@ Stable release tags now publish downloadable frontend artifacts on the GitHub Re
 - production app bundle
 - demo preview bundle
 - Pages bundle (`docs + /preview/`)
+
+Supply-chain outputs are published separately through GitHub Actions:
+
+- `frontend-sbom-cyclonedx`
+- frontend SBOM attestation
+- frontend dist attestation
 
 These are intended for evaluation, static preview hosting, and release verification. This repository remains an application template, not an npm-distributed UI package.
 

@@ -126,6 +126,10 @@ git push origin vX.Y.Z
   - production app bundle
   - demo preview bundle
   - Pages bundle
+- supply-chain workflow 会额外生成：
+  - `frontend-sbom-cyclonedx`
+  - frontend SBOM attestation
+  - frontend dist attestation
 
 ## 9. Update Repository Metadata
 
@@ -150,6 +154,7 @@ git push origin vX.Y.Z
 - `main` 和 tag 都已推送
 - GitHub Release 已可见
 - `frontend-sbom-cyclonedx` artifact 已生成，并在 push workflow 上有 attestation
+- GitHub Release 已附带 3 个可下载 bundle
 - `Frontend Contract Gate` 没有因为 backend 契约拉取失败而报错
 - 当前 release note、changelog、package version 一致
 

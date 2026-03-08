@@ -59,6 +59,7 @@ export default defineConfig({
             text: 'API Backend Compat Allowlist',
             link: '/api-backend-compat.allowlist.json'
           },
+          { text: 'Release Artifacts', link: '/release-artifacts' },
           { text: 'Release SOP', link: '/release-sop' },
           { text: 'Release Final Checklist', link: '/release-final-checklist' }
         ]

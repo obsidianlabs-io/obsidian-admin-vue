@@ -47,4 +47,5 @@ Use this frontend with [Obsidian Admin Laravel](https://github.com/obsidianlabs-
 - Use [Configuration](/configuration), [Deployment](/deployment), and [Auth Flows](/auth-flows) during setup
 - Read the [Frontend Architecture](/architecture), [Multi-Tenancy](/multi-tenancy), and [Realtime](/realtime)
 - Review [Generated SDK Workflow](/generated-sdk-workflow) and [API Layer Conventions](/api-layer-conventions) before adding new backend calls
+- Review [Release Artifacts](/release-artifacts) when you want the downloadable bundles and supply-chain outputs
 - Use the [Release Final Checklist](/release-final-checklist) before publishing

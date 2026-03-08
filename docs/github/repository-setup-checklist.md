@@ -114,6 +114,7 @@ This checklist is for `obsidian-admin-vue`.
 - `release.yml` 需要使用 `GITHUB_TOKEN` 创建 Release
 - `supply-chain.yml` 的 attestation 需要 workflow 权限完整可用
 - `supply-chain.yml` 现在还会生成、上传并 attestate `frontend-sbom-cyclonedx` artifact
+- `supply-chain.yml` 还会对 frontend dist 产物生成 provenance attestation
 
 ## 6. Repository Variables And Secrets
 
@@ -164,6 +165,10 @@ This checklist is for `obsidian-admin-vue`.
   - production app bundle
   - demo preview bundle
   - Pages bundle
+- `Frontend Supply Chain` 会额外提供：
+  - `frontend-sbom-cyclonedx`
+  - frontend SBOM attestation
+  - frontend dist attestation
 
 ## 8.5. GitHub Pages / Docs Site
 

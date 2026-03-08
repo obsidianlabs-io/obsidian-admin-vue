@@ -36,6 +36,7 @@ pnpm test:preview
 - `Frontend Supply Chain` is green
 - the `frontend-sbom-cyclonedx` artifact exists for the release commit
 - the SBOM artifact has an attestation on the push workflow
+- the frontend dist attestation exists on the push workflow
 - the Pages preview smoke is green if demo/docs runtime changed
 
 If login, table behavior, or contract-driven flows changed, also run:
@@ -104,6 +105,9 @@ After publishing, confirm:
   - production app bundle
   - demo preview bundle
   - Pages bundle
+- the `frontend-sbom-cyclonedx` artifact exists
+- the frontend SBOM attestation exists
+- the frontend dist attestation exists
 - `main` is still green
 - contract gate is still green
 
