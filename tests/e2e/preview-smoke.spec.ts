@@ -52,3 +52,17 @@ test('pages preview can open the user drawer in demo runtime', async ({ page }) 
 
   await expect(page.locator('.n-base-select-option').filter({ hasText: /Admin/ }).first()).toBeVisible();
 });
+
+test('pages preview can toggle a feature flag in demo runtime', async ({ page }) => {
+  await loginIntoDemoDashboard(page);
+
+  await page.goto('./#/feature-flag');
+
+  const featureRow = page.locator('tr', { hasText: 'menu.role' }).first();
+
+  await expect(featureRow).toBeVisible();
+
+  await featureRow.getByRole('switch').click();
+
+  await expect(featureRow.getByText(/Force OFF|强制关闭/)).toBeVisible();
+});
