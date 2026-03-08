@@ -28,3 +28,27 @@ test('pages preview supports tenant switching in demo runtime', async ({ page })
   await expect(page.getByRole('button', { name: /Main Tenant/ })).toBeVisible();
   await expect(page).toHaveURL(/#\/dashboard$/);
 });
+
+test('pages preview can open the user drawer in demo runtime', async ({ page }) => {
+  await loginIntoDemoDashboard(page);
+
+  await page.goto('./#/user');
+
+  await expect(page.getByText(/^User$/).first()).toBeVisible();
+
+  await page.getByRole('button', { name: /^Add$|^新增$/ }).click();
+
+  const modal = page.locator('.n-modal').last();
+
+  await expect(modal).toBeVisible();
+  await expect(modal.getByPlaceholder(/Please enter user name|请输入用户名/)).toBeVisible();
+  await expect(modal.getByPlaceholder(/Please enter email|请输入邮箱/)).toBeVisible();
+
+  await modal
+    .locator('.n-form-item')
+    .filter({ hasText: /Role|角色/ })
+    .locator('.n-base-selection')
+    .click();
+
+  await expect(page.locator('.n-base-select-option').filter({ hasText: /Admin/ }).first()).toBeVisible();
+});
