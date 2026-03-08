@@ -173,6 +173,23 @@ test('pages preview can save an organization record in demo runtime', async ({ p
   await expect(page.getByRole('cell', { name: organizationCode }).first()).toBeVisible();
 });
 
+test('pages preview can open the organization edit drawer in demo runtime', async ({ page }) => {
+  await loginIntoDemoDashboard(page);
+
+  await page.goto('./#/organization');
+
+  await expect(page.getByText(/^Organization$|^组织$/).first()).toBeVisible();
+
+  await page.getByRole('button', { name: /^Edit$|^编辑$/ }).first().click();
+
+  const modal = page.locator('.n-modal').last();
+
+  await expect(modal).toBeVisible();
+  await expect(modal.getByText(/^Edit Organization$|^编辑组织$/)).toBeVisible();
+  await expect(modal.getByPlaceholder(/Ex: ORG_MAIN_HQ|例如：ORG_MAIN_HQ/)).toHaveValue('ORG_MAIN_HQ');
+  await expect(modal.getByPlaceholder(/Ex: Main HQ|例如：主组织/)).toHaveValue('Main HQ');
+});
+
 test('pages preview can save a team record in demo runtime', async ({ page }) => {
   await loginIntoDemoDashboard(page);
 
