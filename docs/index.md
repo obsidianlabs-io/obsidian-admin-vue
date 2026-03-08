@@ -48,4 +48,6 @@ Use this frontend with [Obsidian Admin Laravel](https://github.com/obsidianlabs-
 - Read the [Frontend Architecture](/architecture), [Multi-Tenancy](/multi-tenancy), and [Realtime](/realtime)
 - Review [Generated SDK Workflow](/generated-sdk-workflow) and [API Layer Conventions](/api-layer-conventions) before adding new backend calls
 - Review [Release Artifacts](/release-artifacts) when you want the downloadable bundles and supply-chain outputs
+- Use [Open Source Launch Checklist](/open-source-launch-checklist) before promoting the backend and frontend as one stack
+- Use [Full-Stack Demo Environment](/full-stack-demo-environment) when you want to evolve from static preview into a hosted real-backend demo
 - Use the [Release Final Checklist](/release-final-checklist) before publishing
