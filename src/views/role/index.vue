@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, h, reactive, ref } from 'vue';
+import { computed, h, ref } from 'vue';
 import { NTag } from 'naive-ui';
 import { fetchDeleteRole, fetchGetRoleList } from '@/service/api';
 import { useAppStore } from '@/store/modules/app';
@@ -25,7 +25,7 @@ function canManageRoleRow(row: Api.Role.RoleRecord) {
   return Boolean(row.manageable);
 }
 
-const searchParams = reactive({
+const searchParams = ref({
   current: 1,
   size: 10,
   status: null as Api.Common.EnableStatus | null,
@@ -36,11 +36,11 @@ const searchParams = reactive({
 const { columns, columnChecks, data, getData, getDataByPage, loading, mobilePagination } = useNaivePaginatedTable({
   api: async () => {
     const response = await fetchGetRoleList({
-      current: searchParams.current,
-      size: searchParams.size,
-      status: searchParams.status ?? undefined,
-      keyword: searchParams.keyword ?? undefined,
-      level: searchParams.level ?? undefined
+      current: searchParams.value.current,
+      size: searchParams.value.size,
+      status: searchParams.value.status ?? undefined,
+      keyword: searchParams.value.keyword ?? undefined,
+      level: searchParams.value.level ?? undefined
     });
 
     if (!response.error) {
@@ -54,8 +54,8 @@ const { columns, columnChecks, data, getData, getDataByPage, loading, mobilePagi
   },
   transform: response => defaultTransform(response),
   onPaginationParamsChange: params => {
-    searchParams.current = params.page ?? 1;
-    searchParams.size = params.pageSize ?? 10;
+    searchParams.value.current = params.page ?? 1;
+    searchParams.value.size = params.pageSize ?? 10;
   },
   columns: () => [
     ...(canManageRole.value
@@ -73,7 +73,7 @@ const { columns, columnChecks, data, getData, getDataByPage, loading, mobilePagi
       title: $t('common.index'),
       align: 'center',
       width: 64,
-      render: (_, index) => (searchParams.current - 1) * searchParams.size + index + 1
+      render: (_, index) => (searchParams.value.current - 1) * searchParams.value.size + index + 1
     },
     {
       key: 'roleCode',
@@ -210,7 +210,7 @@ async function handleBatchDelete() {
 }
 
 function handleSearch() {
-  searchParams.current = 1;
+  searchParams.value.current = 1;
   getDataByPage();
 }
 </script>

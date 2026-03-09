@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, h, onMounted, reactive, ref } from 'vue';
+import { computed, h, onMounted, ref } from 'vue';
 import { NButton, NPopconfirm } from 'naive-ui';
 import { fetchDeleteLanguageTranslation, fetchGetLanguageList, fetchGetLanguageOptions } from '@/service/api';
 import { useAppStore } from '@/store/modules/app';
@@ -22,7 +22,7 @@ const canManageLanguage = computed(() => hasAuth('language.manage'));
 
 const localeOptions = ref<CommonType.Option<App.I18n.LangType>[]>([]);
 
-const searchParams = reactive({
+const searchParams = ref({
   current: 1,
   size: 10,
   locale: null as App.I18n.LangType | null,
@@ -33,16 +33,16 @@ const searchParams = reactive({
 const { columns, columnChecks, data, getData, getDataByPage, loading, mobilePagination } = useNaivePaginatedTable({
   api: () =>
     fetchGetLanguageList({
-      current: searchParams.current,
-      size: searchParams.size,
-      locale: searchParams.locale ?? undefined,
-      keyword: searchParams.keyword ?? undefined,
-      status: searchParams.status ?? undefined
+      current: searchParams.value.current,
+      size: searchParams.value.size,
+      locale: searchParams.value.locale ?? undefined,
+      keyword: searchParams.value.keyword ?? undefined,
+      status: searchParams.value.status ?? undefined
     }),
   transform: response => defaultTransform(response),
   onPaginationParamsChange: params => {
-    searchParams.current = params.page ?? 1;
-    searchParams.size = params.pageSize ?? 10;
+    searchParams.value.current = params.page ?? 1;
+    searchParams.value.size = params.pageSize ?? 10;
   },
   columns: () => [
     ...(canManageLanguage.value
@@ -59,7 +59,7 @@ const { columns, columnChecks, data, getData, getDataByPage, loading, mobilePagi
       title: $t('common.index'),
       align: 'center',
       width: 64,
-      render: (_, index) => (searchParams.current - 1) * searchParams.size + index + 1
+      render: (_, index) => (searchParams.value.current - 1) * searchParams.value.size + index + 1
     },
     {
       key: 'locale',
@@ -198,7 +198,7 @@ async function handleBatchDelete() {
 }
 
 function handleSearch() {
-  searchParams.current = 1;
+  searchParams.value.current = 1;
   getDataByPage();
 }
 

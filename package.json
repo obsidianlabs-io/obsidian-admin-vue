@@ -70,7 +70,7 @@
     "i18n:types": "node scripts/generate-i18n-types.mjs",
     "i18n:types:check": "pnpm i18n:types && git diff --exit-code src/typings/i18n-generated.d.ts",
     "lint": "eslint . --fix",
-    "lint:check": "eslint .",
+    "lint:check": "eslint . --max-warnings 0",
     "openapi:client:official": "openapi-ts -i ../obsidian-admin-laravel/docs/openapi.yaml -o src/service/api/generated -c @hey-api/client-axios",
     "pages:bundle": "node scripts/assemble-pages-preview.mjs",
     "path-safety:check": "node scripts/check-public-path-safety.mjs",

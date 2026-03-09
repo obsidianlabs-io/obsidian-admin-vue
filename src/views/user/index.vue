@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, h, onMounted, reactive, ref } from 'vue';
+import { computed, h, onMounted, ref } from 'vue';
 import { NTag, NTooltip } from 'naive-ui';
 import { fetchDeleteUser, fetchGetUserList } from '@/service/api';
 import { useAuth } from '@/hooks/business/auth';
@@ -150,7 +150,7 @@ type UserSearchParams = {
   userEmail: string | null;
 };
 
-const searchParams = reactive<UserSearchParams>({
+const searchParams = ref<UserSearchParams>({
   current: 1,
   size: 10,
   status: null,
@@ -167,7 +167,7 @@ const schemaColumns = computed<NaiveUI.TableColumn<Api.User.UserRecord>[]>(() =>
         title: $t(column.titleKey),
         align: column.align,
         width: column.width,
-        render: (_row, index) => (searchParams.current - 1) * searchParams.size + index + 1
+        render: (_row, index) => (searchParams.value.current - 1) * searchParams.value.size + index + 1
       };
     }
 
@@ -336,11 +336,11 @@ function handleSearch() {
 }
 
 function resetSearchParamsForTenantChange() {
-  searchParams.current = 1;
-  searchParams.status = null;
-  searchParams.roleCode = null;
-  searchParams.userName = null;
-  searchParams.userEmail = null;
+  searchParams.value.current = 1;
+  searchParams.value.status = null;
+  searchParams.value.roleCode = null;
+  searchParams.value.userName = null;
+  searchParams.value.userEmail = null;
 }
 
 function handleTenantChanged() {

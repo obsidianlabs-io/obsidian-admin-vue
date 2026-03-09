@@ -6,7 +6,7 @@ import { loginModuleRecord } from '@/constants/app';
 import { fetchGetPublicThemeConfig } from '@/service/api';
 import { useAppStore } from '@/store/modules/app';
 import { useThemeStore } from '@/store/modules/theme';
-import { isDemoRuntime } from '@/utils/runtime';
+import { isEnvFlagEnabled } from '@/utils/runtime';
 import { $t } from '@/locales';
 import CodeLogin from './modules/code-login.vue';
 import PwdLogin from './modules/pwd-login.vue';
@@ -24,7 +24,10 @@ const props = defineProps<Props>();
 const appStore = useAppStore();
 const themeStore = useThemeStore();
 const loginThemeReady = ref(false);
-const demoRuntime = isDemoRuntime(import.meta.env);
+const enabledPlaceholderModules = new Set<UnionKey.LoginModule>([
+  ...(isEnvFlagEnabled(import.meta.env.VITE_LOGIN_CODE_LOGIN_ENABLED) ? ['code-login' as const] : []),
+  ...(isEnvFlagEnabled(import.meta.env.VITE_LOGIN_BIND_WECHAT_ENABLED) ? ['bind-wechat' as const] : [])
+]);
 
 interface LoginModule {
   label: App.I18n.I18nKey;
@@ -40,15 +43,13 @@ const baseModuleMap: Record<UnionKey.LoginModule, LoginModule> = {
 };
 
 const moduleMap = computed<Partial<Record<UnionKey.LoginModule, LoginModule>>>(() => {
-  if (!demoRuntime) {
-    return baseModuleMap;
-  }
-
-  return {
-    'pwd-login': baseModuleMap['pwd-login'],
-    'code-login': baseModuleMap['code-login'],
-    'bind-wechat': baseModuleMap['bind-wechat']
-  };
+  return Object.fromEntries(
+    Object.entries(baseModuleMap).filter(([module]) => {
+      return (
+        !['code-login', 'bind-wechat'].includes(module) || enabledPlaceholderModules.has(module as UnionKey.LoginModule)
+      );
+    })
+  ) as Partial<Record<UnionKey.LoginModule, LoginModule>>;
 });
 
 const activeModule = computed(() => moduleMap.value[props.module || 'pwd-login'] || moduleMap.value['pwd-login']!);

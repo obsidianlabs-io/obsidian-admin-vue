@@ -1,4 +1,5 @@
-import { computed } from 'vue';
+import { computed, unref } from 'vue';
+import type { Ref } from 'vue';
 import { useAsyncState } from '@vueuse/core';
 import type { PaginationProps } from 'naive-ui';
 import type { FlatResponseData } from '@sa/axios';
@@ -14,7 +15,7 @@ type SearchParams = {
 type PaginatedResponse<RowData> = FlatResponseData<any, Api.Common.PaginatingQueryRecord<RowData>>;
 
 interface UseCrudPaginatedTableOptions<RowData, QueryParams extends SearchParams> {
-  searchParams: QueryParams;
+  searchParams: QueryParams | Ref<QueryParams>;
   api: (params: Partial<QueryParams>) => Promise<PaginatedResponse<RowData>>;
   columns: () => NaiveUI.TableColumn<RowData>[];
   mapParams?: (params: QueryParams) => Partial<QueryParams>;
@@ -43,7 +44,8 @@ export function useCrudPaginatedTable<RowData, QueryParams extends SearchParams>
 ) {
   const table = useNaivePaginatedTable({
     api: async () => {
-      const mappedParams = options.mapParams?.(options.searchParams) ?? options.searchParams;
+      const resolvedSearchParams = unref(options.searchParams);
+      const mappedParams = options.mapParams?.(resolvedSearchParams) ?? resolvedSearchParams;
       const response = await options.api(normalizeQueryParams(mappedParams) as Partial<QueryParams>);
 
       if (response.error && (options.notifyOnError ?? true) && !shouldSkipGlobalErrorToast(response.error)) {
@@ -55,8 +57,9 @@ export function useCrudPaginatedTable<RowData, QueryParams extends SearchParams>
     },
     transform: response => defaultTransform(response),
     onPaginationParamsChange: params => {
-      options.searchParams.current = params.page ?? 1;
-      options.searchParams.size = params.pageSize ?? 10;
+      const resolvedSearchParams = unref(options.searchParams);
+      resolvedSearchParams.current = params.page ?? 1;
+      resolvedSearchParams.size = params.pageSize ?? 10;
     },
     columns: options.columns,
     paginationProps: options.paginationProps,
@@ -79,7 +82,7 @@ export function useCrudPaginatedTable<RowData, QueryParams extends SearchParams>
   const tableLoading = computed(() => table.loading.value || initState.isLoading.value);
 
   async function search() {
-    options.searchParams.current = 1;
+    unref(options.searchParams).current = 1;
     await table.getDataByPage();
   }
 

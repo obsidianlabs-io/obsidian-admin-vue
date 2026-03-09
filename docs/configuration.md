@@ -46,8 +46,12 @@ These variables affect route generation and permission behavior:
 - `VITE_AUTH_ROUTE_MODE`: `static` or `dynamic`
 - `VITE_STATIC_SUPER_ROLE`: special role for static-route mode
 - `VITE_MENU_ICON`: fallback menu icon
+- `VITE_LOGIN_CODE_LOGIN_ENABLED`: expose the template-only verification-code login module
+- `VITE_LOGIN_BIND_WECHAT_ENABLED`: expose the template-only WeChat bind module
 
 If you pair this frontend with Obsidian Admin Laravel, the intended mode is usually backend-driven route and menu metadata.
+
+Both login placeholder variables should stay `N` unless you have implemented and tested a real backend contract for those flows.
 
 ## Realtime variables
 

@@ -106,5 +106,6 @@ The current built-in auth pages are intentionally mixed in maturity:
 - `reset-pwd` is wired to the real backend forgot/reset-password contract
 - `code-login` is still a template-level placeholder module
 - `bind-wechat` is still a template-level placeholder module
+- both are disabled by default through env flags
 
 Do not force placeholder modules onto backend APIs unless the frontend field model and backend contract are aligned first.

@@ -1,4 +1,4 @@
-import { computed, h, onActivated, onBeforeUnmount, onDeactivated, onMounted, reactive, ref, watch } from 'vue';
+import { computed, h, onActivated, onBeforeUnmount, onDeactivated, onMounted, ref, watch } from 'vue';
 import { NInputNumber, NSwitch, NTag } from 'naive-ui';
 import { appEvent } from '@/constants/event';
 import { fetchGetAuditPolicyList, fetchUpdateAuditPolicy } from '@/service/api';
@@ -104,7 +104,7 @@ export function useAuditPolicy() {
   const policyCurrent = ref(1);
   const policySize = ref(10);
 
-  const searchParams = reactive<AuditPolicySearchModel>({
+  const searchParams = ref<AuditPolicySearchModel>({
     keyword: null,
     category: null,
     locked: null,
@@ -179,7 +179,7 @@ export function useAuditPolicy() {
   const canOpenSaveDialog = computed(() => canManageAuditPolicy.value && hasChanges.value);
 
   const filteredRecords = computed(() => {
-    const keyword = (searchParams.keyword ?? '').trim().toLowerCase();
+    const keyword = (searchParams.value.keyword ?? '').trim().toLowerCase();
 
     return records.value.filter(item => {
       if (keyword) {
@@ -190,19 +190,19 @@ export function useAuditPolicy() {
         }
       }
 
-      if (searchParams.category && item.category !== searchParams.category) {
+      if (searchParams.value.category && item.category !== searchParams.value.category) {
         return false;
       }
 
-      if (searchParams.locked === 'locked' && !item.locked) {
+      if (searchParams.value.locked === 'locked' && !item.locked) {
         return false;
       }
 
-      if (searchParams.locked === 'editable' && item.locked) {
+      if (searchParams.value.locked === 'editable' && item.locked) {
         return false;
       }
 
-      if (searchParams.changeScope === 'changed' && !changedActionSet.value.has(item.action)) {
+      if (searchParams.value.changeScope === 'changed' && !changedActionSet.value.has(item.action)) {
         return false;
       }
 
@@ -218,7 +218,12 @@ export function useAuditPolicy() {
   });
 
   watch(
-    () => [searchParams.keyword, searchParams.category, searchParams.locked, searchParams.changeScope],
+    () => [
+      searchParams.value.keyword,
+      searchParams.value.category,
+      searchParams.value.locked,
+      searchParams.value.changeScope
+    ],
     () => {
       policyCurrent.value = 1;
     }

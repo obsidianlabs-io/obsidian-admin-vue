@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, h, reactive, ref } from 'vue';
+import { computed, h, ref } from 'vue';
 import { NButton, NTag } from 'naive-ui';
 import { fetchGetAuditLogList } from '@/service/api';
 import { useAppStore } from '@/store/modules/app';
@@ -37,7 +37,7 @@ function createDefaultDateFilters() {
 
 const defaultDateFilters = createDefaultDateFilters();
 
-const searchParams = reactive({
+const searchParams = ref({
   current: 1,
   size: 10,
   keyword: null as string | null,
@@ -59,19 +59,19 @@ function formatLocalDateTime(timestamp: number): string {
 }
 
 function resolveDateFrom(): string | undefined {
-  if (!searchParams.dateFrom) {
+  if (!searchParams.value.dateFrom) {
     return undefined;
   }
 
-  return formatLocalDateTime(searchParams.dateFrom);
+  return formatLocalDateTime(searchParams.value.dateFrom);
 }
 
 function resolveDateTo(): string | undefined {
-  if (!searchParams.dateTo) {
+  if (!searchParams.value.dateTo) {
     return undefined;
   }
 
-  return formatLocalDateTime(searchParams.dateTo);
+  return formatLocalDateTime(searchParams.value.dateTo);
 }
 
 function resolveLogTypeLabel(logType: Api.Audit.AuditLogType | string | null | undefined): string {
@@ -113,20 +113,20 @@ function resolveLogTypeTagType(logType: Api.Audit.AuditLogType | string | null |
 const { columns, columnChecks, data, getData, getDataByPage, loading, mobilePagination } = useNaivePaginatedTable({
   api: () =>
     fetchGetAuditLogList({
-      current: searchParams.current,
-      size: searchParams.size,
-      keyword: searchParams.keyword ?? undefined,
-      action: searchParams.action ?? undefined,
-      logType: searchParams.logType || undefined,
-      userName: searchParams.userName ?? undefined,
-      requestId: searchParams.requestId ?? undefined,
+      current: searchParams.value.current,
+      size: searchParams.value.size,
+      keyword: searchParams.value.keyword ?? undefined,
+      action: searchParams.value.action ?? undefined,
+      logType: searchParams.value.logType || undefined,
+      userName: searchParams.value.userName ?? undefined,
+      requestId: searchParams.value.requestId ?? undefined,
       dateFrom: resolveDateFrom(),
       dateTo: resolveDateTo()
     }),
   transform: response => defaultTransform(response),
   onPaginationParamsChange: params => {
-    searchParams.current = params.page ?? 1;
-    searchParams.size = params.pageSize ?? 10;
+    searchParams.value.current = params.page ?? 1;
+    searchParams.value.size = params.pageSize ?? 10;
   },
   columns: () => [
     {
@@ -134,7 +134,7 @@ const { columns, columnChecks, data, getData, getDataByPage, loading, mobilePagi
       title: $t('common.index'),
       align: 'center',
       width: 64,
-      render: (_, index) => (searchParams.current - 1) * searchParams.size + index + 1
+      render: (_, index) => (searchParams.value.current - 1) * searchParams.value.size + index + 1
     },
     {
       key: 'action',
@@ -217,7 +217,7 @@ const { columns, columnChecks, data, getData, getDataByPage, loading, mobilePagi
 });
 
 function handleSearch() {
-  searchParams.current = 1;
+  searchParams.value.current = 1;
   getDataByPage();
 }
 
@@ -229,14 +229,14 @@ function view(row: Api.Audit.AuditLogRecord) {
 function resetSearchParamsForTenantChange() {
   const { dateFrom, dateTo } = createDefaultDateFilters();
 
-  searchParams.current = 1;
-  searchParams.keyword = null;
-  searchParams.action = null;
-  searchParams.logType = null;
-  searchParams.userName = null;
-  searchParams.requestId = null;
-  searchParams.dateFrom = dateFrom;
-  searchParams.dateTo = dateTo;
+  searchParams.value.current = 1;
+  searchParams.value.keyword = null;
+  searchParams.value.action = null;
+  searchParams.value.logType = null;
+  searchParams.value.userName = null;
+  searchParams.value.requestId = null;
+  searchParams.value.dateFrom = dateFrom;
+  searchParams.value.dateTo = dateTo;
 }
 
 function handleTenantChanged() {

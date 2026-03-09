@@ -29,7 +29,12 @@ These are not represented as real backend-backed flows yet:
 - `code-login`
 - `bind-wechat`
 
-Those modules remain explicit placeholders until a real backend contract exists. They should not be documented or marketed as supported auth methods.
+Those modules remain explicit placeholders until a real backend contract exists. They are disabled by default and should not be documented or marketed as supported auth methods.
+
+To expose them intentionally, set:
+
+- `VITE_LOGIN_CODE_LOGIN_ENABLED=Y`
+- `VITE_LOGIN_BIND_WECHAT_ENABLED=Y`
 
 ## Validation model
 
