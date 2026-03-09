@@ -1,12 +1,56 @@
-import { request } from '../request';
+import type { CustomAxiosRequestConfig, FlatResponseData } from '@sa/axios';
 
-/**
- * Generated API placeholder.
- * Replace endpoint and payload fields after backend contract is ready.
- */
-export function fetchGet{{pascalName}}List(params: Api.{{pascalName}}.{{pascalName}}ListParams) {
-  return request<Api.{{pascalName}}.{{pascalName}}List>({
-    url: '/{{routeName}}/list',
-    params
-  });
+function createScaffoldResponse<T>(data: T): FlatResponseData<any, T> {
+  return {
+    data,
+    error: null,
+    response: { data } as never
+  };
+}
+
+function createScaffoldError(method: string): FlatResponseData<any, never> {
+  const response = {
+    data: {
+      code: '9001',
+      msg: `[scaffold] Wire {{routeName}} facade to the generated SDK before using ${method}.`
+    }
+  } as never;
+
+  return {
+    data: null,
+    error: { response } as never,
+    response
+  };
+}
+
+export function fetchGet{{pascalName}}List(
+  params: Api.{{pascalName}}.{{pascalName}}ListParams
+): Promise<FlatResponseData<any, Api.{{pascalName}}.{{pascalName}}List>> {
+  return Promise.resolve(
+    createScaffoldResponse({
+      current: params.current,
+      size: params.size,
+      total: 0,
+      records: []
+    })
+  );
+}
+
+export function fetchCreate{{pascalName}}(
+  _data: Api.{{pascalName}}.{{pascalName}}Payload,
+  _config?: CustomAxiosRequestConfig
+): Promise<FlatResponseData<any, never>> {
+  return Promise.resolve(createScaffoldError('create'));
+}
+
+export function fetchUpdate{{pascalName}}(
+  _id: number,
+  _data: Api.{{pascalName}}.{{pascalName}}Payload,
+  _config?: CustomAxiosRequestConfig
+): Promise<FlatResponseData<any, never>> {
+  return Promise.resolve(createScaffoldError('update'));
+}
+
+export function fetchDelete{{pascalName}}(_id: number): Promise<FlatResponseData<any, never>> {
+  return Promise.resolve(createScaffoldError('delete'));
 }

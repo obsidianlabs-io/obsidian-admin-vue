@@ -1,0 +1,163 @@
+<script setup lang="ts">
+import { computed, ref, watch } from 'vue';
+import { getEnableStatusLabel, getEnableStatusOptions, getEnableStatusTagType } from '@/constants/common';
+import { fetchCreate{{pascalName}}, fetchUpdate{{pascalName}} } from '@/service/api';
+import { useFormRules, useNaiveForm } from '@/hooks/common/form';
+import { $t } from '@/locales';
+import FormModalWrapper from '@/components/advanced/form-modal-wrapper.vue';
+
+defineOptions({
+  name: '{{pascalName}}OperateDrawer'
+});
+
+interface Props {
+  operateType: NaiveUI.TableOperateType;
+  rowData?: Api.{{pascalName}}.{{pascalName}}Record | null;
+  readOnly?: boolean;
+}
+
+const props = defineProps<Props>();
+
+interface Emits {
+  (e: 'submitted'): void;
+}
+
+const emit = defineEmits<Emits>();
+
+const visible = defineModel<boolean>('visible', {
+  default: false
+});
+
+const naiveForm = useNaiveForm();
+const { defaultRequiredRule } = useFormRules();
+
+const isViewMode = computed(() => Boolean(props.readOnly));
+const enableStatusOptions = computed(() => getEnableStatusOptions());
+
+const title = computed(() => {
+  if (isViewMode.value) {
+    return $t('page.{{routeName}}.viewTitle');
+  }
+
+  const titles: Record<NaiveUI.TableOperateType, string> = {
+    add: $t('page.{{routeName}}.addTitle'),
+    edit: $t('page.{{routeName}}.editTitle')
+  };
+
+  return titles[props.operateType];
+});
+
+interface Model {
+  {{codeKey}}: string;
+  {{nameKey}}: string;
+  status: Api.Common.EnableStatus;
+}
+
+const model = ref<Model>(createDefaultModel());
+naiveForm.bindModelValidation(model, ['{{codeKey}}', '{{nameKey}}', 'status']);
+
+function createDefaultModel(): Model {
+  return {
+    {{codeKey}}: '',
+    {{nameKey}}: '',
+    status: '1'
+  };
+}
+
+const baseRules: Record<'{{codeKey}}' | '{{nameKey}}' | 'status', App.Global.FormRule> = {
+  {{codeKey}}: defaultRequiredRule,
+  {{nameKey}}: defaultRequiredRule,
+  status: defaultRequiredRule
+};
+const rules = naiveForm.withServerValidationRules(baseRules, ['{{codeKey}}', '{{nameKey}}', 'status'] as const);
+
+function handleInitModel() {
+  model.value = createDefaultModel();
+
+  if (props.operateType === 'edit' && props.rowData) {
+    model.value = {
+      {{codeKey}}: props.rowData.{{codeKey}},
+      {{nameKey}}: props.rowData.{{nameKey}},
+      status: props.rowData.status ?? '1'
+    };
+  }
+}
+
+function closeDrawer() {
+  visible.value = false;
+}
+
+async function handleSubmit() {
+  if (isViewMode.value) {
+    return;
+  }
+
+  await naiveForm.validate();
+
+  const payload: Api.{{pascalName}}.{{pascalName}}Payload = {
+    {{codeKey}}: model.value.{{codeKey}}.trim(),
+    {{nameKey}}: model.value.{{nameKey}}.trim(),
+    status: model.value.status
+  };
+
+  const { error } =
+    props.operateType === 'add'
+      ? await fetchCreate{{pascalName}}(payload, { handleValidationErrorLocally: true })
+      : await fetchUpdate{{pascalName}}(props.rowData?.id || 0, payload, { handleValidationErrorLocally: true });
+
+  if (error) {
+    await naiveForm.applyServerValidation(error);
+  }
+
+  if (!error) {
+    window.$message?.success(props.operateType === 'add' ? $t('common.addSuccess') : $t('common.updateSuccess'));
+    closeDrawer();
+    emit('submitted');
+  }
+}
+
+watch(visible, () => {
+  if (visible.value) {
+    handleInitModel();
+    naiveForm.restoreValidation();
+  }
+});
+</script>
+
+<template>
+  <FormModalWrapper
+    v-model:visible="visible"
+    :title="title"
+    :read-only="isViewMode"
+    @submit="handleSubmit"
+    @close="closeDrawer"
+  >
+    <NForm :ref="naiveForm.formRef" :model="model" :rules="rules" :show-require-mark="!isViewMode">
+      <NGrid responsive="screen" item-responsive :x-gap="12">
+        <NFormItemGi span="24 s:12" :label="$t('page.{{routeName}}.{{codeKey}}')" path="{{codeKey}}">
+          <NInput
+            v-model:value="model.{{codeKey}}"
+            :readonly="operateType === 'edit' || isViewMode"
+            :placeholder="isViewMode ? '' : $t('page.{{routeName}}.{{codeKey}}Placeholder')"
+          />
+        </NFormItemGi>
+        <NFormItemGi span="24 s:12" :label="$t('page.{{routeName}}.{{nameKey}}')" path="{{nameKey}}">
+          <NInput
+            v-model:value="model.{{nameKey}}"
+            :readonly="isViewMode"
+            :placeholder="isViewMode ? '' : $t('page.{{routeName}}.{{nameKey}}Placeholder')"
+          />
+        </NFormItemGi>
+      </NGrid>
+      <NFormItem :label="$t('common.status')" path="status">
+        <NTag v-if="isViewMode" :type="getEnableStatusTagType(model.status)">
+          <!-- eslint-disable-next-line vue/no-v-text -->
+          <span v-text="getEnableStatusLabel(model.status)" />
+        </NTag>
+        <NRadioGroup v-else v-model:value="model.status">
+          <NRadio v-for="item in enableStatusOptions" :key="item.value" :value="item.value" :label="item.label" />
+        </NRadioGroup>
+      </NFormItem>
+    </NForm>
+  </FormModalWrapper>
+</template>

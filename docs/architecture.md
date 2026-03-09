@@ -51,11 +51,22 @@
 
 ## Scaffolding workflow
 
-- Use `pnpm generate:page` to scaffold a new page module with:
+- Use `pnpm generate:page` to scaffold a standard code/name/status CRUD surface with two prompts:
+  - resource key in singular kebab-case
+  - labels in `English / Chinese`
+- The generator creates:
   - `src/views/<page>/index.vue`
-  - route i18n keys in `src/locales/langs/en-us.ts` and `src/locales/langs/zh-cn.ts`
-  - optional API placeholder files in `src/typings/api/<page>.d.ts` and `src/service/api/<page>.ts`
-  - optional route manifest refresh via `pnpm gen-route`
+  - `src/views/<page>/modules/<page>-search.vue`
+  - `src/views/<page>/modules/<page>-operate-drawer.vue`
+  - `src/typings/api/<page>.d.ts`
+  - `src/service/api/<page>.ts`
+  - `tests/vue/<page>-operate-drawer.spec.ts`
+- It also appends:
+  - route i18n keys in `src/locales/langs/modules/en-us/route.ts` and `src/locales/langs/modules/zh-cn/route.ts`
+  - page i18n keys in `src/locales/langs/modules/en-us/page.ts` and `src/locales/langs/modules/zh-cn/page.ts`
+  - API export wiring in `src/service/api/index.ts`
+- Post-generation it regenerates i18n typings and lint-fixes only the touched files.
+- It deliberately does **not** call `pnpm gen-route`; that command is reserved for Soybean route creation, not route manifest refresh.
 
 ## Standard paginated CRUD hook
 

@@ -1,13 +1,21 @@
 declare namespace Api {
   namespace {{pascalName}} {
-    interface {{pascalName}}Record {
-      id: number;
-      createTime: string;
-      updateTime: string;
+    interface {{pascalName}}Base {
+      {{codeKey}}: string;
+      {{nameKey}}: string;
     }
 
-    type {{pascalName}}ListParams = Api.Common.CommonSearchParams;
+    type {{pascalName}}Record = Common.CommonRecord<{{pascalName}}Base>;
 
-    type {{pascalName}}List = Api.Common.PaginatingQueryRecord<{{pascalName}}Record>;
+    interface {{pascalName}}ListParams extends Common.CommonSearchParams {
+      status?: Common.EnableStatus | null;
+      keyword?: string | null;
+    }
+
+    type {{pascalName}}List = Common.PaginatingQueryRecord<{{pascalName}}Record>;
+
+    type {{pascalName}}Payload = {{pascalName}}Base & {
+      status: Common.EnableStatus;
+    };
   }
 }
