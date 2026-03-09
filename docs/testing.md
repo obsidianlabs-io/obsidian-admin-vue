@@ -174,3 +174,16 @@ This project is contract-driven. The minimum trustworthy gate for real code chan
 pnpm typecheck:api
 pnpm check:ci
 ```
+
+## Lighthouse baseline
+
+Use the public Pages bundle as the Lighthouse target.
+
+```bash
+VITEPRESS_BASE=/obsidian-admin-vue/ pnpm docs:build
+VITE_BASE_URL=/obsidian-admin-vue/preview/ pnpm build:demo
+pnpm pages:bundle
+pnpm test:lighthouse
+```
+
+The docs-site workflow uploads the generated filesystem report as `frontend-lighthouse-report`.

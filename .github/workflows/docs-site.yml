@@ -48,6 +48,17 @@ jobs:
       - name: Accessibility and visual baseline
         run: pnpm exec playwright test --config playwright.ui-baseline.config.ts
 
+      - name: Lighthouse baseline
+        run: pnpm test:lighthouse
+
+      - name: Upload Lighthouse artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-lighthouse-report
+          path: build/lighthouse
+          if-no-files-found: warn
+
       - name: Upload Pages artifact
         if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v4
