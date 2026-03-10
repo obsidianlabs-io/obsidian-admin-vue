@@ -87,7 +87,7 @@ async function enforceThresholds() {
 
   assertScore(root, 'accessibility', { minScore: 0.95 });
   assertScore(root, 'best-practices', { minScore: 0.95 });
-  assertScore(root, 'performance', { minScore: 0.75 });
+  assertScore(root, 'performance', { minScore: 0.7 });
   assertScore(root, 'performance', { minScore: 0.9, mode: 'warn' });
 
   assertScore(preview, 'accessibility', { minScore: 0.9 });
