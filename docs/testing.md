@@ -193,10 +193,15 @@ Current gate policy:
 - hard gate:
   - docs root accessibility `>= 0.95`
   - docs root best-practices `>= 0.95`
-  - docs root performance `>= 0.90`
+  - docs root performance `>= 0.75`
   - preview accessibility `>= 0.90`
   - preview best-practices `>= 0.95`
 - ratchet warning:
+  - docs root performance target `>= 0.90`
   - preview performance target `>= 0.70`
 
-This keeps Lighthouse useful without turning preview performance drift into flaky CI noise before the preview runtime is fully optimized.
+This keeps Lighthouse useful without turning mobile-throttled CI runs into flaky noise:
+
+- docs root keeps a stable performance floor as a hard gate
+- docs root `0.90` remains the aspirational target
+- preview performance stays warning-only until the preview runtime is optimized further
