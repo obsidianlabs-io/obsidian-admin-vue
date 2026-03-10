@@ -4,7 +4,7 @@ import { useDateFormat, useEventListener, useNow, usePreferredColorScheme } from
 import { defineStore } from 'pinia';
 import { getPaletteColorByNumber } from '@sa/color';
 import { appEvent } from '@/constants/event';
-import { fetchUpdateUserPreferences } from '@/service/api';
+import { fetchUpdateUserPreferences } from '@/service/api/auth';
 import { localStg } from '@/utils/storage';
 import { SetupStoreId } from '@/enum';
 import { useAuthStore } from '../auth';

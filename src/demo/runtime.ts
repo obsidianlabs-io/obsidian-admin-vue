@@ -1,8 +1,8 @@
 import { isDemoRuntime } from '@/utils/runtime';
-import { getDemoBackend, matchesDemoApiUrl, normalizeDemoFetchPath } from './backend';
 
 let demoRuntimeInstalled = false;
 let originalFetch: typeof globalThis.fetch | null = null;
+let demoBackendModulePromise: Promise<typeof import('./backend')> | null = null;
 
 function mergeHeaders(...sources: Array<HeadersInit | undefined>): Headers {
   const headers = new Headers();
@@ -91,24 +91,27 @@ export function installDemoRuntime() {
     return;
   }
 
-  const backend = getDemoBackend();
   originalFetch = globalThis.fetch.bind(globalThis);
 
   globalThis.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
     const url = requestUrlOf(input);
+    const backendModulePromise = demoBackendModulePromise ?? import('./backend');
+    demoBackendModulePromise = backendModulePromise;
+    const backendModule = await backendModulePromise;
 
-    if (!matchesDemoApiUrl(url)) {
+    if (!backendModule.matchesDemoApiUrl(url)) {
       return originalFetch!(input, init);
     }
 
     const requestHeaders = typeof Request !== 'undefined' && input instanceof Request ? input.headers : undefined;
     const headers = mergeHeaders(requestHeaders, init?.headers);
     const body = await readRequestBody(input, init);
+    const backend = backendModule.getDemoBackend();
     const response = await backend.handle({
       method: String(
         init?.method || (typeof Request !== 'undefined' && input instanceof Request ? input.method : 'GET')
       ).toUpperCase(),
-      path: normalizeDemoFetchPath(url.pathname),
+      path: backendModule.normalizeDemoFetchPath(url.pathname),
       query: url.searchParams,
       headers: toHeaderRecord(headers),
       body
@@ -134,4 +137,5 @@ export function uninstallDemoRuntime() {
   globalThis.fetch = originalFetch;
   demoRuntimeInstalled = false;
   originalFetch = null;
+  demoBackendModulePromise = null;
 }

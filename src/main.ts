@@ -1,16 +1,19 @@
 import { createApp } from 'vue';
 import './plugins/assets';
 import { setupVueRootValidator } from 'vite-plugin-vue-transition-root-validator/client';
-import { installDemoRuntime } from './demo/runtime';
 import { setupAppVersionNotification, setupDayjs, setupIconifyOffline, setupLoading, setupNProgress } from './plugins';
 import { setupStore } from './store';
 import { setupRouter } from './router';
 import { getLocale, setLocale, setupI18n } from './locales';
 import { hydrateDefaultLocale, resolvePreferredLocale } from './locales/default-locale';
+import { isDemoRuntime } from './utils/runtime';
 import App from './App.vue';
 
 async function setupApp() {
-  installDemoRuntime();
+  if (isDemoRuntime(import.meta.env)) {
+    const { installDemoRuntime } = await import('./demo/runtime');
+    installDemoRuntime();
+  }
 
   setupLoading();
 

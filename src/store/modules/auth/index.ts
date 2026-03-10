@@ -3,9 +3,8 @@ import { useRoute } from 'vue-router';
 import { defineStore } from 'pinia';
 import { useLoading } from '@sa/hooks';
 import { appEvent } from '@/constants/event';
-import { fetchGetUserInfo, fetchLogin, fetchLogout, fetchUpdateLocale } from '@/service/api';
+import { fetchGetUserInfo, fetchLogin, fetchLogout, fetchUpdateLocale } from '@/service/api/auth';
 import { isValidationErrorPayload } from '@/service/request/shared';
-import { connectRealtime, disconnectRealtime } from '@/service/websocket';
 import { useRouterPush } from '@/hooks/common/router';
 import { localStg } from '@/utils/storage';
 import { createDefaultThemeConfig } from '@/utils/theme-config';
@@ -31,6 +30,15 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
   const { toLogin, redirectFromLogin, routerPushByKey } = useRouterPush(false);
   const { loading: loginLoading, startLoading, endLoading } = useLoading();
   let logoutPromise: Promise<void> | null = null;
+  let websocketModulePromise: Promise<typeof import('@/service/websocket')> | null = null;
+
+  async function resolveWebsocketModule() {
+    if (!websocketModulePromise) {
+      websocketModulePromise = import('@/service/websocket');
+    }
+
+    return websocketModulePromise;
+  }
 
   const token = ref('');
 
@@ -64,7 +72,8 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
   /** Reset auth store */
   async function resetStore() {
     recordUserId();
-    disconnectRealtime();
+    const websocketModule = await resolveWebsocketModule();
+    websocketModule.disconnectRealtime();
 
     clearAuthStorage();
 
@@ -278,7 +287,8 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
       await syncLocale(info.locale || info.preferredLocale);
       window.dispatchEvent(new CustomEvent(appEvent.themeSchemaSync, { detail: { themeSchema: info.themeSchema } }));
       window.dispatchEvent(new CustomEvent(appEvent.themeConfigSync, { detail: { themeConfig: info.themeConfig } }));
-      connectRealtime(token.value);
+      const websocketModule = await resolveWebsocketModule();
+      websocketModule.connectRealtime(token.value);
 
       return true;
     }

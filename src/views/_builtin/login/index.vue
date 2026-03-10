@@ -1,18 +1,19 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, defineAsyncComponent, onMounted, ref } from 'vue';
 import type { Component } from 'vue';
 import { getPaletteColorByNumber } from '@sa/color';
 import { loginModuleRecord } from '@/constants/app';
-import { fetchGetPublicThemeConfig } from '@/service/api';
+import { fetchGetPublicThemeConfig } from '@/service/api/theme';
 import { useAppStore } from '@/store/modules/app';
 import { useThemeStore } from '@/store/modules/theme';
 import { isEnvFlagEnabled } from '@/utils/runtime';
 import { $t } from '@/locales';
-import CodeLogin from './modules/code-login.vue';
 import PwdLogin from './modules/pwd-login.vue';
-import Register from './modules/register.vue';
-import ResetPwd from './modules/reset-pwd.vue';
-import BindWechat from './modules/bind-wechat.vue';
+
+const CodeLogin = defineAsyncComponent(() => import('./modules/code-login.vue'));
+const Register = defineAsyncComponent(() => import('./modules/register.vue'));
+const ResetPwd = defineAsyncComponent(() => import('./modules/reset-pwd.vue'));
+const BindWechat = defineAsyncComponent(() => import('./modules/bind-wechat.vue'));
 
 interface Props {
   /** The login module */

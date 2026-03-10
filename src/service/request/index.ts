@@ -1,10 +1,9 @@
-import type { AxiosResponse } from 'axios';
+import type { AxiosAdapter, AxiosResponse } from 'axios';
 import { BACKEND_ERROR_CODE, createFlatRequest, createRequest } from '@sa/axios';
 import { getToken } from '@/store/modules/auth/shared';
 import { getServiceBaseURL } from '@/utils/service';
 import { isDemoRuntime } from '@/utils/runtime';
 import { $t } from '@/locales';
-import { createDemoAxiosAdapter } from '@/demo/backend';
 import {
   createRequestContextHeaders,
   expiredTokenCodes,
@@ -25,7 +24,22 @@ import type { RequestInstanceState } from './type';
 const runtimeEnv = ((import.meta as ImportMeta & { env?: Partial<Env.ImportMeta> }).env ||
   {}) as Partial<Env.ImportMeta>;
 const demoRuntime = isDemoRuntime(runtimeEnv);
-const demoAxiosAdapter = demoRuntime ? createDemoAxiosAdapter() : undefined;
+let demoAxiosAdapterPromise: Promise<AxiosAdapter> | null = null;
+
+async function resolveDemoAxiosAdapter(): Promise<AxiosAdapter> {
+  if (!demoAxiosAdapterPromise) {
+    demoAxiosAdapterPromise = import('@/demo/backend').then(({ createDemoAxiosAdapter }) => createDemoAxiosAdapter());
+  }
+
+  return demoAxiosAdapterPromise;
+}
+
+const demoAxiosAdapter: AxiosAdapter | undefined = demoRuntime
+  ? async config => {
+      const adapter = await resolveDemoAxiosAdapter();
+      return adapter(config);
+    }
+  : undefined;
 const isHttpProxy = runtimeEnv.DEV === true && runtimeEnv.VITE_HTTP_PROXY === 'Y';
 const { baseURL, otherBaseURL } = getServiceBaseURL(runtimeEnv as Env.ImportMeta, isHttpProxy);
 const apifoxToken = runtimeEnv.DEV ? String(runtimeEnv.VITE_APIFOX_TOKEN || '').trim() : '';

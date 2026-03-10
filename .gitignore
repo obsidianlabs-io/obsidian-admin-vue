@@ -43,4 +43,5 @@ yarn.lock
 docs/.vitepress/cache
 docs/.vitepress/dist
 .pages-dist
+.lighthouseci
 build
