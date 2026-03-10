@@ -175,7 +175,7 @@ pnpm typecheck:api
 pnpm check:ci
 ```
 
-## Lighthouse baseline
+## Lighthouse baseline and gate
 
 Use the public Pages bundle as the Lighthouse target.
 
@@ -187,3 +187,16 @@ pnpm test:lighthouse
 ```
 
 The docs-site workflow uploads the generated filesystem report as `frontend-lighthouse-report`.
+
+Current gate policy:
+
+- hard gate:
+  - docs root accessibility `>= 0.95`
+  - docs root best-practices `>= 0.95`
+  - docs root performance `>= 0.90`
+  - preview accessibility `>= 0.90`
+  - preview best-practices `>= 0.95`
+- ratchet warning:
+  - preview performance target `>= 0.70`
+
+This keeps Lighthouse useful without turning preview performance drift into flaky CI noise before the preview runtime is fully optimized.
