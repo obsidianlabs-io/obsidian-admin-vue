@@ -301,8 +301,16 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
 
       if (redirect || isClear) {
         if (isGuestBootstrapMode()) {
-          const redirectTarget = needRedirect && typeof route.query?.redirect === 'string' ? route.query.redirect : '/';
-          window.location.assign(buildAppHref(redirectTarget));
+          const redirectTarget =
+            needRedirect && typeof route.query?.redirect === 'string' ? route.query.redirect : '/dashboard';
+
+          if (import.meta.env.VITE_ROUTER_HISTORY_MODE === 'hash') {
+            window.location.hash = redirectTarget.startsWith('/') ? redirectTarget : `/${redirectTarget}`;
+            window.location.reload();
+          } else {
+            window.location.assign(buildAppHref(redirectTarget));
+          }
+
           return true;
         }
 
