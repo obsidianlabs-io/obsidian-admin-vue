@@ -7,6 +7,23 @@
 
 ---
 
+## [1.2.0] - 2026-03-12
+
+### ✨ 新增
+- 新增公开文档站、公开预览运行时、前后端真实配对 smoke、视觉基线、无障碍基线与 Lighthouse 预览质量检查。
+- 新增 production bundle、preview bundle、Pages bundle、SBOM 产物与 release pairing 校验等发布物能力。
+- 新增页面脚手架，并补齐更完整的开源治理、支持策略、发布与 demo 规划文档。
+
+### 🔧 调整
+- 将核心与系统类 API facade 统一迁移到 generated SDK adapter 流程，并明确 API-layer contract 约定。
+- 将前端质量门禁收紧为 zero-warning lint、strict typecheck、Vue 组件测试、preview smoke，以及 release 级 docs/preview 校验。
+- 拆分 preview runtime bootstrap、app shell 与 demo backend domain，降低耦合并改善预览运行时可维护性。
+
+### 🐞 修复
+- 修复 preview/runtime 导航、generated typings 漂移、前后端契约对齐，以及多处 CI/release workflow 一致性问题。
+- 统一高价值后台表单的服务端字段错误回填，修复表单验证体验割裂问题。
+- 修复 Pages preview 组装与 visual baseline 不稳定问题，提升公开预览流水线稳定性。
+
 ## [1.1.1] - 2026-03-07
 
 ### ✨ 新增

@@ -7,7 +7,8 @@ This repository is versioned independently from `obsidian-admin-laravel`.
 | Frontend | Backend | Status | Notes |
 | --- | --- | --- | --- |
 | `main` | `main` | Active development | CI assumes both repositories evolve together and regenerates API types from backend OpenAPI artifacts. |
-| `v1.1.1` | `v1.2.0` | Stable | Current documented release pair. |
+| `v1.2.0` | `v1.2.0` | Stable | Current documented release pair. |
+| `v1.1.1` | `v1.2.0` | Stable | Previous stable release pair. |
 
 ## Source of truth
 

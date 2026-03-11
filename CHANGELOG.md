@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.2.0] - 2026-03-12
+
+### ✨ Added
+- Added a public docs site, public preview runtime, full-stack pairing smoke, visual baselines, accessibility baselines, and Lighthouse preview quality checks.
+- Added release artifact publishing for production bundles, preview bundles, Pages bundles, SBOM artifacts, and release-pairing validation.
+- Added developer scaffolding for new page modules and richer open-source governance, support policy, and launch/demo guidance.
+
+### 🔧 Changed
+- Migrated core and system API facades onto the generated SDK adapter flow and documented the API-layer contract model.
+- Tightened frontend quality gates to zero-warning linting, strict typechecking, Vue component tests, preview smoke coverage, and release-grade docs/preview validation.
+- Split preview runtime bootstrap, app shells, and demo backend domains to reduce coupling and improve preview/runtime maintainability.
+
+### 🐞 Fixed
+- Fixed preview/runtime navigation, generated typing drift, contract alignment, and multiple CI/release workflow consistency issues.
+- Fixed form validation UX by standardizing server-side field error handling across high-value admin forms.
+- Fixed Pages preview assembly and visual baseline instability across the public preview pipeline.
+
 ## [1.1.1] - 2026-03-07
 
 ### ✨ Added
