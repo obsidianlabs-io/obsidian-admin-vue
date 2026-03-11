@@ -19,10 +19,6 @@ import {
   ok,
   parseBody
 } from './backend-core';
-import { handleAccessRequest } from './backend-access';
-import { handleAuthRequest } from './backend-auth';
-import { handleSystemRequest } from './backend-system';
-import { handleTenantRequest } from './backend-tenant';
 
 export type {
   AuditLogType,
@@ -74,19 +70,11 @@ export class DemoBackend {
       setTimeout(resolve, 40);
     });
 
-    if (this.requiresSystemSeed(request.path)) {
-      await this.ensureSystemData();
-    }
-
-    if (this.requiresTenantExtensions(request.path)) {
-      await this.ensureTenantExtensionsData();
-    }
-
     const response =
-      handleSystemRequest(this, request) ??
-      handleAuthRequest(this, request) ??
-      handleTenantRequest(this, request) ??
-      handleAccessRequest(this, request);
+      (await this.handleSystem(request)) ??
+      (await this.handleAuth(request)) ??
+      (await this.handleTenant(request)) ??
+      (await this.handleAccess(request));
 
     return response ?? ok({});
   }
@@ -610,8 +598,67 @@ export class DemoBackend {
     });
   }
 
-  private requiresTenantExtensions(path: string): boolean {
-    return path.startsWith('/organization') || path.startsWith('/team') || path.startsWith('/user');
+  private async handleAuth(request: DemoBackendRequest): Promise<DemoBackendResponse | null> {
+    if (!request.path.startsWith('/auth/')) {
+      return null;
+    }
+
+    const { handleAuthRequest } = await import('./backend-auth');
+    return handleAuthRequest(this, request);
+  }
+
+  private async handleTenant(request: DemoBackendRequest): Promise<DemoBackendResponse | null> {
+    if (!this.matchesTenantPath(request.path)) {
+      return null;
+    }
+
+    await this.ensureTenantExtensionsData();
+    const { handleTenantRequest } = await import('./backend-tenant');
+    return handleTenantRequest(this, request);
+  }
+
+  private async handleAccess(request: DemoBackendRequest): Promise<DemoBackendResponse | null> {
+    if (!this.matchesAccessPath(request.path)) {
+      return null;
+    }
+
+    if (request.path.startsWith('/user')) {
+      await this.ensureTenantExtensionsData();
+    }
+
+    const { handleAccessRequest } = await import('./backend-access');
+    return handleAccessRequest(this, request);
+  }
+
+  private async handleSystem(request: DemoBackendRequest): Promise<DemoBackendResponse | null> {
+    if (!this.matchesSystemPath(request.path)) {
+      return null;
+    }
+
+    if (this.requiresSystemSeed(request.path)) {
+      await this.ensureSystemData();
+    }
+
+    const { handleSystemRequest } = await import('./backend-system');
+    return handleSystemRequest(this, request);
+  }
+
+  private matchesTenantPath(path: string): boolean {
+    return path.startsWith('/tenant') || path.startsWith('/organization') || path.startsWith('/team');
+  }
+
+  private matchesAccessPath(path: string): boolean {
+    return path.startsWith('/role') || path.startsWith('/permission') || path.startsWith('/user');
+  }
+
+  private matchesSystemPath(path: string): boolean {
+    return (
+      path.startsWith('/system/') ||
+      path.startsWith('/language') ||
+      path.startsWith('/theme/') ||
+      path.startsWith('/audit/') ||
+      path.startsWith('/health')
+    );
   }
 
   private requiresSystemSeed(path: string): boolean {
