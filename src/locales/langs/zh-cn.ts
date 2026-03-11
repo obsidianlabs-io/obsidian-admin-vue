@@ -5,6 +5,7 @@ import themeSection from './modules/zh-cn/theme';
 import routeSection from './modules/zh-cn/route';
 import menuSection from './modules/zh-cn/menu';
 import pageSection from './modules/zh-cn/page';
+import pageLoginSection from './modules/zh-cn/page-login';
 import formSection from './modules/zh-cn/form';
 import dropdownSection from './modules/zh-cn/dropdown';
 import iconSection from './modules/zh-cn/icon';
@@ -17,7 +18,10 @@ const local: App.I18n.Schema = {
   theme: themeSection,
   route: routeSection,
   menu: menuSection,
-  page: pageSection,
+  page: {
+    login: pageLoginSection,
+    ...pageSection
+  },
   form: formSection,
   dropdown: dropdownSection,
   icon: iconSection,

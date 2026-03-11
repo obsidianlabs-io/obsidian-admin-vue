@@ -4,7 +4,7 @@ import { localStg } from '@/utils/storage';
 import { getServiceBaseURL } from '@/utils/service';
 import { isDemoRuntime } from '@/utils/runtime';
 import { resolvePreferredLocale } from './default-locale';
-import messages from './locale';
+import guestMessages from './guest-locale';
 
 type RuntimeLocaleCache = Partial<
   Record<
@@ -19,10 +19,12 @@ type RuntimeLocaleCache = Partial<
 const runtimeLocaleCacheKey = 'runtimeLocaleCache';
 const successCode = import.meta.env.VITE_SERVICE_SUCCESS_CODE;
 const demoRuntime = isDemoRuntime(import.meta.env);
+let baseMessages = guestMessages;
+let fullMessagesPromise: Promise<void> | null = null;
 const i18n = createI18n({
   locale: resolvePreferredLocale(),
   fallbackLocale: 'en-US',
-  messages,
+  messages: baseMessages,
   legacy: false
 });
 
@@ -35,7 +37,7 @@ function setRuntimeLocaleCache(cache: RuntimeLocaleCache) {
 }
 
 function cloneBaseMessages(locale: App.I18n.LangType): App.I18n.Schema {
-  return JSON.parse(JSON.stringify(messages[locale])) as App.I18n.Schema;
+  return JSON.parse(JSON.stringify(baseMessages[locale])) as App.I18n.Schema;
 }
 
 function setNestedMessage(target: Record<string, unknown>, path: string, value: string) {
@@ -114,12 +116,30 @@ async function fetchRuntimeLocaleMessages(
   }
 }
 
+export async function ensureAdminLocaleMessages() {
+  if (!fullMessagesPromise) {
+    fullMessagesPromise = import('./locale').then(({ default: fullMessages }) => {
+      baseMessages = fullMessages;
+
+      (Object.keys(fullMessages) as App.I18n.LangType[]).forEach(locale => {
+        i18n.global.setLocaleMessage(locale, fullMessages[locale]);
+      });
+    });
+  }
+
+  await fullMessagesPromise;
+}
+
 /**
  * Setup plugin i18n
  *
  * @param app
  */
-export async function setupI18n(app: App) {
+export async function setupI18n(app: App, options: { loadFullMessages?: boolean } = {}) {
+  if (options.loadFullMessages) {
+    await ensureAdminLocaleMessages();
+  }
+
   await loadRuntimeLocaleMessages(getLocale());
   app.use(i18n);
 }

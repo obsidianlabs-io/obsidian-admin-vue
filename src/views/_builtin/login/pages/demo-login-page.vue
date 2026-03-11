@@ -3,12 +3,12 @@ import { computed, defineAsyncComponent, ref } from 'vue';
 import type { Component } from 'vue';
 import { loginModuleRecord } from '@/constants/app';
 import { $t } from '@/locales';
+import PwdLogin from '../modules/pwd-login.vue';
 
 defineOptions({
   name: 'DemoLoginPage'
 });
 
-const PwdLogin = defineAsyncComponent(() => import('../modules/pwd-login.vue'));
 const Register = defineAsyncComponent(() => import('../modules/register.vue'));
 const ResetPwd = defineAsyncComponent(() => import('../modules/reset-pwd.vue'));
 
