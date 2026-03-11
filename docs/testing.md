@@ -187,21 +187,22 @@ pnpm test:lighthouse
 ```
 
 The docs-site workflow uploads the generated filesystem report as `frontend-lighthouse-report`.
+Representative scores are computed from the median of three runs per URL to reduce shared-runner noise.
 
 Current gate policy:
 
 - hard gate:
   - docs root accessibility `>= 0.95`
   - docs root best-practices `>= 0.95`
-  - docs root performance `>= 0.75`
   - preview accessibility `>= 0.90`
   - preview best-practices `>= 0.95`
 - ratchet warning:
+  - docs root performance floor `>= 0.70`
   - docs root performance target `>= 0.90`
   - preview performance target `>= 0.70`
 
 This keeps Lighthouse useful without turning mobile-throttled CI runs into flaky noise:
 
-- docs root keeps a stable performance floor as a hard gate
+- docs root performance remains tracked, but shared-runner variance no longer blocks otherwise healthy releases
 - docs root `0.90` remains the aspirational target
 - preview performance stays warning-only until the preview runtime is optimized further
