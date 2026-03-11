@@ -65,10 +65,22 @@ export class DemoBackend {
 
   public readonly defaultTimezoneOptions = defaultTimezoneOptions;
 
+  private tenantExtensionsLoaded = false;
+
+  private systemDataLoaded = false;
+
   public async handle(request: DemoBackendRequest): Promise<DemoBackendResponse> {
     await new Promise<void>(resolve => {
       setTimeout(resolve, 40);
     });
+
+    if (this.requiresSystemSeed(request.path)) {
+      await this.ensureSystemData();
+    }
+
+    if (this.requiresTenantExtensions(request.path)) {
+      await this.ensureTenantExtensionsData();
+    }
 
     const response =
       handleSystemRequest(this, request) ??
@@ -77,6 +89,41 @@ export class DemoBackend {
       handleAccessRequest(this, request);
 
     return response ?? ok({});
+  }
+
+  public async ensureTenantExtensionsData(): Promise<void> {
+    if (this.tenantExtensionsLoaded || this.state.organizations.length > 0 || this.state.teams.length > 0) {
+      this.tenantExtensionsLoaded = true;
+      return;
+    }
+
+    const { createInitialTenantExtensions } = await import('./backend-tenant-seed');
+    const { organizations, teams } = createInitialTenantExtensions();
+    this.state.organizations = organizations;
+    this.state.teams = teams;
+    this.tenantExtensionsLoaded = true;
+  }
+
+  public async ensureSystemData(): Promise<void> {
+    if (
+      this.systemDataLoaded ||
+      this.state.languages.length > 0 ||
+      this.state.featureFlags.length > 0 ||
+      this.state.auditPolicies.length > 0 ||
+      this.state.auditPolicyHistory.length > 0
+    ) {
+      this.systemDataLoaded = true;
+      return;
+    }
+
+    const { createInitialSystemState } = await import('./backend-system-seed');
+    const systemState = createInitialSystemState();
+    this.state.languages = systemState.languages;
+    this.state.featureFlags = systemState.featureFlags;
+    this.state.auditPolicies = systemState.auditPolicies;
+    this.state.auditPolicyHistory = systemState.auditPolicyHistory;
+    this.state.languageVersion = systemState.languageVersion;
+    this.systemDataLoaded = true;
   }
 
   public parseId(path: string): number {
@@ -561,6 +608,20 @@ export class DemoBackend {
       oldValues,
       newValues
     });
+  }
+
+  private requiresTenantExtensions(path: string): boolean {
+    return path.startsWith('/organization') || path.startsWith('/team') || path.startsWith('/user');
+  }
+
+  private requiresSystemSeed(path: string): boolean {
+    return (
+      path.startsWith('/language') ||
+      path.startsWith('/audit') ||
+      path === '/theme/config' ||
+      path === '/theme/public-config' ||
+      path.startsWith('/system/feature-flags')
+    );
   }
 }
 

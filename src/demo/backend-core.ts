@@ -417,56 +417,6 @@ export function createInitialState(): DemoState {
       updateTime: createdAt
     }
   ];
-  const organizations: DemoOrganizationRecord[] = [
-    {
-      id: 1,
-      tenantId: 1,
-      organizationCode: 'ORG_MAIN_HQ',
-      organizationName: 'Main HQ',
-      description: 'Primary operating organization',
-      status: '1',
-      sort: 10,
-      createTime: createdAt,
-      updateTime: createdAt
-    },
-    {
-      id: 2,
-      tenantId: 2,
-      organizationCode: 'ORG_BRANCH_OPS',
-      organizationName: 'Branch Operations',
-      description: 'Branch operating organization',
-      status: '1',
-      sort: 10,
-      createTime: createdAt,
-      updateTime: createdAt
-    }
-  ];
-  const teams: DemoTeamRecord[] = [
-    {
-      id: 1,
-      tenantId: 1,
-      organizationId: 1,
-      teamCode: 'TEAM_MAIN_PLATFORM',
-      teamName: 'Main Platform Team',
-      description: 'Platform delivery team',
-      status: '1',
-      sort: 10,
-      createTime: createdAt,
-      updateTime: createdAt
-    },
-    {
-      id: 2,
-      tenantId: 2,
-      organizationId: 2,
-      teamCode: 'TEAM_BRANCH_SUPPORT',
-      teamName: 'Branch Support Team',
-      description: 'Support operations team',
-      status: '1',
-      sort: 10,
-      createTime: createdAt,
-      updateTime: createdAt
-    }
-  ];
   const permissions: DemoPermissionRecord[] = allPermissionCodes.map((permissionCode, index) => ({
     id: index + 1,
     permissionCode,
@@ -626,6 +576,135 @@ export function createInitialState(): DemoState {
       updateTime: createdAt
     }
   ];
+  const auditLogs: DemoAuditLogRecord[] = [
+    {
+      id: 1,
+      action: 'auth.login',
+      logType: 'login',
+      userName: 'Super',
+      tenantId: '',
+      tenantName: 'Platform',
+      auditableType: 'user',
+      auditableId: '1',
+      target: 'Super',
+      oldValues: {},
+      newValues: {},
+      ipAddress: '127.0.0.1',
+      userAgent: 'Demo Runtime',
+      requestId: 'demo-login-1',
+      createTime: createdAt
+    }
+  ];
+  const sessions: Record<number, DemoSessionRecord[]> = Object.fromEntries(
+    users.map(user => {
+      const sessionId = `demo-session-${user.id}`;
+      return [
+        user.id,
+        [
+          {
+            sessionId,
+            current: true,
+            legacy: false,
+            rememberMe: true,
+            hasAccessToken: true,
+            hasRefreshToken: true,
+            tokenCount: 2,
+            deviceAlias: 'Demo Browser',
+            deviceName: 'Browser Preview',
+            browser: 'Chromium',
+            os: 'Web',
+            deviceType: 'desktop',
+            ipAddress: '127.0.0.1',
+            createdAt,
+            lastUsedAt: createdAt,
+            lastAccessUsedAt: createdAt,
+            lastRefreshUsedAt: createdAt,
+            accessTokenExpiresAt: addMinutes(createdAt, 60),
+            refreshTokenExpiresAt: addMinutes(createdAt, 60 * 24 * 7)
+          }
+        ]
+      ];
+    })
+  );
+
+  return {
+    tenants,
+    organizations: [],
+    teams: [],
+    permissions,
+    roles,
+    users,
+    languages: [],
+    featureFlags: [],
+    auditPolicies: [],
+    auditPolicyHistory: [],
+    auditLogs,
+    sessions,
+    themeConfig: { ...defaultThemeConfig },
+    revisionCounter: 1,
+    auditLogCounter: auditLogs.length,
+    languageVersion: 0
+  };
+}
+
+export function createInitialTenantExtensions(createdAt = nowString()): Pick<DemoState, 'organizations' | 'teams'> {
+  const organizations: DemoOrganizationRecord[] = [
+    {
+      id: 1,
+      tenantId: 1,
+      organizationCode: 'ORG_MAIN_HQ',
+      organizationName: 'Main HQ',
+      description: 'Primary operating organization',
+      status: '1',
+      sort: 10,
+      createTime: createdAt,
+      updateTime: createdAt
+    },
+    {
+      id: 2,
+      tenantId: 2,
+      organizationCode: 'ORG_BRANCH_OPS',
+      organizationName: 'Branch Operations',
+      description: 'Branch operating organization',
+      status: '1',
+      sort: 10,
+      createTime: createdAt,
+      updateTime: createdAt
+    }
+  ];
+  const teams: DemoTeamRecord[] = [
+    {
+      id: 1,
+      tenantId: 1,
+      organizationId: 1,
+      teamCode: 'TEAM_MAIN_PLATFORM',
+      teamName: 'Main Platform Team',
+      description: 'Platform delivery team',
+      status: '1',
+      sort: 10,
+      createTime: createdAt,
+      updateTime: createdAt
+    },
+    {
+      id: 2,
+      tenantId: 2,
+      organizationId: 2,
+      teamCode: 'TEAM_BRANCH_SUPPORT',
+      teamName: 'Branch Support Team',
+      description: 'Support operations team',
+      status: '1',
+      sort: 10,
+      createTime: createdAt,
+      updateTime: createdAt
+    }
+  ];
+
+  return { organizations, teams };
+}
+
+export function createInitialSystemState(
+  createdAt = nowString()
+): Pick<DemoState, 'languages' | 'featureFlags' | 'auditPolicies' | 'auditPolicyHistory' | 'languageVersion'> {
   const languages: DemoLanguageRecord[] = [
     {
       id: 1,
@@ -714,73 +793,12 @@ export function createInitialState(): DemoState {
       createdAt
     }
   ];
-  const auditLogs: DemoAuditLogRecord[] = [
-    {
-      id: 1,
-      action: 'auth.login',
-      logType: 'login',
-      userName: 'Super',
-      tenantId: '',
-      tenantName: 'Platform',
-      auditableType: 'user',
-      auditableId: '1',
-      target: 'Super',
-      oldValues: {},
-      newValues: {},
-      ipAddress: '127.0.0.1',
-      userAgent: 'Demo Runtime',
-      requestId: 'demo-login-1',
-      createTime: createdAt
-    }
-  ];
-  const sessions: Record<number, DemoSessionRecord[]> = Object.fromEntries(
-    users.map(user => {
-      const sessionId = `demo-session-${user.id}`;
-      return [
-        user.id,
-        [
-          {
-            sessionId,
-            current: true,
-            legacy: false,
-            rememberMe: true,
-            hasAccessToken: true,
-            hasRefreshToken: true,
-            tokenCount: 2,
-            deviceAlias: 'Demo Browser',
-            deviceName: 'Browser Preview',
-            browser: 'Chromium',
-            os: 'Web',
-            deviceType: 'desktop',
-            ipAddress: '127.0.0.1',
-            createdAt,
-            lastUsedAt: createdAt,
-            lastAccessUsedAt: createdAt,
-            lastRefreshUsedAt: createdAt,
-            accessTokenExpiresAt: addMinutes(createdAt, 60),
-            refreshTokenExpiresAt: addMinutes(createdAt, 60 * 24 * 7)
-          }
-        ]
-      ];
-    })
-  );
 
   return {
-    tenants,
-    organizations,
-    teams,
-    permissions,
-    roles,
-    users,
     languages,
     featureFlags,
     auditPolicies,
     auditPolicyHistory,
-    auditLogs,
-    sessions,
-    themeConfig: { ...defaultThemeConfig },
-    revisionCounter: 1,
-    auditLogCounter: auditLogs.length,
     languageVersion: 1
   };
 }
