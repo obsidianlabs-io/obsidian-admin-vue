@@ -1,46 +1,36 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent } from 'vue';
 import { useRoute } from 'vue-router';
-import { NConfigProvider, darkTheme } from 'naive-ui';
-import { useAppStore } from './store/modules/app';
-import { useThemeStore } from './store/modules/theme';
-import { naiveDateLocales, naiveLocales } from './locales/naive';
+import { isDemoRuntime } from '@/utils/runtime';
+import DemoGuestShell from './app-shells/demo-guest-shell.vue';
 
 defineOptions({
   name: 'App'
 });
 
-const appStore = useAppStore();
-const themeStore = useThemeStore();
 const route = useRoute();
-const AppWatermark = defineAsyncComponent(() => import('./components/common/app-watermark.vue'));
+const demoRuntime = isDemoRuntime(import.meta.env);
+const guestRouteNames = new Set(['login', '403', '404', '500']);
 
-const naiveDarkTheme = computed(() => (themeStore.darkMode ? darkTheme : undefined));
+const ManagedGuestShell = defineAsyncComponent(() => import('./app-shells/managed-guest-shell.vue'));
+const AdminAppShell = defineAsyncComponent(() => import('./app-shells/admin-app-shell.vue'));
 
-const naiveLocale = computed(() => {
-  return naiveLocales[appStore.locale];
+const activeShell = computed(() => {
+  const routeName = String(route.name || '');
+  const isGuestRoute = guestRouteNames.has(routeName);
+
+  if (isGuestRoute && demoRuntime) {
+    return DemoGuestShell;
+  }
+
+  if (isGuestRoute) {
+    return ManagedGuestShell;
+  }
+
+  return AdminAppShell;
 });
-
-const naiveDateLocale = computed(() => {
-  return naiveDateLocales[appStore.locale];
-});
-
-const showWatermark = computed(() => route.name !== 'login' && themeStore.watermark.visible);
 </script>
 
 <template>
-  <NConfigProvider
-    :theme="naiveDarkTheme"
-    :theme-overrides="themeStore.naiveTheme"
-    :locale="naiveLocale"
-    :date-locale="naiveDateLocale"
-    class="h-full"
-  >
-    <AppProvider>
-      <RouterView class="bg-layout" />
-      <AppWatermark v-if="showWatermark" />
-    </AppProvider>
-  </NConfigProvider>
+  <component :is="activeShell" />
 </template>
-
-<style scoped></style>
