@@ -4,7 +4,9 @@ import type { Page } from '@playwright/test';
 async function loginIntoDemoDashboard(page: Page) {
   await page.goto('./');
 
-  await expect(page.getByText(/Preview mode is running against the built-in demo backend\./)).toBeVisible();
+  await expect(
+    page.getByRole('alert').getByText(/Preview mode is running against the built-in demo backend\./)
+  ).toBeVisible();
 
   await page.getByRole('button', { name: /Confirm|确定/ }).click();
 

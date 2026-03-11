@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import GlobalContent from '../modules/global-content/index.vue';
-
 defineOptions({
   name: 'BlankLayout'
 });
 </script>
 
 <template>
-  <GlobalContent :show-padding="false" />
+  <RouterView v-slot="{ Component, route }">
+    <component :is="Component" :key="route.fullPath" class="min-h-screen bg-layout" />
+  </RouterView>
 </template>
 
 <style scoped></style>

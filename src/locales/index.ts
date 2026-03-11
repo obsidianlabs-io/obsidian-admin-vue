@@ -2,6 +2,7 @@ import type { App } from 'vue';
 import { createI18n } from 'vue-i18n';
 import { localStg } from '@/utils/storage';
 import { getServiceBaseURL } from '@/utils/service';
+import { isDemoRuntime } from '@/utils/runtime';
 import { resolvePreferredLocale } from './default-locale';
 import messages from './locale';
 
@@ -17,6 +18,7 @@ type RuntimeLocaleCache = Partial<
 
 const runtimeLocaleCacheKey = 'runtimeLocaleCache';
 const successCode = import.meta.env.VITE_SERVICE_SUCCESS_CODE;
+const demoRuntime = isDemoRuntime(import.meta.env);
 const i18n = createI18n({
   locale: resolvePreferredLocale(),
   fallbackLocale: 'en-US',
@@ -78,6 +80,10 @@ async function fetchRuntimeLocaleMessages(
   locale: App.I18n.LangType,
   version?: string
 ): Promise<Api.Language.RuntimeMessagesPayload | null> {
+  if (demoRuntime) {
+    return null;
+  }
+
   try {
     const query = new URLSearchParams();
     query.set('locale', locale);

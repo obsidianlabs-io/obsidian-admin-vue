@@ -57,31 +57,15 @@ export default defineConfig(configEnv => {
               return undefined;
             }
 
-            if (/\/node_modules\/(naive-ui)\//.test(normalizedId)) {
-              return 'vendor-naive';
-            }
-
             if (/\/node_modules\/(echarts|zrender)\//.test(normalizedId)) {
               return 'vendor-echarts';
-            }
-
-            if (/\/node_modules\/(vue|vue-router|pinia)\//.test(normalizedId)) {
-              return 'vendor-vue-core';
-            }
-
-            if (/\/node_modules\/(@vueuse\/core|vue-i18n|@intlify)\//.test(normalizedId)) {
-              return 'vendor-vue-ecosystem';
             }
 
             if (/\/node_modules\/(laravel-echo|pusher-js)\//.test(normalizedId)) {
               return 'vendor-realtime';
             }
 
-            if (/\/node_modules\/(axios|dayjs|defu|json5)\//.test(normalizedId)) {
-              return 'vendor-http-utils';
-            }
-
-            return 'vendor';
+            return undefined;
           }
         }
       }

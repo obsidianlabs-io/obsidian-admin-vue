@@ -1,13 +1,12 @@
-import { computed, effectScope, onScopeDispose, ref, toRefs, watch } from 'vue';
+import { computed, effectScope, onScopeDispose, ref, shallowRef, toRefs, watch } from 'vue';
 import type { Ref } from 'vue';
 import { useDateFormat, useEventListener, useNow, usePreferredColorScheme } from '@vueuse/core';
 import { defineStore } from 'pinia';
 import { getPaletteColorByNumber } from '@sa/color';
 import { appEvent } from '@/constants/event';
-import { fetchUpdateUserPreferences } from '@/service/api/auth';
 import { localStg } from '@/utils/storage';
 import { SetupStoreId } from '@/enum';
-import { useAuthStore } from '../auth';
+import type { useAuthStore } from '../auth';
 import { getToken } from '../auth/shared';
 import { isThemeScheme } from './remote-utils';
 import {
@@ -27,7 +26,9 @@ import {
 export const useThemeStore = defineStore(SetupStoreId.Theme, () => {
   const scope = effectScope();
   const osTheme = usePreferredColorScheme();
-  const authStore = useAuthStore();
+  const authStoreRef = shallowRef<ReturnType<typeof useAuthStore> | null>(null);
+  const authApiModuleRef = shallowRef<typeof import('@/service/api/auth') | null>(null);
+  const authUserName = ref('');
 
   /** Theme settings */
   const settings: Ref<App.Theme.ThemeSetting> = ref(initThemeSettings());
@@ -86,7 +87,7 @@ export const useThemeStore = defineStore(SetupStoreId.Theme, () => {
   /** Watermark content */
   const watermarkContent = computed(() => {
     const { watermark } = settings.value;
-    const userName = authStore.userInfo?.userName;
+    const userName = authUserName.value;
 
     if (watermark.enableUserName && userName) {
       return userName;
@@ -104,6 +105,30 @@ export const useThemeStore = defineStore(SetupStoreId.Theme, () => {
     const themeStore = useThemeStore();
 
     themeStore.$reset();
+  }
+
+  function syncAuthUserName(userName?: string | null) {
+    authUserName.value = userName ?? '';
+  }
+
+  async function resolveAuthStore() {
+    if (!authStoreRef.value) {
+      const { useAuthStore: useResolvedAuthStore } = await import('../auth');
+      authStoreRef.value = useResolvedAuthStore();
+      syncAuthUserName(authStoreRef.value.userInfo?.userName);
+      applyRemoteThemeSchema(authStoreRef.value.userInfo?.themeSchema);
+      applyRemoteThemeConfig(authStoreRef.value.userInfo?.themeConfig);
+    }
+
+    return authStoreRef.value;
+  }
+
+  async function resolveAuthApiModule() {
+    if (!authApiModuleRef.value) {
+      authApiModuleRef.value = await import('@/service/api/auth');
+    }
+
+    return authApiModuleRef.value;
   }
 
   function applyRemoteThemeSchema(themeSchema?: UnionKey.ThemeScheme | null) {
@@ -282,21 +307,14 @@ export const useThemeStore = defineStore(SetupStoreId.Theme, () => {
       applyRemoteThemeConfig(customEvent.detail?.themeConfig);
     });
 
-    watch(
-      () => authStore.userInfo?.themeSchema,
-      themeSchema => {
-        applyRemoteThemeSchema(themeSchema);
-      },
-      { immediate: true }
-    );
+    useEventListener(window, appEvent.authUserNameSync, event => {
+      const customEvent = event as CustomEvent<{ userName?: string | null }>;
+      syncAuthUserName(customEvent.detail?.userName);
+    });
 
-    watch(
-      () => authStore.userInfo?.themeConfig,
-      themeConfig => {
-        applyRemoteThemeConfig(themeConfig);
-      },
-      { immediate: true, deep: true }
-    );
+    if (getToken()) {
+      resolveAuthStore().catch(() => {});
+    }
 
     // watch dark mode
     watch(
@@ -351,11 +369,14 @@ export const useThemeStore = defineStore(SetupStoreId.Theme, () => {
         }
 
         themeSchemaSyncTimer = setTimeout(() => {
-          fetchUpdateUserPreferences({ themeSchema: themeScheme })
-            .then(({ error }) => {
+          resolveAuthApiModule()
+            .then(({ fetchUpdateUserPreferences }) => fetchUpdateUserPreferences({ themeSchema: themeScheme }))
+            .then(async ({ error }) => {
               if (!error) {
                 lastSyncedThemeScheme.value = themeScheme;
-                if (authStore.userInfo) {
+                const authStore = await resolveAuthStore().catch(() => null);
+
+                if (authStore?.userInfo) {
                   authStore.userInfo.themeSchema = themeScheme;
                 }
               }

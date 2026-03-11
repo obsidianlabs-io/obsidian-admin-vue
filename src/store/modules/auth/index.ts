@@ -32,6 +32,10 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
   let logoutPromise: Promise<void> | null = null;
   let websocketModulePromise: Promise<typeof import('@/service/websocket')> | null = null;
 
+  function dispatchAuthUserNameSync(userName?: string | null) {
+    window.dispatchEvent(new CustomEvent(appEvent.authUserNameSync, { detail: { userName: userName ?? '' } }));
+  }
+
   async function resolveWebsocketModule() {
     if (!websocketModulePromise) {
       websocketModulePromise = import('@/service/websocket');
@@ -78,6 +82,7 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
     clearAuthStorage();
 
     authStore.$reset();
+    dispatchAuthUserNameSync('');
 
     if (!route.meta.constant) {
       await toLogin();
@@ -285,6 +290,7 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
       Object.assign(userInfo, info);
       setCurrentTenantId(info.currentTenantId || '');
       await syncLocale(info.locale || info.preferredLocale);
+      dispatchAuthUserNameSync(info.userName);
       window.dispatchEvent(new CustomEvent(appEvent.themeSchemaSync, { detail: { themeSchema: info.themeSchema } }));
       window.dispatchEvent(new CustomEvent(appEvent.themeConfigSync, { detail: { themeConfig: info.themeConfig } }));
       const websocketModule = await resolveWebsocketModule();

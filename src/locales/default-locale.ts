@@ -1,5 +1,6 @@
 import { localStg } from '@/utils/storage';
 import { getServiceBaseURL } from '@/utils/service';
+import { isDemoRuntime } from '@/utils/runtime';
 
 const FALLBACK_DEFAULT_LOCALE: App.I18n.LangType = 'en-US';
 
@@ -65,6 +66,11 @@ export async function hydrateDefaultLocale() {
   }
 
   hydrated = true;
+
+  if (isDemoRuntime(import.meta.env)) {
+    ensureStoredLocale();
+    return;
+  }
 
   try {
     const response = await fetch(`${resolveServiceBaseUrl()}/system/bootstrap`, {

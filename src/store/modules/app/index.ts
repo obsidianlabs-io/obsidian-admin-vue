@@ -1,25 +1,21 @@
-import { effectScope, nextTick, onScopeDispose, ref, watch } from 'vue';
+import { effectScope, nextTick, onScopeDispose, ref, shallowRef, watch } from 'vue';
 import { breakpointsTailwind, useBreakpoints, useEventListener, useTitle } from '@vueuse/core';
 import { defineStore } from 'pinia';
 import { useBoolean } from '@sa/hooks';
 import { appEvent } from '@/constants/event';
 import { router } from '@/router';
-import { fetchUpdateLocale } from '@/service/api/auth';
-import { fetchGetRuntimeLocales } from '@/service/api/language';
 import { localStg } from '@/utils/storage';
+import { isDemoRuntime } from '@/utils/runtime';
 import { SetupStoreId } from '@/enum';
 import { $t, loadRuntimeLocaleMessages, setLocale } from '@/locales';
 import { setDayjsLocale } from '@/locales/dayjs';
 import { resolvePreferredLocale } from '@/locales/default-locale';
 import { getToken } from '../auth/shared';
-import { useRouteStore } from '../route';
-import { useTabStore } from '../tab';
 import { useThemeStore } from '../theme';
 
 export const useAppStore = defineStore(SetupStoreId.App, () => {
+  const demoRuntime = isDemoRuntime(import.meta.env);
   const themeStore = useThemeStore();
-  const routeStore = useRouteStore();
-  const tabStore = useTabStore();
   const scope = effectScope();
   const breakpoints = useBreakpoints(breakpointsTailwind);
   const { bool: themeDrawerVisible, setTrue: openThemeDrawer, setFalse: closeThemeDrawer } = useBoolean();
@@ -51,11 +47,55 @@ export const useAppStore = defineStore(SetupStoreId.App, () => {
     });
 
     setReloadFlag(true);
+
+    const routeStore = await resolveRouteStore();
     routeStore.resetRouteCache();
   }
 
   const locale = ref<App.I18n.LangType>(resolvePreferredLocale());
   const localeOptions = ref<App.I18n.LangOption[]>([]);
+  const routeStoreRef = shallowRef<ReturnType<(typeof import('../route'))['useRouteStore']> | null>(null);
+  const tabStoreRef = shallowRef<ReturnType<(typeof import('../tab'))['useTabStore']> | null>(null);
+  const authApiModuleRef = shallowRef<typeof import('@/service/api/auth') | null>(null);
+  const languageApiModuleRef = shallowRef<typeof import('@/service/api/language') | null>(null);
+  const demoLocaleOptions: App.I18n.LangOption[] = [
+    { key: 'en-US', label: 'English (en-US)' },
+    { key: 'zh-CN', label: '简体中文 (zh-CN)' }
+  ];
+
+  async function resolveRouteStore() {
+    if (!routeStoreRef.value) {
+      const { useRouteStore } = await import('../route');
+      routeStoreRef.value = useRouteStore();
+    }
+
+    return routeStoreRef.value;
+  }
+
+  async function resolveTabStore() {
+    if (!tabStoreRef.value) {
+      const { useTabStore } = await import('../tab');
+      tabStoreRef.value = useTabStore();
+    }
+
+    return tabStoreRef.value;
+  }
+
+  async function resolveAuthApiModule() {
+    if (!authApiModuleRef.value) {
+      authApiModuleRef.value = await import('@/service/api/auth');
+    }
+
+    return authApiModuleRef.value;
+  }
+
+  async function resolveLanguageApiModule() {
+    if (!languageApiModuleRef.value) {
+      languageApiModuleRef.value = await import('@/service/api/language');
+    }
+
+    return languageApiModuleRef.value;
+  }
 
   function ensureCurrentLocaleOption() {
     if (!localeOptions.value.some(option => option.key === locale.value)) {
@@ -64,6 +104,13 @@ export const useAppStore = defineStore(SetupStoreId.App, () => {
   }
 
   async function refreshLocaleOptions() {
+    if (demoRuntime) {
+      localeOptions.value = demoLocaleOptions;
+      ensureCurrentLocaleOption();
+      return;
+    }
+
+    const { fetchGetRuntimeLocales } = await resolveLanguageApiModule();
     const { data, error } = await fetchGetRuntimeLocales();
 
     if (error) {
@@ -102,6 +149,7 @@ export const useAppStore = defineStore(SetupStoreId.App, () => {
 
     if (syncProfile && getToken()) {
       try {
+        const { fetchUpdateLocale } = await resolveAuthApiModule();
         await fetchUpdateLocale(lang);
       } catch {
         // Keep locale switching responsive even when profile sync fails.
@@ -169,14 +217,17 @@ export const useAppStore = defineStore(SetupStoreId.App, () => {
       // update document title by locale
       updateDocumentTitleByLocale();
 
-      // update global menus by locale
-      routeStore.updateGlobalMenusByLocale();
-
-      // update tabs by locale
-      tabStore.updateTabsByLocale();
-
       // set dayjs locale
       setDayjsLocale(locale.value);
+
+      if (!getToken()) {
+        return;
+      }
+
+      Promise.all([resolveRouteStore(), resolveTabStore()]).then(([routeStore, tabStore]) => {
+        routeStore.updateGlobalMenusByLocale();
+        tabStore.updateTabsByLocale();
+      });
     });
 
     useEventListener(window, appEvent.localeSync, event => {
