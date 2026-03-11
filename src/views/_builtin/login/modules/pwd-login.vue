@@ -167,7 +167,9 @@ function handleBack() {
         </NAlert>
 
         <div class="flex-y-center" :class="demoRuntime ? 'justify-start' : 'justify-between'">
-          <NCheckbox v-model:checked="model.rememberMe">{{ $t('page.login.pwdLogin.rememberMe') }}</NCheckbox>
+          <NCheckbox v-model:checked="model.rememberMe" class="login-meta-checkbox">
+            {{ $t('page.login.pwdLogin.rememberMe') }}
+          </NCheckbox>
           <NSpace v-if="!demoRuntime" :size="4">
             <NButton text type="primary" @click="toggleLoginModule('reset-pwd')">
               {{ $t('page.login.pwdLogin.forgetPassword') }}
@@ -182,7 +184,9 @@ function handleBack() {
           {{ $t('common.confirm') }}
         </NButton>
 
-        <NDivider class="text-14px text-#666 !m-0">{{ $t('page.login.pwdLogin.otherAccountLogin') }}</NDivider>
+        <NDivider class="login-meta-divider !m-0">
+          {{ $t('page.login.pwdLogin.otherAccountLogin') }}
+        </NDivider>
         <div class="flex-center flex-wrap gap-12px">
           <NButton v-for="item in accounts" :key="item.key" type="primary" @click="handleAccountLogin(item)">
             {{ item.label }}
@@ -204,4 +208,13 @@ function handleBack() {
   </NForm>
 </template>
 
-<style scoped></style>
+<style scoped>
+.login-meta-checkbox {
+  --n-text-color: #475569;
+}
+
+.login-meta-divider {
+  --n-text-color: #64748b;
+  font-size: 14px;
+}
+</style>

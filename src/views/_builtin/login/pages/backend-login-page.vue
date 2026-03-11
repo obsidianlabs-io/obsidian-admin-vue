@@ -120,7 +120,7 @@ onMounted(async () => {
           </div>
         </header>
         <main class="pt-24px">
-          <h3 class="text-18px text-primary font-medium">{{ $t(displayTitle) }}</h3>
+          <h3 class="text-18px text-[#1e3a8a] font-medium">{{ $t(displayTitle) }}</h3>
           <div class="pt-24px">
             <Transition :name="themeStore.page.animateMode" mode="out-in" appear>
               <component :is="activeModule.component" @update:title="handleUpdateTitle" />

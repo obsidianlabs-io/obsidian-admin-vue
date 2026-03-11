@@ -19,9 +19,10 @@ export default defineConfig({
     video: 'retain-on-failure'
   },
   webServer: {
-    command: 'node scripts/serve-pages-preview.mjs --root .pages-dist --base /obsidian-admin-vue --port 4174',
+    command:
+      'pnpm pages:prepare-preview && node scripts/serve-pages-preview.mjs --root .pages-dist --base /obsidian-admin-vue --port 4174',
     url: 'http://127.0.0.1:4174/obsidian-admin-vue/preview/',
-    timeout: 30_000,
+    timeout: 120_000,
     reuseExistingServer: !process.env.CI
   }
 });

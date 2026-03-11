@@ -28,6 +28,41 @@ async function loginIntoDemoDashboard(page: Page) {
 
   await page.getByRole('button', { name: /Confirm|确定/ }).click();
   await expect(page).toHaveURL(/#\/dashboard$/);
+  await expect(page.getByText(/Dashboard|仪表盘/).first()).toBeVisible();
+  await page.waitForLoadState('networkidle');
+}
+
+async function waitForLoginSurfaceReady(page: Page) {
+  await expect(page.getByText(/Preview mode is running against the built-in demo backend\./)).toBeVisible();
+
+  await page.waitForFunction(() => {
+    const parseRgb = (value: string) => value.match(/\d+/g)?.slice(0, 3).map(Number) ?? [];
+    const loginForm = document.querySelector('.n-form');
+
+    if (!loginForm) {
+      return false;
+    }
+
+    const loginFormStyle = getComputedStyle(loginForm);
+
+    if (loginFormStyle.opacity !== '1' || loginForm.className.includes('fade-enter-active')) {
+      return false;
+    }
+
+    const isReadable = (selector: string) => {
+      const element = document.querySelector(selector);
+
+      if (!element) {
+        return false;
+      }
+
+      const [red, green, blue] = parseRgb(getComputedStyle(element).color);
+
+      return [red, green, blue].every(channel => typeof channel === 'number' && channel < 140);
+    };
+
+    return isReadable('.n-checkbox__label') && isReadable('.n-divider__title');
+  });
 }
 
 async function openUserDrawer(page: Page): Promise<Locator> {
@@ -76,8 +111,7 @@ function isKnownViolationNode(id: string, targets: readonly unknown[]): boolean 
 
 test('preview landing screen has no serious or critical accessibility violations', async ({ page }) => {
   await page.goto('./');
-
-  await expect(page.getByText(/Preview mode is running against the built-in demo backend\./)).toBeVisible();
+  await waitForLoginSurfaceReady(page);
 
   await expectNoSeriousOrCriticalViolations(page, '#app');
 });
