@@ -1,6 +1,6 @@
 import process from 'node:process';
 import { spawn } from 'node:child_process';
-import { mkdir, readFile } from 'node:fs/promises';
+import { mkdir, readFile, rm } from 'node:fs/promises';
 import { setTimeout as delay } from 'node:timers/promises';
 
 const server = spawn(
@@ -96,6 +96,7 @@ async function enforceThresholds() {
 }
 
 try {
+  await rm('build/lighthouse', { recursive: true, force: true });
   await mkdir('build/lighthouse', { recursive: true });
   await waitForServer('http://127.0.0.1:4174/obsidian-admin-vue/preview/');
   await run('pnpm', ['exec', 'lhci', 'autorun', '--config=lighthouserc.preview.json']);
