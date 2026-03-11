@@ -5,14 +5,13 @@ import { useLoading } from '@sa/hooks';
 import { appEvent } from '@/constants/event';
 import { fetchGetUserInfo, fetchLogin, fetchLogout, fetchUpdateLocale } from '@/service/api/auth';
 import { isValidationErrorPayload } from '@/service/request/shared';
-import { useRouterPush } from '@/hooks/common/router';
 import { localStg } from '@/utils/storage';
 import { createDefaultThemeConfig } from '@/utils/theme-config';
+import { buildAppHref } from '@/bootstrap/runtime-location';
+import { isGuestBootstrapMode } from '@/bootstrap/runtime-state';
 import { SetupStoreId } from '@/enum';
 import { $t, loadRuntimeLocaleMessages, setLocale } from '@/locales';
 import { getStoredLocale, resolvePreferredLocale } from '@/locales/default-locale';
-import { useRouteStore } from '../route';
-import { useTabStore } from '../tab';
 import {
   clearAuthStorage,
   getRefreshToken,
@@ -25,12 +24,13 @@ import {
 export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
   const route = useRoute();
   const authStore = useAuthStore();
-  const routeStore = useRouteStore();
-  const tabStore = useTabStore();
-  const { toLogin, redirectFromLogin, routerPushByKey } = useRouterPush(false);
   const { loading: loginLoading, startLoading, endLoading } = useLoading();
   let logoutPromise: Promise<void> | null = null;
   let websocketModulePromise: Promise<typeof import('@/service/websocket')> | null = null;
+  let routeStorePromise: Promise<ReturnType<(typeof import('../route'))['useRouteStore']>> | null = null;
+  let tabStorePromise: Promise<ReturnType<(typeof import('../tab'))['useTabStore']>> | null = null;
+  let routerPushHelpersPromise: Promise<ReturnType<(typeof import('@/hooks/common/router'))['useRouterPush']>> | null =
+    null;
 
   function dispatchAuthUserNameSync(userName?: string | null) {
     window.dispatchEvent(new CustomEvent(appEvent.authUserNameSync, { detail: { userName: userName ?? '' } }));
@@ -42,6 +42,30 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
     }
 
     return websocketModulePromise;
+  }
+
+  async function resolveRouteStore() {
+    if (!routeStorePromise) {
+      routeStorePromise = import('../route').then(({ useRouteStore }) => useRouteStore());
+    }
+
+    return routeStorePromise;
+  }
+
+  async function resolveTabStore() {
+    if (!tabStorePromise) {
+      tabStorePromise = import('../tab').then(({ useTabStore }) => useTabStore());
+    }
+
+    return tabStorePromise;
+  }
+
+  async function resolveRouterPushHelpers() {
+    if (!routerPushHelpersPromise) {
+      routerPushHelpersPromise = import('@/hooks/common/router').then(({ useRouterPush }) => useRouterPush(false));
+    }
+
+    return routerPushHelpersPromise;
   }
 
   const token = ref('');
@@ -84,9 +108,20 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
     authStore.$reset();
     dispatchAuthUserNameSync('');
 
+    if (isGuestBootstrapMode()) {
+      if (!route.meta.constant) {
+        window.location.assign(buildAppHref('/login'));
+      }
+
+      return;
+    }
+
     if (!route.meta.constant) {
+      const { toLogin } = await resolveRouterPushHelpers();
       await toLogin();
     }
+
+    const [tabStore, routeStore] = await Promise.all([resolveTabStore(), resolveRouteStore()]);
 
     tabStore.cacheTabs();
     routeStore.resetStore();
@@ -137,7 +172,7 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
    *
    * @returns {boolean} Whether to clear all tabs
    */
-  function checkTabClear(): boolean {
+  async function checkTabClear(): Promise<boolean> {
     if (!userInfo.userId) {
       return false;
     }
@@ -147,7 +182,9 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
     // Clear all tabs if current user is different from previous user
     if (!lastLoginUserId || lastLoginUserId !== userInfo.userId) {
       localStg.remove('globalTabs');
-      tabStore.clearTabs();
+      const tabStore = await resolveTabStore();
+
+      await tabStore.clearTabs();
 
       localStg.remove('lastLoginUserId');
       return true;
@@ -255,7 +292,7 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
     if (pass) {
       await syncLoginSelectedLocale(loginSelectedLocale);
 
-      const isClear = checkTabClear();
+      const isClear = await checkTabClear();
       let needRedirect = redirect;
 
       if (isClear) {
@@ -263,6 +300,13 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
       }
 
       if (redirect || isClear) {
+        if (isGuestBootstrapMode()) {
+          const redirectTarget = needRedirect && typeof route.query?.redirect === 'string' ? route.query.redirect : '/';
+          window.location.assign(buildAppHref(redirectTarget));
+          return true;
+        }
+
+        const { redirectFromLogin } = await resolveRouterPushHelpers();
         await redirectFromLogin(needRedirect);
       }
 
@@ -356,6 +400,9 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
     }
 
     localStg.remove('globalTabs');
+    const [tabStore, routeStore] = await Promise.all([resolveTabStore(), resolveRouteStore()]);
+    const { routerPushByKey } = await resolveRouterPushHelpers();
+
     await tabStore.clearTabs();
     routeStore.setIsInitAuthRoute(false);
     await routeStore.initAuthRoute();

@@ -1,7 +1,6 @@
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import type { RouteLocationRaw } from 'vue-router';
 import type { RouteKey } from '@elegant-router/types';
-import { router as globalRouter } from '@/router';
 
 /**
  * Router push
@@ -11,15 +10,44 @@ import { router as globalRouter } from '@/router';
  * @param inSetup Whether is in vue script setup
  */
 export function useRouterPush(inSetup = true) {
-  const router = inSetup ? useRouter() : globalRouter;
-  const route = globalRouter.currentRoute;
+  const setupRouter = inSetup ? useRouter() : null;
+  const setupRoute = inSetup ? useRoute() : null;
 
-  const routerPush = router.push;
+  async function resolveRouter() {
+    if (setupRouter) {
+      return setupRouter;
+    }
 
-  const routerBack = router.back;
+    const { router } = await import('@/router');
+
+    return router;
+  }
+
+  async function resolveCurrentRoute() {
+    if (setupRoute) {
+      return setupRoute;
+    }
+
+    const router = await resolveRouter();
+
+    return router.currentRoute.value;
+  }
+
+  async function routerPush(routeLocation: RouteLocationRaw) {
+    const router = await resolveRouter();
+
+    return router.push(routeLocation);
+  }
+
+  async function routerBack() {
+    const router = await resolveRouter();
+
+    return router.back();
+  }
 
   async function routerPushByKey(key: RouteKey, options?: App.Global.RouterPushOptions) {
     const { query, params } = options || {};
+    const router = await resolveRouter();
 
     const routeLocation: RouteLocationRaw = {
       name: key
@@ -33,20 +61,22 @@ export function useRouterPush(inSetup = true) {
       routeLocation.params = params;
     }
 
-    return routerPush(routeLocation);
+    return router.push(routeLocation);
   }
 
   function routerPushByKeyWithMetaQuery(key: RouteKey) {
-    const allRoutes = router.getRoutes();
-    const meta = allRoutes.find(item => item.name === key)?.meta || null;
+    return resolveRouter().then(router => {
+      const allRoutes = router.getRoutes();
+      const meta = allRoutes.find(item => item.name === key)?.meta || null;
 
-    const query: Record<string, string> = {};
+      const query: Record<string, string> = {};
 
-    meta?.query?.forEach(item => {
-      query[item.key] = item.value;
+      meta?.query?.forEach(item => {
+        query[item.key] = item.value;
+      });
+
+      return routerPushByKey(key, { query });
     });
-
-    return routerPushByKey(key, { query });
   }
 
   async function toHome() {
@@ -60,6 +90,7 @@ export function useRouterPush(inSetup = true) {
    * @param redirectUrl The redirect url, if not specified, it will be the current route fullPath
    */
   async function toLogin(loginModule?: UnionKey.LoginModule, redirectUrl?: string) {
+    const route = await resolveCurrentRoute();
     const module = loginModule || 'pwd-login';
 
     const options: App.Global.RouterPushOptions = {
@@ -68,7 +99,7 @@ export function useRouterPush(inSetup = true) {
       }
     };
 
-    const redirect = redirectUrl || route.value.fullPath;
+    const redirect = redirectUrl || route.fullPath;
 
     options.query = {
       redirect
@@ -83,7 +114,8 @@ export function useRouterPush(inSetup = true) {
    * @param module
    */
   async function toggleLoginModule(module: UnionKey.LoginModule) {
-    const query = route.value.query as Record<string, string>;
+    const route = await resolveCurrentRoute();
+    const query = route.query as Record<string, string>;
 
     return routerPushByKey('login', { query, params: { module } });
   }
@@ -94,7 +126,8 @@ export function useRouterPush(inSetup = true) {
    * @param [needRedirect=true] Whether to redirect after login. Default is `true`
    */
   async function redirectFromLogin(needRedirect = true) {
-    const redirect = route.value.query?.redirect as string;
+    const route = await resolveCurrentRoute();
+    const redirect = route.query?.redirect as string;
 
     if (needRedirect && redirect) {
       await routerPush(redirect);
