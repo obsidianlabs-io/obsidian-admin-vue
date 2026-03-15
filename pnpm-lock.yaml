@@ -51,8 +51,8 @@ importers:
         specifier: 2.2.3
         version: 2.2.3
       laravel-echo:
-        specifier: ^2.3.0
-        version: 2.3.0(pusher-js@8.4.0)(socket.io-client@4.8.3)
+        specifier: ^2.3.1
+        version: 2.3.1(pusher-js@8.4.0)(socket.io-client@4.8.3)
       naive-ui:
         specifier: 2.43.2
         version: 2.43.2(vue@3.5.29(typescript@5.9.3))
@@ -4269,8 +4269,8 @@ packages:
   kolorist@1.8.0:
     resolution: {integrity: sha512-Y+60/zizpJ3HRH8DCss+q95yr6145JXZo46OTpFvDZWLfRCE4qChOyk1b26nMaNpfHHgxagk9dXT5OP0Tfe+dQ==}
 
-  laravel-echo@2.3.0:
-    resolution: {integrity: sha512-wgHPnnBvfHmu2I58xJ4asZH37Nu6P0472ku6zuoGRLc3zEWwIbpovDLYTiOshDH1SM7rA6AjZTKuu+jYoM1tpQ==}
+  laravel-echo@2.3.1:
+    resolution: {integrity: sha512-o6oD1oR+XklU9TO7OPGeLh/G9SjcZm+YrpSdGkOaAJf5HpXwZKt+wGgnULvKl5I8xUuUY/AAvqR24+y8suwZTA==}
     engines: {node: '>=20'}
     peerDependencies:
       pusher-js: '*'
@@ -10709,7 +10709,7 @@ snapshots:
 
   kolorist@1.8.0: {}
 
-  laravel-echo@2.3.0(pusher-js@8.4.0)(socket.io-client@4.8.3):
+  laravel-echo@2.3.1(pusher-js@8.4.0)(socket.io-client@4.8.3):
     dependencies:
       pusher-js: 8.4.0
       socket.io-client: 4.8.3
