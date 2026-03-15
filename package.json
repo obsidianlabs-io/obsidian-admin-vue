@@ -144,7 +144,7 @@
     "consola": "3.4.2",
     "eslint": "9.39.2",
     "eslint-plugin-vue": "10.8.0",
-    "jsdom": "^28.1.0",
+    "jsdom": "^29.0.0",
     "kolorist": "1.8.0",
     "plop": "^4.0.5",
     "postcss": "^8.5.6",
