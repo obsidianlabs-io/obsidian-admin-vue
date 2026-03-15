@@ -33,5 +33,5 @@ Obsidian Labs 致力于为真正要长期演进的产品构建清晰、稳固、
 ## Suggested Topics
 
 ```text
-admin vue vue3 vite vite7 typescript pinia naive-ui unocss vue-admin admin-template openapi hey-api multi-tenant saas i18n laravel-echo pusher playwright
+admin vue vue3 vite vite8 typescript pinia naive-ui unocss vue-admin admin-template openapi hey-api multi-tenant saas i18n laravel-echo pusher playwright
 ```

@@ -29,7 +29,7 @@
 
 ### 基础框架
 
-- `Vue 3`、`Vite 7`、`TypeScript`、`Pinia`、`UnoCSS`
+- `Vue 3`、`Vite 8`、`TypeScript`、`Pinia`、`UnoCSS`
 - `pnpm workspace / monorepo` 结构
 - 严格 TypeScript 与 ESLint 规范
 - 自动化文件路由与权限路由体系

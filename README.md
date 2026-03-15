@@ -29,7 +29,7 @@ If you need an admin frontend that can evolve with a serious backend contract, r
 
 ### Foundation
 
-- `Vue 3`, `Vite 7`, `TypeScript`, `Pinia`, `UnoCSS`
+- `Vue 3`, `Vite 8`, `TypeScript`, `Pinia`, `UnoCSS`
 - `pnpm workspace / monorepo` structure
 - strict TypeScript and ESLint conventions
 - automated file routing and permission routing

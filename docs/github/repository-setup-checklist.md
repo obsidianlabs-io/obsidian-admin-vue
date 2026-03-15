@@ -13,7 +13,7 @@ This checklist is for `obsidian-admin-vue`.
 - About:
   `Production-ready Vue 3 admin frontend with Naive UI, Pinia, UnoCSS, generated API contracts, and multi-tenant integration.`
 - Topics:
-  `admin vue vue3 vite vite7 typescript pinia naive-ui unocss vue-admin admin-template openapi hey-api multi-tenant saas i18n laravel-echo pusher playwright`
+  `admin vue vue3 vite vite8 typescript pinia naive-ui unocss vue-admin admin-template openapi hey-api multi-tenant saas i18n laravel-echo pusher playwright`
 - Website:
   留空即可，除非你后面有正式 demo 站或文档站。
 
