@@ -100,22 +100,58 @@ jobs:
           env.write_text('\n'.join(lines) + '\n')
           PY
 
-      - name: Start backend stack
+      - name: Start backend dependencies
         if: github.event_name != 'pull_request' || steps.changes.outputs.pairing == 'true'
         working-directory: backend
         run: |
-          docker compose -p "$COMPOSE_PROJECT_NAME" -f docker-compose.dev.yml up -d --build mysql redis composer app nginx
+          docker compose -p "$COMPOSE_PROJECT_NAME" -f docker-compose.dev.yml up -d mysql redis
+
+      - name: Wait for backend dependencies
+        if: github.event_name != 'pull_request' || steps.changes.outputs.pairing == 'true'
+        working-directory: backend
+        run: |
+          for _ in $(seq 1 60); do
+            if docker compose -p "$COMPOSE_PROJECT_NAME" -f docker-compose.dev.yml exec -T mysql mysqladmin ping -h localhost -uroot -proot --silent >/dev/null 2>&1 \
+              && docker compose -p "$COMPOSE_PROJECT_NAME" -f docker-compose.dev.yml exec -T redis redis-cli ping >/dev/null 2>&1; then
+              exit 0
+            fi
+            sleep 2
+          done
+          echo 'Backend dependencies did not become ready in time.' >&2
+          docker compose -p "$COMPOSE_PROJECT_NAME" -f docker-compose.dev.yml ps || true
+          docker compose -p "$COMPOSE_PROJECT_NAME" -f docker-compose.dev.yml logs --no-color mysql redis || true
+          exit 1
+
+      - name: Install backend dependencies
+        if: github.event_name != 'pull_request' || steps.changes.outputs.pairing == 'true'
+        working-directory: backend
+        run: |
+          timeout 10m docker compose -p "$COMPOSE_PROJECT_NAME" -f docker-compose.dev.yml run --rm composer
+
+      - name: Build and start backend app
+        if: github.event_name != 'pull_request' || steps.changes.outputs.pairing == 'true'
+        working-directory: backend
+        run: |
+          timeout 10m docker compose -p "$COMPOSE_PROJECT_NAME" -f docker-compose.dev.yml up -d --build --no-deps app nginx
 
       - name: Initialize backend application
         if: github.event_name != 'pull_request' || steps.changes.outputs.pairing == 'true'
         working-directory: backend
         run: |
+          app_ready=false
           for _ in $(seq 1 60); do
             if docker compose -p "$COMPOSE_PROJECT_NAME" -f docker-compose.dev.yml exec -T app php -v >/dev/null 2>&1; then
+              app_ready=true
               break
             fi
             sleep 2
           done
+          if [ "$app_ready" != "true" ]; then
+            echo 'Backend app container did not become ready in time.' >&2
+            docker compose -p "$COMPOSE_PROJECT_NAME" -f docker-compose.dev.yml ps || true
+            docker compose -p "$COMPOSE_PROJECT_NAME" -f docker-compose.dev.yml logs --no-color composer app nginx mysql redis || true
+            exit 1
+          fi
           docker compose -p "$COMPOSE_PROJECT_NAME" -f docker-compose.dev.yml exec -T app php artisan key:generate --force
           docker compose -p "$COMPOSE_PROJECT_NAME" -f docker-compose.dev.yml exec -T app php artisan migrate:fresh --seed --force
 
@@ -141,7 +177,7 @@ jobs:
         working-directory: backend
         run: |
           docker compose -p "$COMPOSE_PROJECT_NAME" -f docker-compose.dev.yml ps || true
-          docker compose -p "$COMPOSE_PROJECT_NAME" -f docker-compose.dev.yml logs --no-color app nginx mysql redis || true
+          docker compose -p "$COMPOSE_PROJECT_NAME" -f docker-compose.dev.yml logs --no-color composer app nginx mysql redis || true
           docker compose -p "$COMPOSE_PROJECT_NAME" -f docker-compose.dev.yml exec -T app php artisan about --only=environment || true
           docker compose -p "$COMPOSE_PROJECT_NAME" -f docker-compose.dev.yml exec -T app sh -lc 'ls -la storage/logs && tail -n 200 storage/logs/laravel.log' || true
 
