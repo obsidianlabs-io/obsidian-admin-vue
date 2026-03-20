@@ -198,7 +198,7 @@ Current documented stable pair:
 - frontend `v1.2.0`
 - backend `v1.2.1`
 
-Backend `main` now tracks the Laravel 13 baseline. Check the compatibility matrix before mixing release tags with `main`.
+Backend `main` now tracks the Laravel 13 baseline. The next planned backend release is `v1.3.0`, and the current expectation is that frontend `v1.2.0` remains compatible with that backend minor. Check the compatibility matrix before mixing release tags with `main`.
 
 ## Acknowledgements
 
