@@ -38,8 +38,14 @@ Read the compatibility matrix before mixing versions:
 
 Current stable pair:
 
-- frontend `v1.1.1`
-- backend `v1.2.0`
+- frontend `v1.2.0`
+- backend `v1.2.1`
+
+Current backend development note:
+
+- backend `main` now tracks Laravel 13
+- the next backend release note is prepared as `obsidian-admin-laravel/docs/releases/v1.3.0.md`
+- until a new coordinated frontend tag is cut, treat `v1.2.0 + v1.2.1` as the stable published pair
 
 ## If you use another backend
 

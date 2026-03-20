@@ -193,6 +193,13 @@ For the full contract-driven workflow, pair this frontend with:
 
 - [Obsidian Admin Laravel](https://github.com/obsidianlabs-io/obsidian-admin-laravel)
 
+Current documented stable pair:
+
+- frontend `v1.2.0`
+- backend `v1.2.1`
+
+Backend `main` now tracks the Laravel 13 baseline. Check the compatibility matrix before mixing release tags with `main`.
+
 ## Acknowledgements
 
 Obsidian Admin Vue continues to build on the strong foundation of **[SoybeanAdmin](https://github.com/soybeanjs/soybean-admin)**.

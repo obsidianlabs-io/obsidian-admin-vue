@@ -3,7 +3,7 @@
 ## Release Title
 
 ```text
-v1.1.1 · Release readiness and contract-sync patch
+v1.2.0 · Public preview, pairing, and release artifact baseline
 ```
 
 ## Repository About
