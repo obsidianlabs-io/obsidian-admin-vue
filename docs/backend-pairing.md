@@ -39,14 +39,14 @@ Read the compatibility matrix before mixing versions:
 Current stable pair:
 
 - frontend `v1.2.0`
-- backend `v1.2.1`
+- backend `v1.3.0`
 
 Current backend development note:
 
 - backend `main` now tracks Laravel 13
-- the next backend release is planned as `v1.3.0`
-- the current expectation is that frontend `v1.2.0` remains compatible with backend `v1.3.0`
-- until that backend tag is actually cut, treat `v1.2.0 + v1.2.1` as the stable published pair
+- the current stable backend release is `v1.3.0`
+- frontend `v1.2.0` remains compatible with backend `v1.3.0`
+- a coordinated frontend release is not currently required for the Laravel 13 backend lane
 
 ## If you use another backend
 
