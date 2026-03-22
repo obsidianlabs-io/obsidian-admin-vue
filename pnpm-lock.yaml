@@ -318,8 +318,8 @@ importers:
   packages/uno-preset:
     devDependencies:
       '@unocss/core':
-        specifier: 66.6.6
-        version: 66.6.6
+        specifier: 66.6.7
+        version: 66.6.7
       '@unocss/preset-uno':
         specifier: 66.6.6
         version: 66.6.6
@@ -1849,6 +1849,9 @@ packages:
 
   '@unocss/core@66.6.6':
     resolution: {integrity: sha512-Sbbx0ZQqmV8K2lg8E+z9MJzWb1MgRtJnvqzxDIrNuBjXasKhbcFt5wEMBtEZJOr63Z4ck0xThhZK53HmYT2jmg==}
+
+  '@unocss/core@66.6.7':
+    resolution: {integrity: sha512-Q8456iWFtdwrUNYKVOQY8ygRggjZOVtLc6Jc8KIkxig7OiNlUWOgXJTfCh4I8g6jBYzC5eHaHFDLgJOmOrxBsg==}
 
   '@unocss/eslint-config@66.6.6':
     resolution: {integrity: sha512-sNAJQ3tNlYtDF2osw2w88LvL+SYIiZyQgBQwwUqVIhRBSJE2CUHnyUtTycu/ZPTU5r3z++iMlhoR5EOFLwSGvg==}
@@ -7964,6 +7967,8 @@ snapshots:
 
   '@unocss/core@66.6.6': {}
 
+  '@unocss/core@66.6.7': {}
+
   '@unocss/eslint-config@66.6.6(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)':
     dependencies:
       '@unocss/eslint-plugin': 66.6.6(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
@@ -8022,7 +8027,7 @@ snapshots:
 
   '@unocss/rule-utils@66.6.6':
     dependencies:
-      '@unocss/core': 66.6.6
+      '@unocss/core': 66.6.7
       magic-string: 0.30.21
 
   '@unocss/transformer-directives@66.6.6':

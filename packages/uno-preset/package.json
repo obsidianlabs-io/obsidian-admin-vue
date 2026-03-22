@@ -10,7 +10,7 @@
     }
   },
   "devDependencies": {
-    "@unocss/core": "66.6.6",
+    "@unocss/core": "66.6.7",
     "@unocss/preset-uno": "66.6.6"
   }
 }
