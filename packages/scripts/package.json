@@ -13,7 +13,7 @@
     }
   },
   "devDependencies": {
-    "@soybeanjs/changelog": "0.4.3",
+    "@soybeanjs/changelog": "0.4.5",
     "bumpp": "11.0.0",
     "c12": "3.3.3",
     "cac": "7.0.0",
