@@ -285,8 +285,8 @@ importers:
         specifier: 0.4.3
         version: 0.4.3(@typescript-eslint/utils@8.57.2(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(@unocss/eslint-config@66.6.6(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint-plugin-vue@10.8.0(@typescript-eslint/parser@8.57.2(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.2(jiti@2.6.1))(vue-eslint-parser@10.2.0(eslint@9.39.2(jiti@2.6.1))))(eslint@9.39.2(jiti@2.6.1))(svelte-eslint-parser@1.4.1)(typescript@5.9.3)(vue-eslint-parser@10.2.0(eslint@9.39.2(jiti@2.6.1)))
       bumpp:
-        specifier: 11.0.0
-        version: 11.0.0
+        specifier: 11.0.1
+        version: 11.0.1
       c12:
         specifier: 3.3.3
         version: 3.3.3(magicast@0.3.4)
@@ -2552,8 +2552,8 @@ packages:
     resolution: {integrity: sha512-bkXY9WsVpY7CvMhKSR6pZilZu9Ln5WDrKVBUXf2S443etkmEO4V58heTecXcUIsNsi4Rx8JUO4NfX1IcQl4deg==}
     engines: {node: '>=18.20'}
 
-  bumpp@11.0.0:
-    resolution: {integrity: sha512-rxW8H4VIB+KvnNDZ87y4tyktHydN4wzmXHYJ8CfzhWl8yKd6yuQMPcV78Hrz47udmBssjrN5wQo+JLmyU94gaA==}
+  bumpp@11.0.1:
+    resolution: {integrity: sha512-X0ti27I/ewsx/u0EJSyl0IZWWOE95q+wIpAG/60kc5gqMNR4a23YJdd3lL7JsBN11TgLbCM4KpfGMuFfdigb4g==}
     engines: {node: '>=20.19.0'}
     hasBin: true
 
@@ -5733,10 +5733,6 @@ packages:
   tinybench@2.9.0:
     resolution: {integrity: sha512-0+DUvqWMValLmha6lr4kD8iAMK1HzV0/aKnCtWb9v9641TnP/MFb7Pc2bxoxQjTXAErryXVgUOfv2YqNllqGeg==}
 
-  tinyexec@1.0.2:
-    resolution: {integrity: sha512-W/KYk+NFhkmsYpuHq5JykngiOCnxeVL8v8dFnqxSD8qEEdRfXk1SDM6JzNqcERbcGYj9tMrDQBYV9cjgnunFIg==}
-    engines: {node: '>=18'}
-
   tinyexec@1.0.4:
     resolution: {integrity: sha512-u9r3uZC0bdpGOXtlxUIdwf9pkmvhqJdrVCH9fapQtgy/OeTTMZ1nqH7agtvEfmGui6e1XxjcdrlxvxJvc3sMqw==}
     engines: {node: '>=18'}
@@ -6473,11 +6469,6 @@ packages:
 
   yallist@3.1.1:
     resolution: {integrity: sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==}
-
-  yaml@2.8.2:
-    resolution: {integrity: sha512-mplynKqc1C2hTVYxd0PU2xQAc22TI1vShAYGksCCfxbn/dFwnHTNi1bvYsBTkhdUNtGIf5xNOg938rrSSYvS9A==}
-    engines: {node: '>= 14.6'}
-    hasBin: true
 
   yaml@2.8.3:
     resolution: {integrity: sha512-AvbaCLOO2Otw/lW5bmh9d/WEdcDFdQp2Z2ZUH3pX9U2ihyUY0nvLv7J6TrWowklRGPYbB/IuIMfYgxaCPg5Bpg==}
@@ -7460,7 +7451,7 @@ snapshots:
       detect-libc: 2.1.2
       is-glob: 4.0.3
       node-addon-api: 7.1.1
-      picomatch: 4.0.4
+      picomatch: 4.0.3
     optionalDependencies:
       '@parcel/watcher-android-arm64': 2.5.6
       '@parcel/watcher-darwin-arm64': 2.5.6
@@ -8369,7 +8360,7 @@ snapshots:
       alien-signals: 3.1.2
       muggle-string: 0.4.1
       path-browserify: 1.0.1
-      picomatch: 4.0.4
+      picomatch: 4.0.3
 
   '@vue/reactivity@3.5.30':
     dependencies:
@@ -8763,7 +8754,7 @@ snapshots:
 
   builtin-modules@5.0.0: {}
 
-  bumpp@11.0.0:
+  bumpp@11.0.1:
     dependencies:
       args-tokenizer: 0.3.0
       cac: 7.0.0
@@ -8773,7 +8764,7 @@ snapshots:
       tinyexec: 1.0.4
       tinyglobby: 0.2.15
       unconfig: 7.5.0
-      yaml: 2.8.2
+      yaml: 2.8.3
 
   bundle-name@4.1.0:
     dependencies:
@@ -11163,7 +11154,7 @@ snapshots:
     dependencies:
       citty: 0.2.1
       pathe: 2.0.3
-      tinyexec: 1.0.2
+      tinyexec: 1.0.4
 
   object-assign@4.1.1: {}
 
@@ -12349,8 +12340,6 @@ snapshots:
 
   tinybench@2.9.0: {}
 
-  tinyexec@1.0.2: {}
-
   tinyexec@1.0.4: {}
 
   tinyglobby@0.2.15:
@@ -12434,7 +12423,7 @@ snapshots:
 
   ts-declaration-location@1.0.7(typescript@5.9.3):
     dependencies:
-      picomatch: 4.0.4
+      picomatch: 4.0.3
       typescript: 5.9.3
 
   tslib@1.14.1: {}
@@ -12615,7 +12604,7 @@ snapshots:
   unplugin-utils@0.3.1:
     dependencies:
       pathe: 2.0.3
-      picomatch: 4.0.4
+      picomatch: 4.0.3
 
   unplugin-vue-components@31.0.0(vue@3.5.30(typescript@5.9.3)):
     dependencies:
@@ -12641,13 +12630,13 @@ snapshots:
     dependencies:
       '@jridgewell/remapping': 2.3.5
       acorn: 8.16.0
-      picomatch: 4.0.4
+      picomatch: 4.0.3
       webpack-virtual-modules: 0.6.2
 
   unplugin@3.0.0:
     dependencies:
       '@jridgewell/remapping': 2.3.5
-      picomatch: 4.0.4
+      picomatch: 4.0.3
       webpack-virtual-modules: 0.6.2
 
   unrs-resolver@1.11.1:
@@ -13142,8 +13131,6 @@ snapshots:
   y18n@5.0.8: {}
 
   yallist@3.1.1: {}
-
-  yaml@2.8.2: {}
 
   yaml@2.8.3: {}
 
