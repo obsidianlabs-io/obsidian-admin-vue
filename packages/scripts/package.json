@@ -13,16 +13,16 @@
     }
   },
   "devDependencies": {
-    "@soybeanjs/changelog": "0.4.3",
-    "bumpp": "11.0.0",
+    "@soybeanjs/changelog": "0.4.5",
+    "bumpp": "11.0.1",
     "c12": "3.3.3",
     "cac": "7.0.0",
     "consola": "3.4.2",
     "enquirer": "2.4.1",
     "execa": "9.6.1",
     "kolorist": "1.8.0",
-    "npm-check-updates": "19.6.3",
-    "picomatch": "4.0.3",
+    "npm-check-updates": "19.6.5",
+    "picomatch": "4.0.4",
     "rimraf": "6.1.3"
   }
 }
