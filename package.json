@@ -108,7 +108,7 @@
     "echarts": "6.0.0",
     "json5": "2.2.3",
     "laravel-echo": "^2.3.4",
-    "naive-ui": "2.43.2",
+    "naive-ui": "2.44.1",
     "nprogress": "0.2.0",
     "pinia": "3.0.4",
     "pusher-js": "^8.5.0",
