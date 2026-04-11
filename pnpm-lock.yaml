@@ -169,8 +169,8 @@ importers:
         specifier: ^8.5.9
         version: 8.5.9
       prettier:
-        specifier: 3.6.2
-        version: 3.6.2
+        specifier: 3.8.2
+        version: 3.8.2
       sass:
         specifier: 1.98.0
         version: 1.98.0
@@ -5078,11 +5078,6 @@ packages:
 
   prettier@3.3.3:
     resolution: {integrity: sha512-i2tDNA0O5IrMO757lfrdQZCc2jPNDVntV0m/+4whiDfWaTKfMNgR7Qz0NAeGz/nRqF4m5/6CLzbP4/liHt12Ew==}
-    engines: {node: '>=14'}
-    hasBin: true
-
-  prettier@3.6.2:
-    resolution: {integrity: sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -11546,8 +11541,6 @@ snapshots:
       prettier: 3.8.2
 
   prettier@3.3.3: {}
-
-  prettier@3.6.2: {}
 
   prettier@3.8.2: {}
 
