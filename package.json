@@ -158,7 +158,7 @@
     "vite": "8.0.0",
     "vite-plugin-progress": "0.0.7",
     "vite-plugin-svg-icons": "2.0.1",
-    "vite-plugin-vue-devtools": "8.1.0",
+    "vite-plugin-vue-devtools": "8.1.1",
     "vite-plugin-vue-transition-root-validator": "^0.1.0",
     "vitepress": "1.6.4",
     "vitest": "^4.1.4",
