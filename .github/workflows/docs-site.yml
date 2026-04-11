@@ -13,7 +13,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: frontend-docs-site
+  group: frontend-docs-site-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
