@@ -101,10 +101,10 @@
     "@sa/materials": "workspace:*",
     "@sa/utils": "workspace:*",
     "@vueuse/core": "14.2.1",
-    "axios": "1.13.6",
+    "axios": "1.15.0",
     "clipboard": "2.0.11",
     "dayjs": "1.11.20",
-    "defu": "6.1.4",
+    "defu": "6.1.7",
     "echarts": "6.0.0",
     "json5": "2.2.3",
     "laravel-echo": "^2.3.4",
@@ -164,6 +164,14 @@
     "vitest": "^4.1.4",
     "vue-eslint-parser": "10.4.0",
     "vue-tsc": "3.2.5"
+  },
+  "pnpm": {
+    "overrides": {
+      "axios": "1.15.0",
+      "defu": "6.1.7",
+      "lodash": "4.18.1",
+      "lodash-es": "4.18.1"
+    }
   },
   "simple-git-hooks": {
     "commit-msg": "pnpm sa git-commit-verify",
