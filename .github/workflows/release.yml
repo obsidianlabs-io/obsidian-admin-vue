@@ -68,7 +68,7 @@ jobs:
           tar -czf "build/release/obsidian-admin-vue-${VERSION}-pages-bundle.tar.gz" -C .pages-dist .
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           body_path: RELEASE_NOTES.md
           append_body: false
