@@ -312,8 +312,8 @@ importers:
         specifier: 1.8.0
         version: 1.8.0
       npm-check-updates:
-        specifier: 19.6.6
-        version: 19.6.6
+        specifier: 20.0.1
+        version: 20.0.1
       picomatch:
         specifier: 4.0.4
         version: 4.0.4
@@ -4701,8 +4701,8 @@ packages:
     resolution: {integrity: sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==}
     engines: {node: '>=0.10.0'}
 
-  npm-check-updates@19.6.6:
-    resolution: {integrity: sha512-AvlRcnlUEyBEJfblUSjYMJwYKvCIWDRuCDa6x3hyUMTMkI3kslmFm0LDqwgzQfshfNh0Z3ouKiA4fLjRN7HejQ==}
+  npm-check-updates@20.0.1:
+    resolution: {integrity: sha512-YuzpyL1Od5dJzpeETVh2H5o1I8tpi0zkf6v7k7rXwUDfiDliBX9dgVIb7FlEfp8Lu2RtECAv63ZHm/rqpIhYsw==}
     engines: {node: '>=20.0.0', npm: '>=8.12.1'}
     hasBin: true
 
@@ -11159,7 +11159,7 @@ snapshots:
 
   normalize-path@3.0.0: {}
 
-  npm-check-updates@19.6.6: {}
+  npm-check-updates@20.0.1: {}
 
   npm-run-path@6.0.0:
     dependencies:
