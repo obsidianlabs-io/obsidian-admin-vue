@@ -155,7 +155,7 @@
     "typescript": "5.9.3",
     "unplugin-icons": "23.0.1",
     "unplugin-vue-components": "31.0.0",
-    "vite": "8.0.0",
+    "vite": "8.0.8",
     "vite-plugin-progress": "0.0.7",
     "vite-plugin-svg-icons": "2.0.1",
     "vite-plugin-vue-devtools": "8.1.0",
