@@ -46,7 +46,8 @@ test('useNaiveForm applies, remaps and clears server validation errors', async (
           validateCalls += 1;
           throw new Error('invalid');
         },
-        restoreValidation() {}
+        restoreValidation() {},
+        invalidateLabelWidth() {}
       } as FormInst;
 
       naiveForm.bindModelValidation(model, ['confirmPassword', 'email']);
