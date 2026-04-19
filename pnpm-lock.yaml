@@ -139,8 +139,8 @@ importers:
         specifier: 66.6.7
         version: 66.6.7
       '@unocss/transformer-variant-group':
-        specifier: 66.6.7
-        version: 66.6.7
+        specifier: 66.6.8
+        version: 66.6.8
       '@unocss/vite':
         specifier: 66.6.7
         version: 66.6.7(vite@8.0.8(@types/node@25.3.5)(esbuild@0.27.7)(jiti@2.6.1)(sass@1.98.0)(tsx@4.21.0)(yaml@2.8.3))
@@ -1863,6 +1863,9 @@ packages:
   '@unocss/core@66.6.7':
     resolution: {integrity: sha512-Q8456iWFtdwrUNYKVOQY8ygRggjZOVtLc6Jc8KIkxig7OiNlUWOgXJTfCh4I8g6jBYzC5eHaHFDLgJOmOrxBsg==}
 
+  '@unocss/core@66.6.8':
+    resolution: {integrity: sha512-P9IlQfgms+8/nka7fBhiiWU4SPwrTNKbTdK0z1SLnttXMHHjsB2zpG+Vi1JQDpICfY9Y1/2pWtguPE+zeOVu9Q==}
+
   '@unocss/eslint-config@66.6.7':
     resolution: {integrity: sha512-l33NbugpKr5twWmRbFwQcvAuD/lWAqT9Nrnguga75geeUBENOVNQialeyEFcZAmR7/eYOeILIrhM8XtFUmtf2g==}
     engines: {node: '>=14'}
@@ -1896,8 +1899,8 @@ packages:
   '@unocss/transformer-directives@66.6.7':
     resolution: {integrity: sha512-z3gi8/cD2P0I+c6jOPZUtsPXknHwVNlMIitSh7LhyM6W3EqbqvDcYH2gFeGhdhoYcN2r5OpTBujq34iz4IdUxA==}
 
-  '@unocss/transformer-variant-group@66.6.7':
-    resolution: {integrity: sha512-XouJuQCjYJpvR3sY4QDXnGXxtyJ4qgWFG+S9bAB01TTslhQLvNPE9o2+4gZlltnJLqxiPQWuLeJA1KdPD6ciww==}
+  '@unocss/transformer-variant-group@66.6.8':
+    resolution: {integrity: sha512-+t7gJDW3W3z3/f8zBf0DfV2UZyGyFOwG5CIsIj5ofu3VJ91mKD/5ZAH8fD3cryXCBSqslj4yv+8R+BLV07T5AA==}
 
   '@unocss/vite@66.6.7':
     resolution: {integrity: sha512-8AHrVzAecnQaPLJv3/mpyFt5j2iL3gEwkZcZ8HzjH5ttK2XON1YE9vgujN5NS/yvZwlJxCMNPxn0S410/Ek61A==}
@@ -7994,6 +7997,8 @@ snapshots:
 
   '@unocss/core@66.6.7': {}
 
+  '@unocss/core@66.6.8': {}
+
   '@unocss/eslint-config@66.6.7(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)':
     dependencies:
       '@unocss/eslint-plugin': 66.6.7(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
@@ -8061,9 +8066,9 @@ snapshots:
       '@unocss/rule-utils': 66.6.7
       css-tree: 3.2.1
 
-  '@unocss/transformer-variant-group@66.6.7':
+  '@unocss/transformer-variant-group@66.6.8':
     dependencies:
-      '@unocss/core': 66.6.7
+      '@unocss/core': 66.6.8
 
   '@unocss/vite@66.6.7(vite@8.0.8(@types/node@25.3.5)(esbuild@0.27.7)(jiti@2.6.1)(sass@1.98.0)(tsx@4.21.0)(yaml@2.8.3))':
     dependencies:
