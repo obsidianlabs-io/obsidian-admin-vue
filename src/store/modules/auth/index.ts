@@ -4,7 +4,7 @@ import { defineStore } from 'pinia';
 import { useLoading } from '@sa/hooks';
 import { appEvent } from '@/constants/event';
 import { fetchGetUserInfo, fetchLogin, fetchLogout, fetchUpdateLocale } from '@/service/api/auth';
-import { isValidationErrorPayload } from '@/service/request/shared';
+import { resolveRequestErrorStrategy } from '@/service/request/shared';
 import { localStg } from '@/utils/storage';
 import { createDefaultThemeConfig } from '@/utils/theme-config';
 import { buildAppHref } from '@/bootstrap/runtime-location';
@@ -229,21 +229,19 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
       handleValidationErrorLocally ? { handleValidationErrorLocally: true } : undefined
     );
 
-    function resolveBackendCode(errorLike: unknown): string {
-      if (!errorLike || typeof errorLike !== 'object') {
-        return '';
-      }
+    const strategy = error
+      ? resolveRequestErrorStrategy(error, {
+          handleValidationErrorLocally,
+          fallbackMessage: error.message
+        })
+      : null;
 
-      const maybeResponse = (errorLike as { response?: { data?: { code?: unknown } } }).response;
-      return String(maybeResponse?.data?.code ?? '');
-    }
-
-    if (error?.code === '4020' || resolveBackendCode(error) === '4020') {
+    if (strategy?.isTwoFactorRequired) {
       endLoading();
       return { status: '2fa_required', error };
     }
 
-    if (error && handleValidationErrorLocally && isValidationErrorPayload(error)) {
+    if (error && strategy?.shouldHandleValidationLocally) {
       endLoading();
       return { status: 'validation_error', error };
     }

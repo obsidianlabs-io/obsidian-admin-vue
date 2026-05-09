@@ -95,6 +95,9 @@ declare namespace App {
       "logoutWithModalMsg": string;
       "refreshToken": string;
       "tokenExpired": string;
+      "networkError": string;
+      "timeout": string;
+      "serviceUnavailable": string;
     };
     "theme": {
       "themeDrawerTitle": string;
@@ -1186,7 +1189,10 @@ declare namespace App {
       | "request.logoutMsg"
       | "request.logoutWithModal"
       | "request.logoutWithModalMsg"
+      | "request.networkError"
       | "request.refreshToken"
+      | "request.serviceUnavailable"
+      | "request.timeout"
       | "request.tokenExpired"
       | "route.403"
       | "route.404"

@@ -1,6 +1,7 @@
 import { computed, reactive, ref } from 'vue';
 import { REG_PWD } from '@/constants/reg';
 import { fetchGetTimezoneOptions, fetchGetUserProfile, fetchUpdateUserProfile } from '@/service/api';
+import { shouldApplyServerValidation } from '@/service/request/shared';
 import type { useAuthStore } from '@/store/modules/auth';
 import type { useFormRules, useNaiveForm } from '@/hooks/common/form';
 import { $t } from '@/locales';
@@ -210,11 +211,14 @@ export function useProfileForm(options: UseProfileFormOptions) {
       });
 
       if (error) {
-        await naiveForm.applyServerValidation(error, {
-          fieldAliases: {
-            password_confirmation: 'confirmPassword'
-          }
-        });
+        if (shouldApplyServerValidation(error)) {
+          await naiveForm.applyServerValidation(error, {
+            fieldAliases: {
+              password_confirmation: 'confirmPassword'
+            }
+          });
+        }
+
         return;
       }
 

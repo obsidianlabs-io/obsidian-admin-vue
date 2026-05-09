@@ -9,6 +9,7 @@ import {
   fetchGetAllTeams,
   fetchUpdateUser
 } from '@/service/api';
+import { shouldApplyServerValidation } from '@/service/request/shared';
 import { useAuthStore } from '@/store/modules/auth';
 import { useFormRules, useNaiveForm } from '@/hooks/common/form';
 import { useOperateModal } from '@/hooks/business/operate-modal';
@@ -327,7 +328,9 @@ async function handleSubmit() {
       : await fetchUpdateUser(props.rowData?.id || 0, payload, { handleValidationErrorLocally: true });
 
   if (error) {
-    await naiveForm.applyServerValidation(error);
+    if (shouldApplyServerValidation(error)) {
+      await naiveForm.applyServerValidation(error);
+    }
   }
 
   if (!error) {

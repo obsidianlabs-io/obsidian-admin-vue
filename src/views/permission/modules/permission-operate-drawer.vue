@@ -2,6 +2,7 @@
 import { computed, ref, watch } from 'vue';
 import { getEnableStatusLabel, getEnableStatusOptions, getEnableStatusTagType } from '@/constants/common';
 import { fetchCreatePermission, fetchUpdatePermission } from '@/service/api';
+import { shouldApplyServerValidation } from '@/service/request/shared';
 import { useFormRules, useNaiveForm } from '@/hooks/common/form';
 import { $t } from '@/locales';
 import FormModalWrapper from '@/components/advanced/form-modal-wrapper.vue';
@@ -120,7 +121,9 @@ async function handleSubmit() {
       : await fetchUpdatePermission(props.rowData?.id || 0, payload, { handleValidationErrorLocally: true });
 
   if (error) {
-    await naiveForm.applyServerValidation(error);
+    if (shouldApplyServerValidation(error)) {
+      await naiveForm.applyServerValidation(error);
+    }
   }
 
   if (!error) {

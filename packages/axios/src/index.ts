@@ -66,7 +66,7 @@ function createCommonRequest<
       }
 
       const backendError = new AxiosError<ResponseData>(
-        'the backend request error',
+        'Backend request failed',
         BACKEND_ERROR_CODE,
         response.config,
         response.request,
@@ -78,6 +78,30 @@ function createCommonRequest<
       return Promise.reject(backendError);
     },
     async (error: AxiosError<ResponseData>) => {
+      // If the error has a response with our backend error format (has `code` field),
+      // route it through the same backend fail handler so that token refresh,
+      // auto-logout, and other session management logic works correctly.
+      // This is critical when the backend returns semantic HTTP status codes (401, 403, etc.)
+      // instead of always returning HTTP 200.
+      if (error.response?.data && typeof error.response.data === 'object' && 'code' in error.response.data) {
+        const fail = await opts.onBackendFail(error.response, instance);
+        if (fail) {
+          return fail;
+        }
+
+        const backendError = new AxiosError<ResponseData>(
+          'Backend request failed',
+          BACKEND_ERROR_CODE,
+          error.response.config,
+          error.response.request,
+          error.response
+        );
+
+        await opts.onError(backendError);
+
+        return Promise.reject(backendError);
+      }
+
       await opts.onError(error);
 
       return Promise.reject(error);

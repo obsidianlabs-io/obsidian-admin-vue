@@ -3,6 +3,7 @@ import { computed, ref, watch } from 'vue';
 import { jsonClone } from '@sa/utils';
 import { getEnableStatusLabel, getEnableStatusOptions, getEnableStatusTagType } from '@/constants/common';
 import { fetchCreateRole, fetchGetRoleAssignablePermissions, fetchUpdateRole } from '@/service/api';
+import { shouldApplyServerValidation } from '@/service/request/shared';
 import { useFormRules, useNaiveForm } from '@/hooks/common/form';
 import { useOperateModal } from '@/hooks/business/operate-modal';
 import { $t } from '@/locales';
@@ -303,7 +304,9 @@ async function handleSubmit() {
       : await fetchUpdateRole(props.rowData?.id || 0, payload, { handleValidationErrorLocally: true });
 
   if (error) {
-    await naiveForm.applyServerValidation(error);
+    if (shouldApplyServerValidation(error)) {
+      await naiveForm.applyServerValidation(error);
+    }
   }
 
   if (!error) {

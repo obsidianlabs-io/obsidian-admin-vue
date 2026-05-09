@@ -2,6 +2,7 @@
 import { computed, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { fetchForgotPassword, fetchResetPassword } from '@/service/api/auth';
+import { shouldApplyServerValidation } from '@/service/request/shared';
 import { useFormRules, useNaiveForm } from '@/hooks/common/form';
 import { useRouterPush } from '@/hooks/common/router';
 import { $t } from '@/locales';
@@ -80,7 +81,10 @@ async function requestResetToken() {
   );
 
   if (error) {
-    await naiveForm.applyServerValidation(error);
+    if (shouldApplyServerValidation(error)) {
+      await naiveForm.applyServerValidation(error);
+    }
+
     submitting.value = false;
     return;
   }
@@ -110,11 +114,14 @@ async function submitResetPassword() {
   );
 
   if (error) {
-    await naiveForm.applyServerValidation(error, {
-      fieldAliases: {
-        password_confirmation: 'confirmPassword'
-      }
-    });
+    if (shouldApplyServerValidation(error)) {
+      await naiveForm.applyServerValidation(error, {
+        fieldAliases: {
+          password_confirmation: 'confirmPassword'
+        }
+      });
+    }
+
     submitting.value = false;
     return;
   }

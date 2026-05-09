@@ -9,14 +9,13 @@ import {
   expiredTokenCodes,
   getAuthorization,
   handleExpiredRequest,
-  isSessionEndingCode,
   isTenantInactivePayload,
   isUserInactivePayload,
-  isValidationErrorPayload,
   logoutCodes,
   modalLogoutCodes,
+  resolveRequestErrorMessage,
+  resolveRequestErrorStrategy,
   serviceSuccessCode,
-  shouldSkipGlobalErrorToast,
   showErrorMsg
 } from './shared';
 import type { RequestInstanceState } from './type';
@@ -172,49 +171,18 @@ export const request = createFlatRequest(
       return null;
     },
     onError(error) {
-      // when the request is fail, you can show error message
-
-      let message = error.message;
-      let backendErrorCode = '';
-
-      // get backend error message and code
-      if (error.code === BACKEND_ERROR_CODE) {
-        message = error.response?.data?.msg || message;
-        backendErrorCode = String(error.response?.data?.code || '');
-      }
-
-      if (passiveLogoutInProgress || shouldSkipGlobalErrorToast(error)) {
-        return;
-      }
-
       const handleValidationErrorLocally = (error.config as { handleValidationErrorLocally?: boolean } | undefined)
         ?.handleValidationErrorLocally;
+      const strategy = resolveRequestErrorStrategy(error, {
+        handleValidationErrorLocally,
+        fallbackMessage: error.message
+      });
 
-      if (handleValidationErrorLocally && isValidationErrorPayload(error)) {
+      if (passiveLogoutInProgress || !strategy.shouldShowGlobalToast) {
         return;
       }
 
-      if (isSessionEndingCode(backendErrorCode)) {
-        return;
-      }
-
-      // the error message is displayed in the modal
-      if (modalLogoutCodes.includes(backendErrorCode)) {
-        return;
-      }
-
-      // when the token is expired, refresh token and retry request, so no need to show error message
-      if (expiredTokenCodes.includes(backendErrorCode)) {
-        return;
-      }
-
-      // 4020 is our custom '2FA Required' code during login. We bypass the global error message
-      // because the login component needs to handle this gracefully to show the OTP input.
-      if (backendErrorCode === '4020') {
-        return;
-      }
-
-      showErrorMsg(request.state, message);
+      showErrorMsg(request.state, strategy.displayMessage);
     }
   }
 );
@@ -257,7 +225,7 @@ export const demoRequest = createRequest(
         message = error.response?.data?.message || message;
       }
 
-      window.$message?.error(message);
+      window.$message?.error(resolveRequestErrorMessage(error, message));
     }
   }
 );

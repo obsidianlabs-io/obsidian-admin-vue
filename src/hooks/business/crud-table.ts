@@ -1,4 +1,5 @@
 import { type Ref, ref } from 'vue';
+import { resolveRequestErrorStrategy } from '@/service/request/shared';
 import { useTableOperate } from '@/hooks/common/table';
 import { $t } from '@/locales';
 
@@ -93,6 +94,13 @@ export function useCrudTable<TableData extends object>(options: UseCrudTableOpti
     const results = await Promise.all(ids.map(id => options.deleteById(id)));
     const successCount = results.filter(item => !item.error).length;
     const failedCount = ids.length - successCount;
+    const hasFailureAlreadyPresented = results.some(item => {
+      if (!item.error) {
+        return false;
+      }
+
+      return resolveRequestErrorStrategy(item.error).shouldShowGlobalToast;
+    });
 
     if (successCount === ids.length) {
       checkedRowKeys.value = [];
@@ -124,7 +132,9 @@ export function useCrudTable<TableData extends object>(options: UseCrudTableOpti
       return;
     }
 
-    window.$message?.error($t('common.batchDeleteFailed'));
+    if (!hasFailureAlreadyPresented) {
+      window.$message?.error($t('common.batchDeleteFailed'));
+    }
   }
 
   return {

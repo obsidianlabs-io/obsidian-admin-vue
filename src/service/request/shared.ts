@@ -2,6 +2,7 @@ import { getCurrentTenantId, getRefreshToken, getToken, updateAuthTokens } from 
 import { resolvePreferredLocale } from '@/locales/default-locale';
 import { $t } from '@/locales';
 import { resolveValidationErrors } from './validation';
+import type { ValidationErrorMap } from './validation';
 import type { RequestInstanceState } from './type';
 import { buildRequestContextHeaders, resolveServiceCodeConfig } from './context';
 
@@ -15,7 +16,6 @@ export const modalLogoutCodes = serviceCodeConfig.modalLogoutCodes;
 export const expiredTokenCodes = serviceCodeConfig.expiredTokenCodes;
 const tenantInactiveMessage = 'Tenant is inactive';
 const userInactiveMessage = 'User is inactive';
-const validationErrorCodes = ['1001', '1002'];
 
 const backendMessageI18nMap: Partial<Record<string, App.I18n.I18nKey>> = {
   'User is inactive': 'page.login.common.userInactive',
@@ -47,6 +47,38 @@ function normalizeMessage(message: unknown): string {
   return String(message || '').trim();
 }
 
+function resolveTransportErrorMessage(error: unknown): string {
+  if (!error || typeof error !== 'object') {
+    return $t('request.serviceUnavailable');
+  }
+
+  const axiosLikeError = error as {
+    code?: unknown;
+    message?: unknown;
+    response?: {
+      status?: unknown;
+    };
+  };
+
+  const status = Number(axiosLikeError.response?.status ?? 0);
+  const code = String(axiosLikeError.code ?? '');
+  const message = normalizeMessage(axiosLikeError.message);
+
+  if (code === 'ECONNABORTED' || /timeout/i.test(message)) {
+    return $t('request.timeout');
+  }
+
+  if (code === 'ERR_NETWORK' || /network error/i.test(message)) {
+    return $t('request.networkError');
+  }
+
+  if ([500, 502, 503, 504].includes(status)) {
+    return $t('request.serviceUnavailable');
+  }
+
+  return message || $t('request.serviceUnavailable');
+}
+
 function parseErrorPayload(error: unknown): { code: string; message: string } {
   if (!error || typeof error !== 'object') {
     return { code: '', message: '' };
@@ -60,16 +92,99 @@ function parseErrorPayload(error: unknown): { code: string; message: string } {
   };
 }
 
-export function isValidationErrorPayload(error: unknown): boolean {
-  if (!error || typeof error !== 'object') {
-    return false;
+export type RequestErrorKind =
+  | 'transport'
+  | 'business'
+  | 'validation'
+  | 'session_ending'
+  | 'modal_logout'
+  | 'inactive_boundary'
+  | 'two_factor_required';
+
+export interface RequestErrorStrategy {
+  code: string;
+  backendMessage: string;
+  displayMessage: string;
+  fieldErrors: ValidationErrorMap;
+  hasStructuredPayload: boolean;
+  kind: RequestErrorKind;
+  isValidation: boolean;
+  isSessionEnding: boolean;
+  isModalLogout: boolean;
+  isInactiveBoundary: boolean;
+  isTwoFactorRequired: boolean;
+  shouldHandleValidationLocally: boolean;
+  shouldSkipGlobalToast: boolean;
+  shouldShowGlobalToast: boolean;
+}
+
+export function resolveRequestErrorStrategy(
+  error: unknown,
+  options: {
+    handleValidationErrorLocally?: boolean;
+    fallbackMessage?: string;
+  } = {}
+): RequestErrorStrategy {
+  const payload = parseErrorPayload(error);
+  const fieldErrors = resolveValidationErrors(error);
+  const hasFieldErrors = Object.keys(fieldErrors).length > 0;
+  const handleValidationErrorLocally = options.handleValidationErrorLocally === true;
+  const isInactiveBoundary =
+    isTenantInactivePayload(payload.code, payload.message) || isUserInactivePayload(payload.code, payload.message);
+  const isTwoFactorRequired = payload.code === '4020';
+  const isModalLogout = modalLogoutCodes.includes(payload.code);
+  const isSessionEnding = isSessionEndingCode(payload.code);
+  const shouldHandleValidationLocally = handleValidationErrorLocally && hasFieldErrors;
+  const fallbackMessage = normalizeMessage(options.fallbackMessage);
+
+  let kind: RequestErrorKind = 'transport';
+  if (isInactiveBoundary) {
+    kind = 'inactive_boundary';
+  } else if (isTwoFactorRequired) {
+    kind = 'two_factor_required';
+  } else if (isModalLogout) {
+    kind = 'modal_logout';
+  } else if (isSessionEnding) {
+    kind = 'session_ending';
+  } else if (hasFieldErrors) {
+    kind = 'validation';
+  } else if (payload.code !== '' || payload.message !== '') {
+    kind = 'business';
   }
 
-  const payload = parseErrorPayload(error);
-  const response = (error as { response?: { status?: number } }).response;
-  const fieldErrors = resolveValidationErrors(error);
+  let displayMessage = payload.message;
+  if (displayMessage === '') {
+    if (fallbackMessage !== '' && !/^Request failed with status code\s+\d+$/i.test(fallbackMessage)) {
+      displayMessage = fallbackMessage;
+    } else {
+      displayMessage = resolveTransportErrorMessage(error);
+    }
+  }
 
-  return response?.status === 422 || validationErrorCodes.includes(payload.code) || Object.keys(fieldErrors).length > 0;
+  const shouldSkipGlobalToast = isSessionEnding || isInactiveBoundary;
+  const shouldShowGlobalToast =
+    !shouldHandleValidationLocally && !shouldSkipGlobalToast && !isModalLogout && !isTwoFactorRequired;
+
+  return {
+    code: payload.code,
+    backendMessage: payload.message,
+    displayMessage,
+    fieldErrors,
+    hasStructuredPayload: payload.code !== '' || payload.message !== '' || hasFieldErrors,
+    kind,
+    isValidation: hasFieldErrors,
+    isSessionEnding,
+    isModalLogout,
+    isInactiveBoundary,
+    isTwoFactorRequired,
+    shouldHandleValidationLocally,
+    shouldSkipGlobalToast,
+    shouldShowGlobalToast
+  };
+}
+
+export function isValidationErrorPayload(error: unknown): boolean {
+  return resolveRequestErrorStrategy(error).isValidation;
 }
 
 export function isTenantInactivePayload(code: unknown, message: unknown): boolean {
@@ -97,9 +212,15 @@ export function isSessionEndingCode(code: unknown): boolean {
 }
 
 export function shouldSkipGlobalErrorToast(error: unknown): boolean {
-  const payload = parseErrorPayload(error);
+  return resolveRequestErrorStrategy(error).shouldSkipGlobalToast;
+}
 
-  return isSessionEndingCode(payload.code) || isTenantInactivePayload(payload.code, payload.message);
+export function resolveRequestErrorMessage(error: unknown, fallbackMessage: string): string {
+  return resolveRequestErrorStrategy(error, { fallbackMessage }).displayMessage;
+}
+
+export function shouldApplyServerValidation(error: unknown): boolean {
+  return resolveRequestErrorStrategy(error, { handleValidationErrorLocally: true }).shouldHandleValidationLocally;
 }
 
 export function getAuthorization() {

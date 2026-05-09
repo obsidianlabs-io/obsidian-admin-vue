@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { fetchRegister } from '@/service/api/auth';
+import { shouldApplyServerValidation } from '@/service/request/shared';
 import { useAuthStore } from '@/store/modules/auth';
 import { useFormRules, useNaiveForm } from '@/hooks/common/form';
 import { useRouterPush } from '@/hooks/common/router';
@@ -56,11 +57,14 @@ async function handleSubmit() {
   );
 
   if (error) {
-    await naiveForm.applyServerValidation(error, {
-      fieldAliases: {
-        name: 'userName'
-      }
-    });
+    if (shouldApplyServerValidation(error)) {
+      await naiveForm.applyServerValidation(error, {
+        fieldAliases: {
+          name: 'userName'
+        }
+      });
+    }
+
     submitting.value = false;
     return;
   }

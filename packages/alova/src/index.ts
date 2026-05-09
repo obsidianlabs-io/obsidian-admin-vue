@@ -50,7 +50,7 @@ export const createAlovaRequest = <
           if (await options.isBackendSuccess(response)) {
             transformedData = await options.transformBackendResponse(response);
           } else {
-            error = new Error('the backend request error');
+            error = new Error('Backend request failed');
             error.code = BACKEND_ERROR_CODE;
           }
         } catch (err) {
