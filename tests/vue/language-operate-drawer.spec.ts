@@ -321,9 +321,11 @@ describe('language-operate-drawer', () => {
 
   it('forwards backend validation errors to applyServerValidation', async () => {
     const error = {
-      data: {
-        errors: {
-          translationKey: ['The translation key has already been taken.']
+      response: {
+        data: {
+          errors: {
+            translationKey: ['The translation key has already been taken.']
+          }
         }
       }
     };

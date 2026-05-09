@@ -101,7 +101,7 @@
     "@sa/materials": "workspace:*",
     "@sa/utils": "workspace:*",
     "@vueuse/core": "14.2.1",
-    "axios": "1.15.0",
+    "axios": "1.15.2",
     "clipboard": "2.0.11",
     "dayjs": "1.11.20",
     "defu": "6.1.7",
@@ -167,7 +167,7 @@
   },
   "pnpm": {
     "overrides": {
-      "axios": "1.15.0",
+      "axios": "1.15.2",
       "defu": "6.1.7",
       "lodash": "4.18.1",
       "lodash-es": "4.18.1"
