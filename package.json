@@ -149,7 +149,7 @@
     "plop": "^4.0.5",
     "postcss": "^8.5.14",
     "prettier": "3.8.2",
-    "sass": "1.98.0",
+    "sass": "1.99.0",
     "simple-git-hooks": "2.13.1",
     "tsx": "4.21.0",
     "typescript": "5.9.3",
