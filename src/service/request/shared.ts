@@ -1,4 +1,5 @@
 import { getCurrentTenantId, getRefreshToken, getToken, updateAuthTokens } from '@/store/modules/auth/shared';
+import { getNaiveMessage } from '@/utils/naive-ui';
 import { resolvePreferredLocale } from '@/locales/default-locale';
 import { $t } from '@/locales';
 import { resolveValidationErrors } from './validation';
@@ -287,7 +288,7 @@ export function showErrorMsg(state: RequestInstanceState, message: string) {
   if (!isExist) {
     state.errMsgStack.push(localizedMessage);
 
-    window.$message?.error(localizedMessage, {
+    getNaiveMessage()?.error(localizedMessage, {
       onLeave: () => {
         state.errMsgStack = state.errMsgStack.filter(msg => msg !== localizedMessage);
 

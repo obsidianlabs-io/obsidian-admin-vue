@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends object">
 import type { PaginationProps } from 'naive-ui';
 import { useAppStore } from '@/store/modules/app';
 import type { SchemaSearchField } from '@/types/schema-search-form';
@@ -11,11 +11,11 @@ defineOptions({
 
 interface Props {
   title: string;
-  searchFields: SchemaSearchField<any>[];
-  columns: NaiveUI.TableColumn<any>[];
-  data: any[];
+  searchFields: SchemaSearchField<T>[];
+  columns: NaiveUI.TableColumn<T>[];
+  data: T[];
   loading: boolean;
-  rowKey: (row: any) => TableRowKey;
+  rowKey: (row: T) => TableRowKey;
   pagination: PaginationProps;
   scrollX?: number;
   showAdd?: boolean;
@@ -47,7 +47,7 @@ const columnChecks = defineModel<NaiveUI.TableColumnCheck[]>('columnChecks', {
 const checkedRowKeys = defineModel<TableRowKey[]>('checkedRowKeys', {
   default: () => []
 });
-const searchModel = defineModel<Record<string, any>>('searchModel', {
+const searchModel = defineModel<Record<string, unknown>>('searchModel', {
   required: true
 });
 </script>

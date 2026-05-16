@@ -1,6 +1,7 @@
 import { computed } from 'vue';
 import { useCountDown, useLoading } from '@sa/hooks';
 import { REG_PHONE } from '@/constants/reg';
+import { getNaiveMessage } from '@/utils/naive-ui';
 import { $t } from '@/locales';
 
 export function useCaptcha() {
@@ -25,13 +26,13 @@ export function useCaptcha() {
 
   function isPhoneValid(phone: string) {
     if (phone.trim() === '') {
-      window.$message?.error?.($t('form.phone.required'));
+      getNaiveMessage()?.error?.($t('form.phone.required'));
 
       return false;
     }
 
     if (!REG_PHONE.test(phone)) {
-      window.$message?.error?.($t('form.phone.invalid'));
+      getNaiveMessage()?.error?.($t('form.phone.invalid'));
 
       return false;
     }
@@ -53,7 +54,7 @@ export function useCaptcha() {
       setTimeout(resolve, 500);
     });
 
-    window.$message?.success?.($t('page.login.codeLogin.sendCodeSuccess'));
+    getNaiveMessage()?.success?.($t('page.login.codeLogin.sendCodeSuccess'));
 
     start();
 

@@ -616,7 +616,7 @@ export type PostAuthRefreshTokenData = {
     body: RefreshTokenRequestBody;
     path?: never;
     query?: never;
-    url: '/auth/refreshToken';
+    url: '/auth/refresh-token';
 };
 
 export type PostAuthRefreshTokenResponses = {
@@ -628,21 +628,21 @@ export type PostAuthRefreshTokenResponses = {
 
 export type PostAuthRefreshTokenResponse = PostAuthRefreshTokenResponses[keyof PostAuthRefreshTokenResponses];
 
-export type GetAuthGetUserInfoData = {
+export type GetAuthUserInfoData = {
     body?: never;
     path?: never;
     query?: never;
-    url: '/auth/getUserInfo';
+    url: '/auth/user-info';
 };
 
-export type GetAuthGetUserInfoResponses = {
+export type GetAuthUserInfoResponses = {
     /**
      * Current user info response wrapper
      */
     200: ApiResponse;
 };
 
-export type GetAuthGetUserInfoResponse = GetAuthGetUserInfoResponses[keyof GetAuthGetUserInfoResponses];
+export type GetAuthUserInfoResponse = GetAuthUserInfoResponses[keyof GetAuthUserInfoResponses];
 
 export type GetAuthMenusData = {
     body?: never;

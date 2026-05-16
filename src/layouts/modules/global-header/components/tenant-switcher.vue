@@ -4,6 +4,7 @@ import { NInput } from 'naive-ui';
 import { useAppStore } from '@/store/modules/app';
 import { useAuthStore } from '@/store/modules/auth';
 import { useThemeStore } from '@/store/modules/theme';
+import { getNaiveMessage } from '@/utils/naive-ui';
 import { $t } from '@/locales';
 import SvgIcon from '@/components/custom/svg-icon.vue';
 
@@ -131,7 +132,7 @@ async function handleSelect(key: string) {
         ? $t('common.platform')
         : authStore.userInfo.tenants.find(item => item.tenantId === key)?.tenantName || $t('common.tenant');
 
-    window.$message?.success($t('common.switchTenantSuccess', { tenant: switchedTo }));
+    getNaiveMessage()?.success($t('common.switchTenantSuccess', { tenant: switchedTo }));
   }
 }
 </script>

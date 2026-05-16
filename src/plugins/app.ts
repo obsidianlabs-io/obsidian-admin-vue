@@ -1,6 +1,7 @@
 import { h } from 'vue';
 import type { App } from 'vue';
 import { NButton } from 'naive-ui';
+import { getNaiveNotification } from '@/utils/naive-ui';
 import { $t } from '@/locales';
 
 export function setupAppErrorHandle(app: App) {
@@ -33,7 +34,7 @@ export function setupAppVersionNotification() {
     isShow = true;
 
     // Show update notification
-    const n = window.$notification?.create({
+    const n = getNaiveNotification()?.create({
       title: $t('system.updateTitle'),
       content: $t('system.updateContent'),
       action() {

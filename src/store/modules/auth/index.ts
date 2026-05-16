@@ -7,6 +7,7 @@ import { fetchGetUserInfo, fetchLogin, fetchLogout, fetchUpdateLocale } from '@/
 import { resolveRequestErrorStrategy } from '@/service/request/shared';
 import { localStg } from '@/utils/storage';
 import { createDefaultThemeConfig } from '@/utils/theme-config';
+import { getNaiveNotification } from '@/utils/naive-ui';
 import { buildAppHref } from '@/bootstrap/runtime-location';
 import { isGuestBootstrapMode } from '@/bootstrap/runtime-state';
 import { SetupStoreId } from '@/enum';
@@ -23,7 +24,6 @@ import {
 
 export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
   const route = useRoute();
-  const authStore = useAuthStore();
   const { loading: loginLoading, startLoading, endLoading } = useLoading();
   let logoutPromise: Promise<void> | null = null;
   let websocketModulePromise: Promise<typeof import('@/service/websocket')> | null = null;
@@ -105,7 +105,24 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
 
     clearAuthStorage();
 
-    authStore.$reset();
+    // Reset all reactive state directly instead of calling $reset() to avoid circular self-reference
+    token.value = '';
+    Object.assign(userInfo, {
+      userId: '',
+      userName: '',
+      locale: resolvePreferredLocale(),
+      timezone: 'UTC',
+      themeSchema: null,
+      themeConfig: createDefaultThemeConfig(),
+      roles: [],
+      buttons: [],
+      currentTenantId: '',
+      currentTenantName: '',
+      tenants: [],
+      menuScope: 'platform',
+      menus: [],
+      routeRules: {}
+    });
     dispatchAuthUserNameSync('');
 
     if (isGuestBootstrapMode()) {
@@ -317,7 +334,7 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
       }
 
       if (showWelcomeNotification) {
-        window.$notification?.success({
+        getNaiveNotification()?.success({
           title: $t('page.login.common.loginSuccess'),
           content: $t('page.login.common.welcomeBack', { userName: userInfo.userName }),
           duration: 4500

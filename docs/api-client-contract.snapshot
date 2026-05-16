@@ -12,12 +12,12 @@
 [src/service/api/auth.ts] fetchForgotPassword | POST /auth/forgot-password | response=Api.Auth.ForgotPasswordResult | params=payload:Api.Auth.ForgotPasswordPayload, config:CustomAxiosRequestConfig
 [src/service/api/auth.ts] fetchGetAuthSessions | GET /auth/sessions | response=Api.Auth.AuthSessionList | params=-
 [src/service/api/auth.ts] fetchGetTimezoneOptions | GET /auth/timezones | response={ defaultTimezone: string; records: Api.Auth.TimezoneOption[]; } | params=-
-[src/service/api/auth.ts] fetchGetUserInfo | GET /auth/getUserInfo | response=Api.Auth.UserInfo | params=-
+[src/service/api/auth.ts] fetchGetUserInfo | GET /auth/user-info | response=Api.Auth.UserInfo | params=-
 [src/service/api/auth.ts] fetchGetUserMenus | GET /auth/menus | response=Pick<Api.Auth.UserInfo, 'menuScope' | 'menus' | 'routeRules'> | params=-
 [src/service/api/auth.ts] fetchGetUserProfile | GET /auth/profile | response=Api.Auth.UserProfile | params=-
 [src/service/api/auth.ts] fetchLogin | POST /auth/login | response=Api.Auth.LoginToken | params=payload:{ userName: string; password: string; rememberMe: boolean; otpCode?: string; locale?: App.I18n.LangType | null; }, config:CustomAxiosRequestConfig
 [src/service/api/auth.ts] fetchLogout | POST /auth/logout | response={ userId: string } | params=refreshToken:string
-[src/service/api/auth.ts] fetchRefreshToken | POST /auth/refreshToken | response=Api.Auth.LoginToken | params=refreshToken:string
+[src/service/api/auth.ts] fetchRefreshToken | POST /auth/refresh-token | response=Api.Auth.LoginToken | params=refreshToken:string
 [src/service/api/auth.ts] fetchRegister | POST /auth/register | response=Api.Auth.LoginToken | params=payload:Api.Auth.RegisterPayload, config:CustomAxiosRequestConfig
 [src/service/api/auth.ts] fetchResetPassword | POST /auth/reset-password | response=Record<string, never> | params=payload:Api.Auth.ResetPasswordPayload, config:CustomAxiosRequestConfig
 [src/service/api/auth.ts] fetchRevokeAuthSession | DELETE /auth/sessions/{sessionId} | response=Api.Auth.RevokeAuthSessionResult | params=sessionId:string

@@ -4,6 +4,7 @@ import type { VNode } from 'vue';
 import { useAuthStore } from '@/store/modules/auth';
 import { useRouterPush } from '@/hooks/common/router';
 import { useSvgIcon } from '@/hooks/common/icon';
+import { getNaiveDialog } from '@/utils/naive-ui';
 import { $t } from '@/locales';
 
 defineOptions({
@@ -53,7 +54,7 @@ const options = computed(() => {
 });
 
 function logout() {
-  window.$dialog?.info({
+  getNaiveDialog()?.info({
     title: $t('common.tip'),
     content: $t('common.logoutConfirm'),
     positiveText: $t('common.confirm'),

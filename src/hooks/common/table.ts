@@ -8,6 +8,7 @@ import type { FlatResponseData } from '@sa/axios';
 import { jsonClone } from '@sa/utils';
 import { getEnableStatusLabel, getEnableStatusTagType } from '@/constants/common';
 import { useAppStore } from '@/store/modules/app';
+import { getNaiveMessage } from '@/utils/naive-ui';
 import { $t } from '@/locales';
 
 export type UseNaiveTableOptions<ResponseData, ApiData, Pagination extends boolean> = Omit<
@@ -204,7 +205,7 @@ export function useTableOperate<TableData>(
 
   /** the hook after the batch delete operation is completed */
   async function onBatchDeleted() {
-    window.$message?.success($t('common.deleteSuccess'));
+    getNaiveMessage()?.success($t('common.deleteSuccess'));
 
     checkedRowKeys.value = [];
 
@@ -213,7 +214,7 @@ export function useTableOperate<TableData>(
 
   /** the hook after the delete operation is completed */
   async function onDeleted() {
-    window.$message?.success($t('common.deleteSuccess'));
+    getNaiveMessage()?.success($t('common.deleteSuccess'));
 
     await getData();
   }

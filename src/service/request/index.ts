@@ -3,6 +3,7 @@ import { BACKEND_ERROR_CODE, createFlatRequest, createRequest } from '@sa/axios'
 import { getToken } from '@/store/modules/auth/shared';
 import { getServiceBaseURL } from '@/utils/service';
 import { isDemoRuntime } from '@/utils/runtime';
+import { getNaiveDialog, getNaiveMessage } from '@/utils/naive-ui';
 import { $t } from '@/locales';
 import {
   createRequestContextHeaders,
@@ -139,7 +140,7 @@ export const request = createFlatRequest(
         // prevent the user from refreshing the page
         window.addEventListener('beforeunload', handleLocalLogout);
 
-        window.$dialog?.error({
+        getNaiveDialog()?.error({
           title: $t('common.error'),
           content: response.data.msg,
           positiveText: $t('common.confirm'),
@@ -225,7 +226,7 @@ export const demoRequest = createRequest(
         message = error.response?.data?.message || message;
       }
 
-      window.$message?.error(resolveRequestErrorMessage(error, message));
+      getNaiveMessage()?.error(resolveRequestErrorMessage(error, message));
     }
   }
 );

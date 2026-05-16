@@ -44,7 +44,7 @@ test('demo backend login and bootstrap flows return contract-shaped payloads', a
 
   const userInfo = await backend.handle({
     method: 'GET',
-    path: '/auth/getUserInfo',
+    path: '/auth/user-info',
     query: new URLSearchParams(),
     headers: {
       authorization: 'Bearer demo-access-user-2',

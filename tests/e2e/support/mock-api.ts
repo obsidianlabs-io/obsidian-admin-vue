@@ -129,7 +129,7 @@ function createStaticHandlers(permissions: string[], state: MockApiState): Recor
         }
       });
     },
-    'GET /auth/getUserInfo': async route => {
+    'GET /auth/user-info': async route => {
       await fulfill(route, {
         code: '0000',
         msg: 'ok',

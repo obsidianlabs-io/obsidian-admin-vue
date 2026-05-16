@@ -2,11 +2,11 @@ import type { CustomAxiosRequestConfig } from '@sa/axios';
 import {
   deleteAuthSessionsBySessionId,
   getAuthError,
-  getAuthGetUserInfo,
   getAuthMenus,
   getAuthProfile,
   getAuthSessions,
   getAuthTimezones,
+  getAuthUserInfo,
   postAuth2FaDisable,
   postAuth2FaEnable,
   postAuth2FaSetup,
@@ -114,7 +114,7 @@ export function fetchResetPassword(payload: Api.Auth.ResetPasswordPayload, confi
 
 /** Get user info */
 export function fetchGetUserInfo() {
-  return callGenerated<Api.Auth.UserInfo>(() => getAuthGetUserInfo());
+  return callGenerated<Api.Auth.UserInfo>(() => getAuthUserInfo());
 }
 
 /** Get backend-driven menus and route rules */

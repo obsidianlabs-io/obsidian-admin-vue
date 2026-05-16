@@ -5,6 +5,7 @@ import type { PaginationProps } from 'naive-ui';
 import type { FlatResponseData } from '@sa/axios';
 import { resolveRequestErrorStrategy } from '@/service/request/shared';
 import { defaultTransform, useNaivePaginatedTable } from '@/hooks/common/table';
+import { getNaiveMessage } from '@/utils/naive-ui';
 
 type SearchParams = {
   current: number;
@@ -51,7 +52,7 @@ export function useCrudPaginatedTable<RowData, QueryParams extends SearchParams>
         const strategy = resolveRequestErrorStrategy(response.error);
 
         if (!strategy.shouldShowGlobalToast && !strategy.shouldSkipGlobalToast) {
-          window.$message?.error(options.resolveErrorMessage(response.error));
+          getNaiveMessage()?.error(options.resolveErrorMessage(response.error));
         }
       }
 

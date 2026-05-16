@@ -28,7 +28,7 @@ export function handleAuthRequest(backend: DemoBackend, request: DemoBackendRequ
 
 function handleAuthGet(backend: DemoBackend, request: DemoBackendRequest): DemoBackendResponse | null {
   switch (request.path) {
-    case '/auth/getUserInfo':
+    case '/auth/user-info':
     case '/auth/me':
       return ok(backend.userInfo(request.headers));
     case '/auth/menus':
@@ -56,7 +56,7 @@ function handleAuthPost(backend: DemoBackend, request: DemoBackendRequest): Demo
       return register(backend, request.body);
     case '/auth/logout':
       return ok({ userId: backend.requireCurrentUser(request.headers).id.toString() }, 'Logout success');
-    case '/auth/refreshToken':
+    case '/auth/refresh-token':
       return refreshToken(backend, request.body);
     case '/auth/forgot-password':
       return ok({ resetToken: 'demo-reset-token' }, 'If the email exists, a reset link has been sent');

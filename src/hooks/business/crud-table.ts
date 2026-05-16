@@ -1,6 +1,7 @@
 import { type Ref, ref } from 'vue';
 import { resolveRequestErrorStrategy } from '@/service/request/shared';
 import { useTableOperate } from '@/hooks/common/table';
+import { getNaiveMessage } from '@/utils/naive-ui';
 import { $t } from '@/locales';
 
 type DeleteApiResponse = {
@@ -77,7 +78,7 @@ export function useCrudTable<TableData extends object>(options: UseCrudTableOpti
     if (!response.error) {
       await options.getData();
       await options.onAfterDeleteSuccess?.();
-      window.$message?.success(resolveDeleteSuccessMessage(resolveDeleteAction(response)));
+      getNaiveMessage()?.success(resolveDeleteSuccessMessage(resolveDeleteAction(response)));
     }
   }
 
@@ -110,7 +111,7 @@ export function useCrudTable<TableData extends object>(options: UseCrudTableOpti
         item => !item.error && resolveDeleteAction(item) === 'deactivated'
       ).length;
 
-      window.$message?.success(
+      getNaiveMessage()?.success(
         deactivatedCount === successCount ? $t('common.deactivateSuccess') : $t('common.deleteSuccess')
       );
 
@@ -122,7 +123,7 @@ export function useCrudTable<TableData extends object>(options: UseCrudTableOpti
       await options.getData();
       await options.onAfterDeleteSuccess?.();
 
-      window.$message?.warning(
+      getNaiveMessage()?.warning(
         $t('common.batchDeletePartialResult', {
           success: String(successCount),
           failed: String(failedCount)
@@ -133,7 +134,7 @@ export function useCrudTable<TableData extends object>(options: UseCrudTableOpti
     }
 
     if (!hasFailureAlreadyPresented) {
-      window.$message?.error($t('common.batchDeleteFailed'));
+      getNaiveMessage()?.error($t('common.batchDeleteFailed'));
     }
   }
 

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { createTextVNode, defineComponent } from 'vue';
 import { useDialog, useLoadingBar, useMessage, useNotification } from 'naive-ui';
+import { registerNaiveProviders } from '@/utils/naive-ui';
 
 defineOptions({
   name: 'AppProvider'
@@ -10,10 +11,18 @@ const ContextHolder = defineComponent({
   name: 'ContextHolder',
   setup() {
     function register() {
-      window.$loadingBar = useLoadingBar();
-      window.$dialog = useDialog();
-      window.$message = useMessage();
-      window.$notification = useNotification();
+      const loadingBar = useLoadingBar();
+      const dialog = useDialog();
+      const message = useMessage();
+      const notification = useNotification();
+
+      registerNaiveProviders({ loadingBar, dialog, message, notification });
+
+      // Keep window references for backward compatibility during gradual migration
+      window.$loadingBar = loadingBar;
+      window.$dialog = dialog;
+      window.$message = message;
+      window.$notification = notification;
     }
 
     register();
