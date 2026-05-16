@@ -142,7 +142,7 @@
     "@vitejs/plugin-vue-jsx": "5.1.5",
     "@vue/test-utils": "^2.4.10",
     "consola": "3.4.2",
-    "eslint": "9.39.2",
+    "eslint": "10.4.0",
     "eslint-plugin-vue": "10.8.0",
     "jsdom": "^29.1.1",
     "kolorist": "1.8.0",
