@@ -123,7 +123,7 @@
     "@axe-core/playwright": "^4.11.3",
     "@elegant-router/vue": "0.3.8",
     "@hey-api/openapi-ts": "^0.94.5",
-    "@iconify/json": "2.2.461",
+    "@iconify/json": "2.2.474",
     "@lhci/cli": "0.15.1",
     "@playwright/test": "^1.60.0",
     "@sa/scripts": "workspace:*",
