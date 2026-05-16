@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.2.1] - 2026-05-16
+
+### ✨ Added
+- Added a shared Naive UI provider access layer for programmatic dialog, message, notification, and loading-bar usage outside component setup boundaries.
+
+### 🔧 Changed
+- Aligned the generated auth client and auth facade with the backend kebab-case auth contract for `refresh-token` and `user-info`.
+- Promoted the Laravel 13 backend lane to the coordinated stable release pair for frontend `v1.2.1` and backend `v1.3.1`.
+
+### 🐞 Fixed
+- Fixed request-layer error normalization and JSON response handling so frontend adapters behave consistently against the current Laravel backend responses.
+- Fixed Naive UI form mocks and validation-related tests after upstream dependency updates.
+
 ## [1.2.0] - 2026-03-12
 
 ### ✨ Added

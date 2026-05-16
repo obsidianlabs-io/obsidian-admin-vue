@@ -7,15 +7,16 @@ This repository is versioned independently from `obsidian-admin-laravel`.
 | Frontend | Backend | Status | Notes |
 | --- | --- | --- | --- |
 | `main` | `main` | Active development | CI assumes both repositories evolve together and regenerates API types from backend OpenAPI artifacts. |
-| `v1.2.0` | `v1.3.1` | Stable | Current documented release pair. Backend patch release with security and contract-alignment fixes and no required frontend tag bump. |
+| `v1.2.1` | `v1.3.1` | Stable | Current documented release pair. Frontend patch release that aligns auth contract updates, request/runtime hardening, and Laravel 13 backend pairing. |
+| `v1.2.0` | `v1.3.1` | Stable | Previous stable release pair. Backend patch release with security and contract-alignment fixes before the coordinated frontend patch release. |
 | `v1.2.0` | `v1.3.0` | Stable | Previous stable release pair. Backend-only Laravel 13 minor release with no required frontend tag bump. |
 | `v1.2.0` | `v1.2.1` | Stable | Previous stable release pair. |
 
 ## Current coordinated backend lane
 
 - Backend `main` now runs on the Laravel 13 baseline.
-- The current stable published pair is frontend `v1.2.0` with backend `v1.3.1`.
-- Frontend `v1.2.0` remains compatible with backend `v1.3.1`, so no coordinated frontend release is required for this backend patch lane.
+- The current stable published pair is frontend `v1.2.1` with backend `v1.3.1`.
+- Frontend `v1.2.0` remains deployable with backend `v1.3.1`, but `v1.2.1` is the coordinated frontend release for this backend lane.
 
 ## Source of truth
 

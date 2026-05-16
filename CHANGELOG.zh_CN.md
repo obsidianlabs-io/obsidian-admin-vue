@@ -7,6 +7,19 @@
 
 ---
 
+## [1.2.1] - 2026-05-16
+
+### ✨ 新增
+- 新增统一的 Naive UI provider 访问层，便于在组件 `setup` 之外稳定调用 dialog、message、notification 与 loading bar。
+
+### 🔧 调整
+- 将 generated auth client 与 auth facade 对齐到后端 kebab-case 认证契约，覆盖 `refresh-token` 与 `user-info` 路径。
+- 将 Laravel 13 后端发布线提升为前端 `v1.2.1` 与后端 `v1.3.1` 的协调稳定配对版本。
+
+### 🐞 修复
+- 修复请求层错误归一化与 JSON 响应识别策略，使前端适配器对当前 Laravel 后端响应更一致。
+- 修复依赖升级后 Naive UI 表单 mock 与校验相关测试的不稳定问题。
+
 ## [1.2.0] - 2026-03-12
 
 ### ✨ 新增

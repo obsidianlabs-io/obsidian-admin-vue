@@ -155,14 +155,14 @@ This checklist is for `obsidian-admin-vue`.
 
 - tag 指向代码发布提交
 - GitHub Release 正文使用:
-  `docs/releases/v1.2.0.md`
+  `docs/releases/v1.2.1.md`
 - CHANGELOG 使用:
   `CHANGELOG.md`
 - `release.yml` 会优先读取 `docs/releases/<tag>.md`，缺失时才回退到 `CHANGELOG.md`
 
 当前状态:
 
-- 当前公开 frontend release 为 `v1.2.0`
+- 当前公开 frontend release 为 `v1.2.1`
 - release workflow 会在 GitHub Release 中上传：
   - production app bundle
   - demo preview bundle

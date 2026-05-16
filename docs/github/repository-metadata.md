@@ -3,7 +3,7 @@
 ## Release Title
 
 ```text
-v1.2.0 · Public preview, pairing, and release artifact baseline
+v1.2.1 · Laravel 13 pairing and auth contract alignment
 ```
 
 ## Repository About
