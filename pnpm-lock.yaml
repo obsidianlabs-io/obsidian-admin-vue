@@ -116,7 +116,7 @@ importers:
         version: link:packages/uno-preset
       '@soybeanjs/eslint-config':
         specifier: 1.7.5
-        version: 1.7.5(@typescript-eslint/utils@8.59.3(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(@unocss/eslint-config@66.6.7(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint-plugin-vue@10.8.0(@typescript-eslint/parser@8.59.3(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.2(jiti@2.6.1))(vue-eslint-parser@10.4.0(eslint@9.39.2(jiti@2.6.1))))(eslint@9.39.2(jiti@2.6.1))(svelte-eslint-parser@1.4.1)(typescript@5.9.3)(vue-eslint-parser@10.4.0(eslint@9.39.2(jiti@2.6.1)))
+        version: 1.7.5(@typescript-eslint/utils@8.59.3(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(@unocss/eslint-config@66.6.8(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint-plugin-vue@10.8.0(@typescript-eslint/parser@8.59.3(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.2(jiti@2.6.1))(vue-eslint-parser@10.4.0(eslint@9.39.2(jiti@2.6.1))))(eslint@9.39.2(jiti@2.6.1))(svelte-eslint-parser@1.4.1)(typescript@5.9.3)(vue-eslint-parser@10.4.0(eslint@9.39.2(jiti@2.6.1)))
       '@types/node':
         specifier: 25.3.5
         version: 25.3.5
@@ -124,8 +124,8 @@ importers:
         specifier: 0.2.3
         version: 0.2.3
       '@unocss/eslint-config':
-        specifier: 66.6.7
-        version: 66.6.7(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
+        specifier: 66.6.8
+        version: 66.6.8(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
       '@unocss/preset-icons':
         specifier: 66.6.7
         version: 66.6.7
@@ -1863,15 +1863,22 @@ packages:
     resolution: {integrity: sha512-1uleyRLyJc6PNNc2L3hEaKL89zXwvQAtP36oFySgL47RAxZHPZ4vfqFpbwR0eEN4iSqTS24ZFr7CTRWCaEGjzQ==}
     engines: {node: '>=14'}
 
+  '@unocss/config@66.6.8':
+    resolution: {integrity: sha512-f+a8OyhD7ZoK8Pa1b3Cbx1RQc3n5x+Qht/cHg3wh/g4DNQIjBI2EqwSLfBigWhdO96zIqFAdyTlO3onmrJwUOw==}
+    engines: {node: '>=14'}
+
   '@unocss/core@66.6.7':
     resolution: {integrity: sha512-Q8456iWFtdwrUNYKVOQY8ygRggjZOVtLc6Jc8KIkxig7OiNlUWOgXJTfCh4I8g6jBYzC5eHaHFDLgJOmOrxBsg==}
 
-  '@unocss/eslint-config@66.6.7':
-    resolution: {integrity: sha512-l33NbugpKr5twWmRbFwQcvAuD/lWAqT9Nrnguga75geeUBENOVNQialeyEFcZAmR7/eYOeILIrhM8XtFUmtf2g==}
+  '@unocss/core@66.6.8':
+    resolution: {integrity: sha512-P9IlQfgms+8/nka7fBhiiWU4SPwrTNKbTdK0z1SLnttXMHHjsB2zpG+Vi1JQDpICfY9Y1/2pWtguPE+zeOVu9Q==}
+
+  '@unocss/eslint-config@66.6.8':
+    resolution: {integrity: sha512-ONlFypzot0Cf3FykIVBsj1dL4hC5TGLVAcVbI6jv/KUJDzwhcf+SnVKyxzQH3ZricFG6B0PmU3kf872ZxFUmcg==}
     engines: {node: '>=14'}
 
-  '@unocss/eslint-plugin@66.6.7':
-    resolution: {integrity: sha512-0pNFT918CUOiWSlr3ZmePL5Bb06/g/mmP8zP+/dpl2+Vc/GuW6wHVsP+qn5hT2c5FwCPRZ3CUm0HprTru2/sGA==}
+  '@unocss/eslint-plugin@66.6.8':
+    resolution: {integrity: sha512-w51M8EwQZL7klOX+ZYS2zxxrj4AjfAtVenSCk+fXE+fSkC8aKNCpQpsV61Af/r9rIAy8GnbBL+QkcTOqkoKLrQ==}
     engines: {node: '>=14'}
 
   '@unocss/extractor-arbitrary-variants@66.6.7':
@@ -1894,6 +1901,10 @@ packages:
 
   '@unocss/rule-utils@66.6.7':
     resolution: {integrity: sha512-4PT/s8yKIShSqP9XPSw4EjbZopcu3wlIB9i3kbGbzQwF91H+0Yy10guK3kHDGtkmWVN6Np6VvaGIj2UcbmaivA==}
+    engines: {node: '>=14'}
+
+  '@unocss/rule-utils@66.6.8':
+    resolution: {integrity: sha512-WR35L07mLP6PElD4hlUHo5KbQ48uz2HT/XCuJyAsHP+15Gv6539hPWA5SresPuva9r8rl+PeGIgMSIKf4A5Ihw==}
     engines: {node: '>=14'}
 
   '@unocss/transformer-directives@66.6.7':
@@ -2548,15 +2559,8 @@ packages:
   brace-expansion@1.1.14:
     resolution: {integrity: sha512-MWPGfDxnyzKU7rNOW9SP/c50vi3xrmrua/+6hfPbCS2ABNWfx24vPidzvC7krjU/RTo235sV776ymlsMtGKj8g==}
 
-  brace-expansion@2.0.2:
-    resolution: {integrity: sha512-Jt0vHyM+jmUBqojB7E1NIYadt0vI0Qxjxd2TErW94wDz+E2LAm5vKMXXwg6ZZBTHPuUlDgQHKXvjGBdfcF1ZDQ==}
-
   brace-expansion@2.1.0:
     resolution: {integrity: sha512-TN1kCZAgdgweJhWWpgKYrQaMNHcDULHkWwQIspdtjV4Y5aurRdZpjAqn6yX3FPqTA9ngHCc4hJxMAMgGfve85w==}
-
-  brace-expansion@5.0.3:
-    resolution: {integrity: sha512-fy6KJm2RawA5RcHkLa1z/ScpBeA762UF9KmZQxwIbDtRJrgLzM10depAiEQ+CXYcoiqW1/m96OAAoke2nE9EeA==}
-    engines: {node: 18 || 20 || >=22}
 
   brace-expansion@5.0.6:
     resolution: {integrity: sha512-kLpxurY4Z4r9sgMsyG0Z9uzsBlgiU/EFKhj/h91/8yHu0edo7XuixOIH3VcJ8kkxs6/jPzoI6U9Vj3WqbMQ94g==}
@@ -7813,7 +7817,7 @@ snapshots:
       ofetch: 1.5.1
       semver: 7.7.4
 
-  '@soybeanjs/eslint-config@1.7.5(@typescript-eslint/utils@8.59.3(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(@unocss/eslint-config@66.6.7(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint-plugin-vue@10.8.0(@typescript-eslint/parser@8.59.3(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.2(jiti@2.6.1))(vue-eslint-parser@10.4.0(eslint@9.39.2(jiti@2.6.1))))(eslint@9.39.2(jiti@2.6.1))(svelte-eslint-parser@1.4.1)(typescript@5.9.3)(vue-eslint-parser@10.4.0(eslint@9.39.2(jiti@2.6.1)))':
+  '@soybeanjs/eslint-config@1.7.5(@typescript-eslint/utils@8.59.3(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(@unocss/eslint-config@66.6.8(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint-plugin-vue@10.8.0(@typescript-eslint/parser@8.59.3(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.2(jiti@2.6.1))(vue-eslint-parser@10.4.0(eslint@9.39.2(jiti@2.6.1))))(eslint@9.39.2(jiti@2.6.1))(svelte-eslint-parser@1.4.1)(typescript@5.9.3)(vue-eslint-parser@10.4.0(eslint@9.39.2(jiti@2.6.1)))':
     dependencies:
       '@antfu/eslint-define-config': 1.23.0-2
       '@antfu/install-pkg': 1.1.0
@@ -7837,7 +7841,7 @@ snapshots:
       svelte-eslint-parser: 1.4.1
       typescript: 5.9.3
     optionalDependencies:
-      '@unocss/eslint-config': 66.6.7(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
+      '@unocss/eslint-config': 66.6.8(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
       eslint-plugin-vue: 10.8.0(@typescript-eslint/parser@8.59.3(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.2(jiti@2.6.1))(vue-eslint-parser@10.4.0(eslint@9.39.2(jiti@2.6.1)))
       vue-eslint-parser: 10.4.0(eslint@9.39.2(jiti@2.6.1))
     transitivePeerDependencies:
@@ -8038,22 +8042,31 @@ snapshots:
       consola: 3.4.2
       unconfig: 7.5.0
 
+  '@unocss/config@66.6.8':
+    dependencies:
+      '@unocss/core': 66.6.8
+      colorette: 2.0.20
+      consola: 3.4.2
+      unconfig: 7.5.0
+
   '@unocss/core@66.6.7': {}
 
-  '@unocss/eslint-config@66.6.7(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)':
+  '@unocss/core@66.6.8': {}
+
+  '@unocss/eslint-config@66.6.8(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)':
     dependencies:
-      '@unocss/eslint-plugin': 66.6.7(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
+      '@unocss/eslint-plugin': 66.6.8(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
     transitivePeerDependencies:
       - eslint
       - supports-color
       - typescript
 
-  '@unocss/eslint-plugin@66.6.7(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)':
+  '@unocss/eslint-plugin@66.6.8(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)':
     dependencies:
       '@typescript-eslint/utils': 8.59.3(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
-      '@unocss/config': 66.6.7
-      '@unocss/core': 66.6.7
-      '@unocss/rule-utils': 66.6.7
+      '@unocss/config': 66.6.8
+      '@unocss/core': 66.6.8
+      '@unocss/rule-utils': 66.6.8
       magic-string: 0.30.21
       synckit: 0.11.12
     transitivePeerDependencies:
@@ -8099,6 +8112,11 @@ snapshots:
   '@unocss/rule-utils@66.6.7':
     dependencies:
       '@unocss/core': 66.6.7
+      magic-string: 0.30.21
+
+  '@unocss/rule-utils@66.6.8':
+    dependencies:
+      '@unocss/core': 66.6.8
       magic-string: 0.30.21
 
   '@unocss/transformer-directives@66.6.7':
@@ -8780,17 +8798,9 @@ snapshots:
       balanced-match: 1.0.2
       concat-map: 0.0.1
 
-  brace-expansion@2.0.2:
-    dependencies:
-      balanced-match: 1.0.2
-
   brace-expansion@2.1.0:
     dependencies:
       balanced-match: 1.0.2
-
-  brace-expansion@5.0.3:
-    dependencies:
-      balanced-match: 4.0.4
 
   brace-expansion@5.0.6:
     dependencies:
@@ -11085,7 +11095,7 @@ snapshots:
 
   minimatch@10.2.2:
     dependencies:
-      brace-expansion: 5.0.3
+      brace-expansion: 5.0.6
 
   minimatch@10.2.5:
     dependencies:
@@ -11097,7 +11107,7 @@ snapshots:
 
   minimatch@9.0.5:
     dependencies:
-      brace-expansion: 2.0.2
+      brace-expansion: 2.1.0
 
   minimatch@9.0.9:
     dependencies:
