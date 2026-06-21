@@ -22,7 +22,7 @@ jobs:
       COMPOSE_PROJECT_NAME: obsidian-fullstack
     steps:
       - name: Checkout frontend
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
 
       - name: Detect full-stack relevant changes
         if: github.event_name == 'pull_request'
@@ -47,7 +47,7 @@ jobs:
 
       - name: Checkout backend repo (with token)
         if: (github.event_name != 'pull_request' || steps.changes.outputs.pairing == 'true') && env.BACKEND_REPO_TOKEN != ''
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
         with:
           repository: ${{ env.BACKEND_REPO }}
           ref: ${{ env.BACKEND_REPO_REF }}
