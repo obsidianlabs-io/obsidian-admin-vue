@@ -7,6 +7,17 @@
 
 ---
 
+## [1.2.2] - 2026-06-22
+
+### 🔧 调整
+- 将内置 demo backend 从 `src/` 移出，并改为仅在运行时按需导入，使生产构建与 mock 基础设施边界更清晰。
+- 将认证相关副作用提取到 bootstrap 层，并通过共享 operate-form composable 统一 CRUD 抽屉表单逻辑。
+- 删除未使用的 `packages/alova` workspace 包，并刷新本次发布线的前端依赖元数据。
+
+### 🐞 修复
+- 修复 operate drawer 异步提交测试未等待 promise 完成导致的断言不稳定。
+- 修复 Axios 与 hook request factory 中触发 ESLint `no-shadow` 的同名函数表达式问题。
+
 ## [1.2.1] - 2026-05-16
 
 ### ✨ 新增

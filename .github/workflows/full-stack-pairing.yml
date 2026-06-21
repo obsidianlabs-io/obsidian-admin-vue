@@ -64,6 +64,12 @@ jobs:
         if: github.event_name != 'pull_request' || steps.changes.outputs.pairing == 'true'
         uses: ./.github/actions/setup-frontend
 
+      - name: Prepare frontend environment
+        if: github.event_name != 'pull_request' || steps.changes.outputs.pairing == 'true'
+        run: |
+          cp .env.example .env
+          cp .env.test.example .env.test
+
       - name: Cache Playwright browsers
         if: github.event_name != 'pull_request' || steps.changes.outputs.pairing == 'true'
         id: playwright-cache

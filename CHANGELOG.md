@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.2.2] - 2026-06-22
+
+### 🔧 Changed
+- Moved the built-in demo backend out of `src/` and behind runtime-only imports so production builds keep a clearer boundary from mock infrastructure.
+- Extracted authentication side effects into a bootstrap layer and standardized CRUD drawer form logic through a shared operate-form composable.
+- Removed the unused `packages/alova` workspace package and refreshed frontend dependency metadata for the release lane.
+
+### 🐞 Fixed
+- Fixed operate-drawer async submit tests by waiting for pending promise work before assertions.
+- Fixed package-level ESLint `no-shadow` failures in the Axios and hook request factories.
+
 ## [1.2.1] - 2026-05-16
 
 ### ✨ Added

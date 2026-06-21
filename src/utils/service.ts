@@ -6,11 +6,13 @@ import json5 from 'json5';
  * @param env The current env
  */
 export function createServiceConfig(env: Env.ImportMeta) {
-  const { VITE_SERVICE_BASE_URL, VITE_OTHER_SERVICE_BASE_URL } = env;
+  const VITE_SERVICE_BASE_URL = env.VITE_SERVICE_BASE_URL || 'http://127.0.0.1:8080/api/v1';
+  const VITE_OTHER_SERVICE_BASE_URL = env.VITE_OTHER_SERVICE_BASE_URL || '{"demo": "http://localhost:9528"}';
 
   let other = {} as Record<App.Service.OtherBaseURLKey, string>;
   try {
-    other = json5.parse(VITE_OTHER_SERVICE_BASE_URL);
+    const cleaned = VITE_OTHER_SERVICE_BASE_URL.replace(/^`|`$/g, '').trim();
+    other = json5.parse(cleaned);
   } catch {
     // eslint-disable-next-line no-console
     console.error('VITE_OTHER_SERVICE_BASE_URL is not a valid json5 string');

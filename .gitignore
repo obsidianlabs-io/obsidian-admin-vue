@@ -45,6 +45,7 @@ yarn.lock
 !.env.example
 !.env.*.example
 !.env.demo-live.example
+!.env.demo
 docs/.vitepress/cache
 docs/.vitepress/dist
 .pages-dist

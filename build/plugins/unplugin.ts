@@ -9,12 +9,13 @@ import { NaiveUiResolver } from 'unplugin-vue-components/resolvers';
 import { FileSystemIconLoader } from 'unplugin-icons/loaders';
 
 export function setupUnplugin(viteEnv: Env.ImportMeta) {
-  const { VITE_ICON_PREFIX, VITE_ICON_LOCAL_PREFIX } = viteEnv;
+  const iconPrefix = viteEnv.VITE_ICON_PREFIX ?? 'icon';
+  const iconLocalPrefix = viteEnv.VITE_ICON_LOCAL_PREFIX ?? 'icon-local';
 
   const localIconPath = path.join(process.cwd(), 'src/assets/svg-icon');
 
   /** The name of the local icon collection */
-  const collectionName = VITE_ICON_LOCAL_PREFIX.replace(`${VITE_ICON_PREFIX}-`, '');
+  const collectionName = iconLocalPrefix.replace(`${iconPrefix}-`, '');
 
   const plugins: PluginOption[] = [
     Icons({
@@ -32,12 +33,12 @@ export function setupUnplugin(viteEnv: Env.ImportMeta) {
       types: [{ from: 'vue-router', names: ['RouterLink', 'RouterView'] }],
       resolvers: [
         NaiveUiResolver(),
-        IconsResolver({ customCollections: [collectionName], componentPrefix: VITE_ICON_PREFIX })
+        IconsResolver({ customCollections: [collectionName], componentPrefix: iconPrefix })
       ]
     }),
     createSvgIconsPlugin({
       iconDirs: [localIconPath],
-      symbolId: `${VITE_ICON_LOCAL_PREFIX}-[dir]-[name]`,
+      symbolId: `${iconLocalPrefix}-[dir]-[name]`,
       inject: 'body-last',
       customDomId: '__SVG_ICON_LOCAL__'
     })

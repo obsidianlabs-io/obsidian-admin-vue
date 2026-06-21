@@ -30,6 +30,11 @@ jobs:
       - name: Vue-layer tests (Vitest)
         run: pnpm test:vue
 
+      - name: Prepare environment
+        run: |
+          cp .env.example .env
+          cp .env.test.example .env.test
+
       - name: Production build
         run: pnpm build
 
@@ -64,6 +69,12 @@ jobs:
       - name: Setup frontend toolchain
         if: steps.changes.outputs.e2e == 'true'
         uses: ./.github/actions/setup-frontend
+
+      - name: Prepare environment
+        if: steps.changes.outputs.e2e == 'true'
+        run: |
+          cp .env.example .env
+          cp .env.test.example .env.test
 
       - name: Cache Playwright browsers
         if: steps.changes.outputs.e2e == 'true'

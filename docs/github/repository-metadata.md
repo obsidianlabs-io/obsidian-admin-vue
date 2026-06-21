@@ -3,7 +3,7 @@
 ## Release Title
 
 ```text
-v1.2.1 · Laravel 13 pairing and auth contract alignment
+v1.2.2 · frontend architecture cleanup and demo boundary hardening
 ```
 
 ## Repository About

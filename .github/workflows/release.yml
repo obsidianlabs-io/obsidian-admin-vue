@@ -49,6 +49,9 @@ jobs:
             } > RELEASE_NOTES.md
           fi
 
+      - name: Prepare environment
+        run: cp .env.example .env
+
       - name: Build release artifacts
         env:
           VITEPRESS_BASE: /obsidian-admin-vue/

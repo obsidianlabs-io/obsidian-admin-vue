@@ -195,10 +195,10 @@ For the full contract-driven workflow, pair this frontend with:
 
 Current documented stable pair:
 
-- frontend `v1.2.1`
+- frontend `v1.2.2`
 - backend `v1.3.1`
 
-Backend `main` tracks the current Laravel 13 baseline, and the current coordinated published pair is frontend `v1.2.1` with backend `v1.3.1`. Frontend `v1.2.0` remains compatible during staged rollouts, but `v1.2.1` is the release tag to prefer. Check the compatibility matrix before mixing release tags with `main`.
+Backend `main` tracks the current Laravel 13 baseline, and the current coordinated published pair is frontend `v1.2.2` with backend `v1.3.1`. Frontend `v1.2.1` remains compatible during staged rollouts, but `v1.2.2` is the release tag to prefer. Check the compatibility matrix before mixing release tags with `main`.
 
 ## Acknowledgements
 

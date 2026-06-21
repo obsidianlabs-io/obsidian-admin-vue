@@ -5,17 +5,18 @@ import presetIcons from '@unocss/preset-icons';
 import { FileSystemIconLoader } from '@iconify/utils/lib/loader/node-loaders';
 
 export function setupUnocss(viteEnv: Env.ImportMeta) {
-  const { VITE_ICON_PREFIX, VITE_ICON_LOCAL_PREFIX } = viteEnv;
+  const iconPrefix = viteEnv.VITE_ICON_PREFIX ?? 'icon';
+  const iconLocalPrefix = viteEnv.VITE_ICON_LOCAL_PREFIX ?? 'icon-local';
 
   const localIconPath = path.join(process.cwd(), 'src/assets/svg-icon');
 
   /** The name of the local icon collection */
-  const collectionName = VITE_ICON_LOCAL_PREFIX.replace(`${VITE_ICON_PREFIX}-`, '');
+  const collectionName = iconLocalPrefix.replace(`${iconPrefix}-`, '');
 
   return unocss({
     presets: [
       presetIcons({
-        prefix: `${VITE_ICON_PREFIX}-`,
+        prefix: `${iconPrefix}-`,
         scale: 1,
         extraProperties: {
           display: 'inline-block'

@@ -5,10 +5,12 @@ async function loginIntoDemoDashboard(page: Page) {
   await page.goto('./');
 
   await expect(
-    page.getByRole('alert').getByText(/Preview mode is running against the built-in demo backend\./)
+    page
+      .getByRole('alert')
+      .getByText(/Preview mode is running against the built-in demo backend\.|当前预览运行在内置 demo backend 上\./)
   ).toBeVisible();
 
-  await page.getByRole('button', { name: /Confirm|确定/ }).click();
+  await page.getByRole('button', { name: /Confirm|确认|确定/ }).click();
 
   await expect(page).toHaveURL(/#\/dashboard$/);
   await expect(page.getByText(/Dashboard|仪表盘/).first()).toBeVisible();
@@ -36,7 +38,7 @@ test('pages preview can open the user drawer in demo runtime', async ({ page }) 
 
   await page.goto('./#/user');
 
-  await expect(page.getByText(/^User$/).first()).toBeVisible();
+  await expect(page.getByText(/^User$|^用户$/).first()).toBeVisible();
 
   await page.getByRole('button', { name: /^Add$|^新增$/ }).click();
 
