@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 import { getEnableStatusLabel, getEnableStatusOptions, getEnableStatusTagType } from '@/constants/common';
 import { fetchCreateTeam, fetchUpdateTeam } from '@/service/api';
-import { shouldApplyServerValidation } from '@/service/request/shared';
-import { useFormRules, useNaiveForm } from '@/hooks/common/form';
 import { $t } from '@/locales';
 import FormModalWrapper from '@/components/advanced/form-modal-wrapper.vue';
+import { useOperateForm } from '../../_shared/composables/use-operate-form';
 
 defineOptions({
   name: 'TeamOperateDrawer'
@@ -30,10 +29,6 @@ const visible = defineModel<boolean>('visible', {
   default: false
 });
 
-const naiveForm = useNaiveForm();
-const { defaultRequiredRule } = useFormRules();
-
-const isViewMode = computed(() => Boolean(props.readOnly));
 const enableStatusOptions = computed(() => getEnableStatusOptions());
 const organizationNameById = computed(() => {
   const map = new Map<number, string>();
@@ -43,19 +38,6 @@ const organizationNameById = computed(() => {
   });
 
   return map;
-});
-
-const title = computed(() => {
-  if (isViewMode.value) {
-    return $t('page.team.viewTitle');
-  }
-
-  const titles: Record<NaiveUI.TableOperateType, string> = {
-    add: $t('page.team.addTitle'),
-    edit: $t('page.team.editTitle')
-  };
-
-  return titles[props.operateType];
 });
 
 interface Model {
@@ -68,7 +50,6 @@ interface Model {
 }
 
 const model = ref<Model>(createDefaultModel());
-naiveForm.bindModelValidation(model, ['organizationId', 'teamCode', 'teamName', 'status']);
 
 function resolveDefaultOrganizationId(): number | null {
   const first = props.organizationOptions[0];
@@ -86,6 +67,24 @@ function createDefaultModel(): Model {
     sort: 0
   };
 }
+
+const { defaultRequiredRule, naiveForm, isViewMode, title, closeDrawer, handleSubmit } = useOperateForm({
+  visible,
+  operateType: () => props.operateType,
+  readOnly: () => props.readOnly,
+  titles: {
+    add: $t('page.team.addTitle'),
+    edit: $t('page.team.editTitle'),
+    view: $t('page.team.viewTitle')
+  },
+  model,
+  createDefaultModel,
+  initModel,
+  validationKeys: ['organizationId', 'teamCode', 'teamName', 'status'],
+  beforeSubmit: ensureOrganizationSelected,
+  submit: submitTeam,
+  onSubmitted: () => emit('submitted')
+});
 
 const baseRules: Record<'organizationId' | 'teamCode' | 'teamName' | 'status', App.Global.FormRule> = {
   organizationId: defaultRequiredRule,
@@ -110,11 +109,9 @@ const selectedOrganizationName = computed(() => {
   return organizationNameById.value.get(current) || props.rowData?.organizationName || '';
 });
 
-function handleInitModel() {
-  model.value = createDefaultModel();
-
+function initModel(): Model {
   if (props.operateType === 'edit' && props.rowData) {
-    model.value = {
+    return {
       organizationId: Number(props.rowData.organizationId || 0) || resolveDefaultOrganizationId(),
       teamCode: props.rowData.teamCode,
       teamName: props.rowData.teamName,
@@ -123,58 +120,35 @@ function handleInitModel() {
       sort: props.rowData.sort ?? 0
     };
   }
+
+  return createDefaultModel();
 }
 
-function closeDrawer() {
-  visible.value = false;
-}
-
-async function handleSubmit() {
-  if (isViewMode.value) {
-    return;
-  }
-
-  await naiveForm.validate();
-
+function ensureOrganizationSelected() {
   const organizationId = Number(model.value.organizationId ?? 0);
   if (!organizationId) {
     window.$message?.warning($t('page.team.organizationRequired'));
-    return;
+    return false;
   }
 
-  const payload: Api.Team.TeamPayload = {
-    organizationId,
-    teamCode: model.value.teamCode.trim(),
-    teamName: model.value.teamName.trim(),
-    description: model.value.description.trim(),
-    status: model.value.status,
-    sort: Number(model.value.sort ?? 0)
-  };
-
-  const { error } =
-    props.operateType === 'add'
-      ? await fetchCreateTeam(payload, { handleValidationErrorLocally: true })
-      : await fetchUpdateTeam(props.rowData?.id || 0, payload, { handleValidationErrorLocally: true });
-
-  if (error) {
-    if (shouldApplyServerValidation(error)) {
-      await naiveForm.applyServerValidation(error);
-    }
-  }
-
-  if (!error) {
-    window.$message?.success(props.operateType === 'add' ? $t('common.addSuccess') : $t('common.updateSuccess'));
-    closeDrawer();
-    emit('submitted');
-  }
+  return true;
 }
 
-watch(visible, () => {
-  if (visible.value) {
-    handleInitModel();
-    naiveForm.restoreValidation();
-  }
-});
+async function submitTeam(currentModel: Model) {
+  const organizationId = Number(currentModel.organizationId ?? 0);
+  const payload: Api.Team.TeamPayload = {
+    organizationId,
+    teamCode: currentModel.teamCode.trim(),
+    teamName: currentModel.teamName.trim(),
+    description: currentModel.description.trim(),
+    status: currentModel.status,
+    sort: Number(currentModel.sort ?? 0)
+  };
+
+  return props.operateType === 'add'
+    ? fetchCreateTeam(payload, { handleValidationErrorLocally: true })
+    : fetchUpdateTeam(props.rowData?.id || 0, payload, { handleValidationErrorLocally: true });
+}
 </script>
 
 <template>

@@ -2,7 +2,6 @@ import type { AxiosAdapter, AxiosResponse } from 'axios';
 import { BACKEND_ERROR_CODE, createFlatRequest, createRequest } from '@sa/axios';
 import { getToken } from '@/store/modules/auth/shared';
 import { getServiceBaseURL } from '@/utils/service';
-import { isDemoRuntime } from '@/utils/runtime';
 import { getNaiveDialog, getNaiveMessage } from '@/utils/naive-ui';
 import { $t } from '@/locales';
 import {
@@ -23,12 +22,12 @@ import type { RequestInstanceState } from './type';
 
 const runtimeEnv = ((import.meta as ImportMeta & { env?: Partial<Env.ImportMeta> }).env ||
   {}) as Partial<Env.ImportMeta>;
-const demoRuntime = isDemoRuntime(runtimeEnv);
+const demoRuntime = import.meta.env.VITE_APP_RUNTIME === 'demo';
 let demoAxiosAdapterPromise: Promise<AxiosAdapter> | null = null;
 
 async function resolveDemoAxiosAdapter(): Promise<AxiosAdapter> {
   if (!demoAxiosAdapterPromise) {
-    demoAxiosAdapterPromise = import('@/demo/backend').then(({ createDemoAxiosAdapter }) => createDemoAxiosAdapter());
+    demoAxiosAdapterPromise = import('@demo/backend').then(({ createDemoAxiosAdapter }) => createDemoAxiosAdapter());
   }
 
   return demoAxiosAdapterPromise;

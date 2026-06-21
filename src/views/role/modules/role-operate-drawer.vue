@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 import { jsonClone } from '@sa/utils';
 import { getEnableStatusLabel, getEnableStatusOptions, getEnableStatusTagType } from '@/constants/common';
 import { fetchCreateRole, fetchGetRoleAssignablePermissions, fetchUpdateRole } from '@/service/api';
-import { shouldApplyServerValidation } from '@/service/request/shared';
-import { useFormRules, useNaiveForm } from '@/hooks/common/form';
-import { useOperateModal } from '@/hooks/business/operate-modal';
 import { $t } from '@/locales';
 import FormModalWrapper from '@/components/advanced/form-modal-wrapper.vue';
+import { useOperateForm } from '../../_shared/composables/use-operate-form';
 
 defineOptions({
   name: 'RoleOperateDrawer'
@@ -36,18 +34,6 @@ const visible = defineModel<boolean>('visible', {
   default: false
 });
 
-const naiveForm = useNaiveForm();
-const { defaultRequiredRule } = useFormRules();
-
-const { isViewMode, title } = useOperateModal({
-  operateType: () => props.operateType,
-  readOnly: () => props.readOnly,
-  titles: {
-    add: $t('page.role.addTitle'),
-    edit: $t('page.role.editTitle'),
-    view: $t('page.role.viewTitle')
-  }
-});
 const enableStatusOptions = computed(() => getEnableStatusOptions());
 const resolvedActorRoleLevel = computed(() => {
   const level = Number(props.actorRoleLevel ?? 0);
@@ -84,7 +70,6 @@ interface Model {
 }
 
 const model = ref<Model>(createDefaultModel());
-naiveForm.bindModelValidation(model, ['roleCode', 'roleName', 'level', 'status']);
 
 function createDefaultModel(): Model {
   const defaultLevel = Math.min(100, inputMaxAssignableRoleLevel.value);
@@ -98,6 +83,24 @@ function createDefaultModel(): Model {
     permissionCodes: []
   };
 }
+
+const { defaultRequiredRule, naiveForm, isViewMode, title, closeDrawer, handleSubmit } = useOperateForm({
+  visible,
+  operateType: () => props.operateType,
+  readOnly: () => props.readOnly,
+  titles: {
+    add: $t('page.role.addTitle'),
+    edit: $t('page.role.editTitle'),
+    view: $t('page.role.viewTitle')
+  },
+  model,
+  createDefaultModel,
+  initModel,
+  validationKeys: ['roleCode', 'roleName', 'level', 'status'],
+  onOpened: getPermissionOptions,
+  submit: submitRole,
+  onSubmitted: () => emit('submitted')
+});
 
 interface GroupedPermissionItem {
   group: string;
@@ -263,11 +266,9 @@ function getGroupTitle(group: string) {
     .join(' ');
 }
 
-function handleInitModel() {
-  model.value = createDefaultModel();
-
+function initModel(): Model {
   if (props.operateType === 'edit' && props.rowData) {
-    model.value = {
+    return {
       roleCode: props.rowData.roleCode,
       roleName: props.rowData.roleName,
       level: props.rowData.level ?? 100,
@@ -276,53 +277,24 @@ function handleInitModel() {
       permissionCodes: jsonClone(props.rowData.permissionCodes)
     };
   }
+
+  return createDefaultModel();
 }
 
-function closeDrawer() {
-  visible.value = false;
-}
-
-async function handleSubmit() {
-  if (isViewMode.value) {
-    return;
-  }
-
-  await naiveForm.validate();
-
+async function submitRole(currentModel: Model) {
   const payload: Api.Role.RolePayload = {
-    roleCode: model.value.roleCode.trim(),
-    roleName: model.value.roleName.trim(),
-    level: Number(model.value.level ?? 100),
-    description: model.value.description.trim(),
-    status: model.value.status,
-    permissionCodes: model.value.permissionCodes
+    roleCode: currentModel.roleCode.trim(),
+    roleName: currentModel.roleName.trim(),
+    level: Number(currentModel.level ?? 100),
+    description: currentModel.description.trim(),
+    status: currentModel.status,
+    permissionCodes: currentModel.permissionCodes
   };
 
-  const { error } =
-    props.operateType === 'add'
-      ? await fetchCreateRole(payload, { handleValidationErrorLocally: true })
-      : await fetchUpdateRole(props.rowData?.id || 0, payload, { handleValidationErrorLocally: true });
-
-  if (error) {
-    if (shouldApplyServerValidation(error)) {
-      await naiveForm.applyServerValidation(error);
-    }
-  }
-
-  if (!error) {
-    window.$message?.success(props.operateType === 'add' ? $t('common.addSuccess') : $t('common.updateSuccess'));
-    closeDrawer();
-    emit('submitted');
-  }
+  return props.operateType === 'add'
+    ? fetchCreateRole(payload, { handleValidationErrorLocally: true })
+    : fetchUpdateRole(props.rowData?.id || 0, payload, { handleValidationErrorLocally: true });
 }
-
-watch(visible, () => {
-  if (visible.value) {
-    handleInitModel();
-    naiveForm.restoreValidation();
-    getPermissionOptions();
-  }
-});
 </script>
 
 <template>

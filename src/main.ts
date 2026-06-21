@@ -1,14 +1,14 @@
 import './plugins/assets';
 import { setupGuestApp } from './bootstrap/setup-guest-app';
-import { isDemoRuntime } from './utils/runtime';
 import { isGuestBootstrapPath } from './bootstrap/runtime-location';
 
 async function setupApp() {
-  const demoRuntimeInstallPromise = isDemoRuntime(import.meta.env)
-    ? import('./demo/runtime').then(({ installDemoRuntime }) => {
-        installDemoRuntime();
-      })
-    : null;
+  const demoRuntimeInstallPromise =
+    import.meta.env.VITE_APP_RUNTIME === 'demo'
+      ? import('@demo/runtime').then(({ installDemoRuntime }) => {
+          installDemoRuntime();
+        })
+      : null;
 
   if (isGuestBootstrapPath()) {
     await setupGuestApp();

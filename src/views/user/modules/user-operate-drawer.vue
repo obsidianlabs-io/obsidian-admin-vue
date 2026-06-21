@@ -9,12 +9,10 @@ import {
   fetchGetAllTeams,
   fetchUpdateUser
 } from '@/service/api';
-import { shouldApplyServerValidation } from '@/service/request/shared';
 import { useAuthStore } from '@/store/modules/auth';
-import { useFormRules, useNaiveForm } from '@/hooks/common/form';
-import { useOperateModal } from '@/hooks/business/operate-modal';
 import { $t } from '@/locales';
 import FormModalWrapper from '@/components/advanced/form-modal-wrapper.vue';
+import { useOperateForm } from '../../_shared/composables/use-operate-form';
 
 defineOptions({
   name: 'UserOperateDrawer'
@@ -41,19 +39,7 @@ const visible = defineModel<boolean>('visible', {
   default: false
 });
 
-const naiveForm = useNaiveForm();
-const { defaultRequiredRule, patternRules } = useFormRules();
 const authStore = useAuthStore();
-
-const { isViewMode, title } = useOperateModal({
-  operateType: () => props.operateType,
-  readOnly: () => props.readOnly,
-  titles: {
-    add: $t('page.user.addTitle'),
-    edit: $t('page.user.editTitle'),
-    view: $t('page.user.viewTitle')
-  }
-});
 const enableStatusOptions = computed(() => getEnableStatusOptions());
 const hasTenantScope = computed(() => Boolean(authStore.userInfo.currentTenantId));
 
@@ -78,7 +64,6 @@ interface TeamOption {
 }
 
 const model = ref<UserFormModel>(createDefaultModel());
-naiveForm.bindModelValidation(model, ['userName', 'email', 'roleCode', 'status', 'password', 'confirmPassword']);
 
 function createDefaultModel(): UserFormModel {
   return {
@@ -92,6 +77,24 @@ function createDefaultModel(): UserFormModel {
     status: '1'
   };
 }
+
+const { defaultRequiredRule, patternRules, naiveForm, isViewMode, title, closeDrawer, handleSubmit } = useOperateForm({
+  visible,
+  operateType: () => props.operateType,
+  readOnly: () => props.readOnly,
+  titles: {
+    add: $t('page.user.addTitle'),
+    edit: $t('page.user.editTitle'),
+    view: $t('page.user.viewTitle')
+  },
+  model,
+  createDefaultModel,
+  initModel,
+  validationKeys: ['userName', 'email', 'roleCode', 'status', 'password', 'confirmPassword'],
+  onOpened: loadOptionsForUserForm,
+  submit: submitUser,
+  onSubmitted: () => emit('submitted')
+});
 
 const roleOptions = ref<CommonType.Option<string>[]>([]);
 const organizationOptions = ref<OrganizationOption[]>([]);
@@ -209,15 +212,16 @@ const rules = naiveForm.withServerValidationRules(baseRules, [
   'confirmPassword'
 ] as const);
 
-function handleInitModel() {
-  model.value = createDefaultModel();
-
+function initModel(): UserFormModel {
+  const nextModel = createDefaultModel();
   if (props.operateType === 'edit' && props.rowData) {
-    Object.assign(model.value, jsonClone(props.rowData));
-    model.value.roleCode = props.rowData.roleCode ?? null;
-    model.value.organizationId = toPositiveInt(props.rowData.organizationId);
-    model.value.teamId = toPositiveInt(props.rowData.teamId);
+    Object.assign(nextModel, jsonClone(props.rowData));
+    nextModel.roleCode = props.rowData.roleCode ?? null;
+    nextModel.organizationId = toPositiveInt(props.rowData.organizationId);
+    nextModel.teamId = toPositiveInt(props.rowData.teamId);
   }
+
+  return nextModel;
 }
 
 function toPositiveInt(value: unknown): number | null {
@@ -286,26 +290,31 @@ async function getTeamOptions() {
     .filter((item): item is TeamOption => item !== null);
 }
 
-function closeDrawer() {
-  visible.value = false;
-}
-
-async function handleSubmit() {
+async function loadOptionsForUserForm() {
   if (isViewMode.value) {
     return;
   }
 
-  await naiveForm.validate();
+  if (!hasTenantScope.value) {
+    organizationOptions.value = [];
+    teamOptions.value = [];
+    model.value.organizationId = null;
+    model.value.teamId = null;
+  }
 
-  const roleCode = model.value.roleCode || '';
+  await Promise.all([getRoleOptions(), ...(hasTenantScope.value ? [getOrganizationOptions(), getTeamOptions()] : [])]);
+}
+
+async function submitUser(currentModel: UserFormModel) {
+  const roleCode = currentModel.roleCode || '';
   const payload: Api.User.UserPayload = {
-    userName: model.value.userName.trim(),
-    email: model.value.email.trim(),
+    userName: currentModel.userName.trim(),
+    email: currentModel.email.trim(),
     roleCode,
-    status: model.value.status
+    status: currentModel.status
   };
-  const organizationId = toPositiveInt(model.value.organizationId);
-  const teamId = toPositiveInt(model.value.teamId);
+  const organizationId = toPositiveInt(currentModel.organizationId);
+  const teamId = toPositiveInt(currentModel.teamId);
 
   if (organizationId !== null) {
     payload.organizationId = organizationId;
@@ -315,29 +324,16 @@ async function handleSubmit() {
     payload.teamId = teamId;
   }
 
-  const password = model.value.password;
+  const password = currentModel.password;
   if (props.operateType === 'add') {
     payload.password = password;
   } else if (password !== '') {
     payload.password = password;
   }
 
-  const { error } =
-    props.operateType === 'add'
-      ? await fetchCreateUser(payload, { handleValidationErrorLocally: true })
-      : await fetchUpdateUser(props.rowData?.id || 0, payload, { handleValidationErrorLocally: true });
-
-  if (error) {
-    if (shouldApplyServerValidation(error)) {
-      await naiveForm.applyServerValidation(error);
-    }
-  }
-
-  if (!error) {
-    window.$message?.success(props.operateType === 'add' ? $t('common.addSuccess') : $t('common.updateSuccess'));
-    closeDrawer();
-    emit('submitted');
-  }
+  return props.operateType === 'add'
+    ? fetchCreateUser(payload, { handleValidationErrorLocally: true })
+    : fetchUpdateUser(props.rowData?.id || 0, payload, { handleValidationErrorLocally: true });
 }
 
 watch(
@@ -402,23 +398,6 @@ watch(
   },
   { deep: true }
 );
-
-watch(visible, () => {
-  if (visible.value) {
-    handleInitModel();
-    naiveForm.restoreValidation();
-    if (!isViewMode.value) {
-      if (!hasTenantScope.value) {
-        organizationOptions.value = [];
-        teamOptions.value = [];
-        model.value.organizationId = null;
-        model.value.teamId = null;
-      }
-
-      Promise.all([getRoleOptions(), ...(hasTenantScope.value ? [getOrganizationOptions(), getTeamOptions()] : [])]);
-    }
-  }
-});
 </script>
 
 <template>

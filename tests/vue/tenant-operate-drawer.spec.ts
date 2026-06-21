@@ -1,6 +1,6 @@
 import { computed, defineComponent, h, nextTick, ref } from 'vue';
 import type { Component } from 'vue';
-import { mount } from '@vue/test-utils';
+import { flushPromises, mount } from '@vue/test-utils';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const fetchCreateTenant = vi.fn();
@@ -252,6 +252,7 @@ describe('TenantOperateDrawer', () => {
 
     await wrapper.get('[data-testid="modal-submit"]').trigger('click');
     await nextTick();
+    await flushPromises();
 
     expect(validate).toHaveBeenCalledTimes(1);
     expect(fetchCreateTenant).toHaveBeenCalledWith(
@@ -293,6 +294,7 @@ describe('TenantOperateDrawer', () => {
 
     await wrapper.get('[data-testid="modal-submit"]').trigger('click');
     await nextTick();
+    await flushPromises();
 
     expect(fetchCreateTenant).toHaveBeenCalledTimes(1);
     expect(applyServerValidation).toHaveBeenCalledWith(backendError);
@@ -328,6 +330,7 @@ describe('TenantOperateDrawer', () => {
 
     await wrapper.get('[data-testid="modal-submit"]').trigger('click');
     await nextTick();
+    await flushPromises();
 
     expect(fetchUpdateTenant).toHaveBeenCalledWith(
       42,

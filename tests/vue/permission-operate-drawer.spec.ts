@@ -1,6 +1,6 @@
 import { defineComponent, h, nextTick, ref } from 'vue';
 import type { Component } from 'vue';
-import { mount } from '@vue/test-utils';
+import { flushPromises, mount } from '@vue/test-utils';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const createPermissionMock = vi.fn();
@@ -175,8 +175,9 @@ const FormItemStub = defineComponent({
 
 const { default: PermissionOperateDrawer } = await import('@/views/permission/modules/permission-operate-drawer.vue');
 
-function flushUi() {
-  return nextTick();
+async function flushUi() {
+  await nextTick();
+  await flushPromises();
 }
 
 describe('permission-operate-drawer', () => {

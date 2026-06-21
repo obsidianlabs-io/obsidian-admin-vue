@@ -8,6 +8,7 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "paths": {
+      "@demo/*": ["./demo/*"],
       "@/*": ["./src/*"],
       "~/*": ["./*"]
     },

@@ -48,7 +48,7 @@ export default function createHookRequest<ResponseData, ApiData, State extends R
 ) {
   const request = createFlatRequest<ResponseData, ApiData, State>(axiosConfig, options);
 
-  const hookRequest: HookRequestInstance<ResponseData, ApiData, State> = function hookRequest<
+  const hookRequest: HookRequestInstance<ResponseData, ApiData, State> = function hookRequestInstance<
     T extends ApiData = ApiData,
     R extends ResponseType = 'json'
   >(config: CustomAxiosRequestConfig) {

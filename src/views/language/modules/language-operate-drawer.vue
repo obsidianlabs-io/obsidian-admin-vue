@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 import { getEnableStatusLabel, getEnableStatusOptions, getEnableStatusTagType } from '@/constants/common';
 import { fetchCreateLanguageTranslation, fetchUpdateLanguageTranslation } from '@/service/api';
-import { shouldApplyServerValidation } from '@/service/request/shared';
-import { useFormRules, useNaiveForm } from '@/hooks/common/form';
 import { $t } from '@/locales';
 import FormModalWrapper from '@/components/advanced/form-modal-wrapper.vue';
 import { getDefaultLocale } from '@/locales/default-locale';
+import { useOperateForm } from '../../_shared/composables/use-operate-form';
 
 defineOptions({
   name: 'LanguageOperateDrawer'
@@ -31,24 +30,7 @@ const visible = defineModel<boolean>('visible', {
   default: false
 });
 
-const naiveForm = useNaiveForm();
-const { defaultRequiredRule } = useFormRules();
-
-const isViewMode = computed(() => Boolean(props.readOnly));
 const enableStatusOptions = computed(() => getEnableStatusOptions());
-
-const title = computed(() => {
-  if (isViewMode.value) {
-    return $t('page.language.viewTitle');
-  }
-
-  const titles: Record<NaiveUI.TableOperateType, string> = {
-    add: $t('page.language.addTitle'),
-    edit: $t('page.language.editTitle')
-  };
-
-  return titles[props.operateType];
-});
 
 interface Model {
   locale: App.I18n.LangType | null;
@@ -59,7 +41,6 @@ interface Model {
 }
 
 const model = ref<Model>(createDefaultModel());
-naiveForm.bindModelValidation(model, ['locale', 'translationKey', 'translationValue', 'status']);
 
 function createDefaultModel(): Model {
   return {
@@ -70,6 +51,23 @@ function createDefaultModel(): Model {
     status: '1'
   };
 }
+
+const { defaultRequiredRule, naiveForm, isViewMode, title, closeDrawer, handleSubmit } = useOperateForm({
+  visible,
+  operateType: () => props.operateType,
+  readOnly: () => props.readOnly,
+  titles: {
+    add: $t('page.language.addTitle'),
+    edit: $t('page.language.editTitle'),
+    view: $t('page.language.viewTitle')
+  },
+  model,
+  createDefaultModel,
+  initModel,
+  validationKeys: ['locale', 'translationKey', 'translationValue', 'status'],
+  submit: submitLanguageTranslation,
+  onSubmitted: () => emit('submitted')
+});
 
 const baseRules: Partial<Record<'locale' | 'translationKey' | 'translationValue' | 'status', App.Global.FormRule[]>> = {
   locale: [defaultRequiredRule],
@@ -92,14 +90,14 @@ function resolveDefaultLocale(): App.I18n.LangType {
   return (props.localeOptions[0]?.value || getDefaultLocale()) as App.I18n.LangType;
 }
 
-function handleInitModel() {
-  model.value = {
+function initModel(): Model {
+  const defaultModel = {
     ...createDefaultModel(),
     locale: resolveDefaultLocale()
   };
 
   if (props.operateType === 'edit' && props.rowData) {
-    model.value = {
+    return {
       locale: props.rowData.locale,
       translationKey: props.rowData.translationKey,
       translationValue: props.rowData.translationValue,
@@ -107,53 +105,25 @@ function handleInitModel() {
       status: props.rowData.status
     };
   }
+
+  return defaultModel;
 }
 
-function closeDrawer() {
-  visible.value = false;
-}
-
-async function handleSubmit() {
-  if (isViewMode.value) {
-    return;
-  }
-
-  await naiveForm.validate();
-
+async function submitLanguageTranslation(currentModel: Model) {
   const payload: Api.Language.TranslationPayload = {
-    locale: (model.value.locale || getDefaultLocale()) as App.I18n.LangType,
-    translationKey: model.value.translationKey.trim(),
-    translationValue: model.value.translationValue,
-    description: model.value.description.trim(),
-    status: model.value.status
+    locale: (currentModel.locale || getDefaultLocale()) as App.I18n.LangType,
+    translationKey: currentModel.translationKey.trim(),
+    translationValue: currentModel.translationValue,
+    description: currentModel.description.trim(),
+    status: currentModel.status
   };
 
-  const { error } =
-    props.operateType === 'add'
-      ? await fetchCreateLanguageTranslation(payload, { handleValidationErrorLocally: true })
-      : await fetchUpdateLanguageTranslation(props.rowData?.id || 0, payload, {
-          handleValidationErrorLocally: true
-        });
-
-  if (error) {
-    if (shouldApplyServerValidation(error)) {
-      await naiveForm.applyServerValidation(error);
-    }
-  }
-
-  if (!error) {
-    window.$message?.success(props.operateType === 'add' ? $t('common.addSuccess') : $t('common.updateSuccess'));
-    closeDrawer();
-    emit('submitted');
-  }
+  return props.operateType === 'add'
+    ? fetchCreateLanguageTranslation(payload, { handleValidationErrorLocally: true })
+    : fetchUpdateLanguageTranslation(props.rowData?.id || 0, payload, {
+        handleValidationErrorLocally: true
+      });
 }
-
-watch(visible, () => {
-  if (visible.value) {
-    handleInitModel();
-    naiveForm.restoreValidation();
-  }
-});
 </script>
 
 <template>

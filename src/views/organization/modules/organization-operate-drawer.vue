@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 import { getEnableStatusLabel, getEnableStatusOptions, getEnableStatusTagType } from '@/constants/common';
 import { fetchCreateOrganization, fetchUpdateOrganization } from '@/service/api';
-import { shouldApplyServerValidation } from '@/service/request/shared';
-import { useFormRules, useNaiveForm } from '@/hooks/common/form';
 import { $t } from '@/locales';
 import FormModalWrapper from '@/components/advanced/form-modal-wrapper.vue';
+import { useOperateForm } from '../../_shared/composables/use-operate-form';
 
 defineOptions({
   name: 'OrganizationOperateDrawer'
@@ -29,24 +28,7 @@ const visible = defineModel<boolean>('visible', {
   default: false
 });
 
-const naiveForm = useNaiveForm();
-const { defaultRequiredRule } = useFormRules();
-
-const isViewMode = computed(() => Boolean(props.readOnly));
 const enableStatusOptions = computed(() => getEnableStatusOptions());
-
-const title = computed(() => {
-  if (isViewMode.value) {
-    return $t('page.organization.viewTitle');
-  }
-
-  const titles: Record<NaiveUI.TableOperateType, string> = {
-    add: $t('page.organization.addTitle'),
-    edit: $t('page.organization.editTitle')
-  };
-
-  return titles[props.operateType];
-});
 
 interface Model {
   organizationCode: string;
@@ -57,7 +39,6 @@ interface Model {
 }
 
 const model = ref<Model>(createDefaultModel());
-naiveForm.bindModelValidation(model, ['organizationCode', 'organizationName', 'status']);
 
 function createDefaultModel(): Model {
   return {
@@ -68,6 +49,23 @@ function createDefaultModel(): Model {
     sort: 0
   };
 }
+
+const { defaultRequiredRule, naiveForm, isViewMode, title, closeDrawer, handleSubmit } = useOperateForm({
+  visible,
+  operateType: () => props.operateType,
+  readOnly: () => props.readOnly,
+  titles: {
+    add: $t('page.organization.addTitle'),
+    edit: $t('page.organization.editTitle'),
+    view: $t('page.organization.viewTitle')
+  },
+  model,
+  createDefaultModel,
+  initModel,
+  validationKeys: ['organizationCode', 'organizationName', 'status'],
+  submit: submitOrganization,
+  onSubmitted: () => emit('submitted')
+});
 
 const baseRules: Record<'organizationCode' | 'organizationName' | 'status', App.Global.FormRule> = {
   organizationCode: defaultRequiredRule,
@@ -80,11 +78,9 @@ const rules = naiveForm.withServerValidationRules(baseRules, [
   'status'
 ] as const);
 
-function handleInitModel() {
-  model.value = createDefaultModel();
-
+function initModel(): Model {
   if (props.operateType === 'edit' && props.rowData) {
-    model.value = {
+    return {
       organizationCode: props.rowData.organizationCode,
       organizationName: props.rowData.organizationName,
       description: props.rowData.description || '',
@@ -92,51 +88,23 @@ function handleInitModel() {
       sort: props.rowData.sort ?? 0
     };
   }
+
+  return createDefaultModel();
 }
 
-function closeDrawer() {
-  visible.value = false;
-}
-
-async function handleSubmit() {
-  if (isViewMode.value) {
-    return;
-  }
-
-  await naiveForm.validate();
-
+async function submitOrganization(currentModel: Model) {
   const payload: Api.Organization.OrganizationPayload = {
-    organizationCode: model.value.organizationCode.trim(),
-    organizationName: model.value.organizationName.trim(),
-    description: model.value.description.trim(),
-    status: model.value.status,
-    sort: Number(model.value.sort ?? 0)
+    organizationCode: currentModel.organizationCode.trim(),
+    organizationName: currentModel.organizationName.trim(),
+    description: currentModel.description.trim(),
+    status: currentModel.status,
+    sort: Number(currentModel.sort ?? 0)
   };
 
-  const { error } =
-    props.operateType === 'add'
-      ? await fetchCreateOrganization(payload, { handleValidationErrorLocally: true })
-      : await fetchUpdateOrganization(props.rowData?.id || 0, payload, { handleValidationErrorLocally: true });
-
-  if (error) {
-    if (shouldApplyServerValidation(error)) {
-      await naiveForm.applyServerValidation(error);
-    }
-  }
-
-  if (!error) {
-    window.$message?.success(props.operateType === 'add' ? $t('common.addSuccess') : $t('common.updateSuccess'));
-    closeDrawer();
-    emit('submitted');
-  }
+  return props.operateType === 'add'
+    ? fetchCreateOrganization(payload, { handleValidationErrorLocally: true })
+    : fetchUpdateOrganization(props.rowData?.id || 0, payload, { handleValidationErrorLocally: true });
 }
-
-watch(visible, () => {
-  if (visible.value) {
-    handleInitModel();
-    naiveForm.restoreValidation();
-  }
-});
 </script>
 
 <template>

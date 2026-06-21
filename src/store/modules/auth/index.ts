@@ -8,8 +8,16 @@ import { resolveRequestErrorStrategy } from '@/service/request/shared';
 import { localStg } from '@/utils/storage';
 import { createDefaultThemeConfig } from '@/utils/theme-config';
 import { getNaiveNotification } from '@/utils/naive-ui';
-import { buildAppHref } from '@/bootstrap/runtime-location';
-import { isGuestBootstrapMode } from '@/bootstrap/runtime-state';
+import {
+  clearTabsForNewUser,
+  connectAuthRealtime,
+  disconnectAuthRealtime,
+  dispatchAuthUserNameSync,
+  redirectAfterSessionInitialized,
+  redirectToLoginIfNeeded,
+  refreshWorkspaceAfterTenantSwitch,
+  resetWorkspaceAfterLogout
+} from '@/bootstrap/auth-effects';
 import { SetupStoreId } from '@/enum';
 import { $t, loadRuntimeLocaleMessages, setLocale } from '@/locales';
 import { getStoredLocale, resolvePreferredLocale } from '@/locales/default-locale';
@@ -26,47 +34,6 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
   const route = useRoute();
   const { loading: loginLoading, startLoading, endLoading } = useLoading();
   let logoutPromise: Promise<void> | null = null;
-  let websocketModulePromise: Promise<typeof import('@/service/websocket')> | null = null;
-  let routeStorePromise: Promise<ReturnType<(typeof import('../route'))['useRouteStore']>> | null = null;
-  let tabStorePromise: Promise<ReturnType<(typeof import('../tab'))['useTabStore']>> | null = null;
-  let routerPushHelpersPromise: Promise<ReturnType<(typeof import('@/hooks/common/router'))['useRouterPush']>> | null =
-    null;
-
-  function dispatchAuthUserNameSync(userName?: string | null) {
-    window.dispatchEvent(new CustomEvent(appEvent.authUserNameSync, { detail: { userName: userName ?? '' } }));
-  }
-
-  async function resolveWebsocketModule() {
-    if (!websocketModulePromise) {
-      websocketModulePromise = import('@/service/websocket');
-    }
-
-    return websocketModulePromise;
-  }
-
-  async function resolveRouteStore() {
-    if (!routeStorePromise) {
-      routeStorePromise = import('../route').then(({ useRouteStore }) => useRouteStore());
-    }
-
-    return routeStorePromise;
-  }
-
-  async function resolveTabStore() {
-    if (!tabStorePromise) {
-      tabStorePromise = import('../tab').then(({ useTabStore }) => useTabStore());
-    }
-
-    return tabStorePromise;
-  }
-
-  async function resolveRouterPushHelpers() {
-    if (!routerPushHelpersPromise) {
-      routerPushHelpersPromise = import('@/hooks/common/router').then(({ useRouterPush }) => useRouterPush(false));
-    }
-
-    return routerPushHelpersPromise;
-  }
 
   const token = ref('');
 
@@ -100,8 +67,7 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
   /** Reset auth store */
   async function resetStore() {
     recordUserId();
-    const websocketModule = await resolveWebsocketModule();
-    websocketModule.disconnectRealtime();
+    await disconnectAuthRealtime();
 
     clearAuthStorage();
 
@@ -125,23 +91,12 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
     });
     dispatchAuthUserNameSync('');
 
-    if (isGuestBootstrapMode()) {
-      if (!route.meta.constant) {
-        window.location.assign(buildAppHref('/login'));
-      }
-
+    const handledByGuestBootstrap = await redirectToLoginIfNeeded(route);
+    if (handledByGuestBootstrap) {
       return;
     }
 
-    if (!route.meta.constant) {
-      const { toLogin } = await resolveRouterPushHelpers();
-      await toLogin();
-    }
-
-    const [tabStore, routeStore] = await Promise.all([resolveTabStore(), resolveRouteStore()]);
-
-    tabStore.cacheTabs();
-    routeStore.resetStore();
+    await resetWorkspaceAfterLogout();
   }
 
   async function logout(options: { notifyBackend?: boolean } = {}) {
@@ -198,11 +153,7 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
 
     // Clear all tabs if current user is different from previous user
     if (!lastLoginUserId || lastLoginUserId !== userInfo.userId) {
-      localStg.remove('globalTabs');
-      const tabStore = await resolveTabStore();
-
-      await tabStore.clearTabs();
-
+      await clearTabsForNewUser();
       localStg.remove('lastLoginUserId');
       return true;
     }
@@ -315,22 +266,7 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
       }
 
       if (redirect || isClear) {
-        if (isGuestBootstrapMode()) {
-          const redirectTarget =
-            needRedirect && typeof route.query?.redirect === 'string' ? route.query.redirect : '/dashboard';
-
-          if (import.meta.env.VITE_ROUTER_HISTORY_MODE === 'hash') {
-            window.location.hash = redirectTarget.startsWith('/') ? redirectTarget : `/${redirectTarget}`;
-            window.location.reload();
-          } else {
-            window.location.assign(buildAppHref(redirectTarget));
-          }
-
-          return true;
-        }
-
-        const { redirectFromLogin } = await resolveRouterPushHelpers();
-        await redirectFromLogin(needRedirect);
+        await redirectAfterSessionInitialized(route, needRedirect);
       }
 
       if (showWelcomeNotification) {
@@ -360,8 +296,7 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
       dispatchAuthUserNameSync(info.userName);
       window.dispatchEvent(new CustomEvent(appEvent.themeSchemaSync, { detail: { themeSchema: info.themeSchema } }));
       window.dispatchEvent(new CustomEvent(appEvent.themeConfigSync, { detail: { themeConfig: info.themeConfig } }));
-      const websocketModule = await resolveWebsocketModule();
-      websocketModule.connectRealtime(token.value);
+      await connectAuthRealtime(token.value);
 
       return true;
     }
@@ -423,14 +358,7 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
     }
 
     localStg.remove('globalTabs');
-    const [tabStore, routeStore] = await Promise.all([resolveTabStore(), resolveRouteStore()]);
-    const { routerPushByKey } = await resolveRouterPushHelpers();
-
-    await tabStore.clearTabs();
-    routeStore.setIsInitAuthRoute(false);
-    await routeStore.initAuthRoute();
-    routeStore.updateGlobalMenusByLocale();
-    await routerPushByKey('root');
+    await refreshWorkspaceAfterTenantSwitch();
 
     window.dispatchEvent(new CustomEvent(appEvent.tenantChanged, { detail: { tenantId: nextTenantId } }));
 

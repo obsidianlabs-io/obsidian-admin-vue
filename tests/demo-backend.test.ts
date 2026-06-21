@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { normalizeDemoFetchPath, resetDemoBackend } from '../src/demo/backend';
+import { normalizeDemoFetchPath, resetDemoBackend } from '../demo/backend';
 
 test('normalizeDemoFetchPath strips api prefixes and maps dynamic segments', () => {
   assert.equal(normalizeDemoFetchPath('/api/v1/user/42'), '/user/:id');

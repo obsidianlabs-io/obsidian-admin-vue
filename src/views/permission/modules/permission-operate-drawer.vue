@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 import { getEnableStatusLabel, getEnableStatusOptions, getEnableStatusTagType } from '@/constants/common';
 import { fetchCreatePermission, fetchUpdatePermission } from '@/service/api';
-import { shouldApplyServerValidation } from '@/service/request/shared';
-import { useFormRules, useNaiveForm } from '@/hooks/common/form';
 import { $t } from '@/locales';
 import FormModalWrapper from '@/components/advanced/form-modal-wrapper.vue';
+import { useOperateForm } from '../../_shared/composables/use-operate-form';
 
 defineOptions({
   name: 'PermissionOperateDrawer'
@@ -32,23 +31,7 @@ const visible = defineModel<boolean>('visible', {
   default: false
 });
 
-const naiveForm = useNaiveForm();
-const { defaultRequiredRule } = useFormRules();
-
-const isViewMode = computed(() => Boolean(props.readOnly));
 const enableStatusOptions = computed(() => getEnableStatusOptions());
-
-const title = computed(() => {
-  if (isViewMode.value) {
-    return $t('page.permission.viewTitle');
-  }
-
-  const titles: Record<NaiveUI.TableOperateType, string> = {
-    add: $t('page.permission.addTitle'),
-    edit: $t('page.permission.editTitle')
-  };
-  return titles[props.operateType];
-});
 
 interface Model {
   permissionCode: string;
@@ -58,7 +41,6 @@ interface Model {
 }
 
 const model = ref<Model>(createDefaultModel());
-naiveForm.bindModelValidation(model, ['permissionCode', 'permissionName', 'status']);
 
 function createDefaultModel(): Model {
   return {
@@ -69,6 +51,23 @@ function createDefaultModel(): Model {
   };
 }
 
+const { defaultRequiredRule, naiveForm, isViewMode, title, closeDrawer, handleSubmit } = useOperateForm({
+  visible,
+  operateType: () => props.operateType,
+  readOnly: () => props.readOnly,
+  titles: {
+    add: $t('page.permission.addTitle'),
+    edit: $t('page.permission.editTitle'),
+    view: $t('page.permission.viewTitle')
+  },
+  model,
+  createDefaultModel,
+  initModel,
+  validationKeys: ['permissionCode', 'permissionName', 'status'],
+  submit: submitPermission,
+  onSubmitted: () => emit('submitted')
+});
+
 const baseRules: Record<'permissionCode' | 'permissionName' | 'status', App.Global.FormRule> = {
   permissionCode: defaultRequiredRule,
   permissionName: defaultRequiredRule,
@@ -76,69 +75,39 @@ const baseRules: Record<'permissionCode' | 'permissionName' | 'status', App.Glob
 };
 const rules = naiveForm.withServerValidationRules(baseRules, ['permissionCode', 'permissionName', 'status'] as const);
 
-function handleInitModel() {
-  model.value = createDefaultModel();
-
+function initModel(): Model {
   if (props.operateType === 'edit' && props.rowData) {
-    model.value = {
+    return {
       permissionCode: props.rowData.permissionCode,
       permissionName: props.rowData.permissionName,
       description: props.rowData.description,
       status: props.rowData.status
     };
   }
+
+  return createDefaultModel();
 }
 
-function getGroupByPermissionCode(permissionCode: string) {
-  return permissionCode.split('.')[0]?.trim() || '';
-}
-
-function closeDrawer() {
-  visible.value = false;
-}
-
-async function handleSubmit() {
-  if (isViewMode.value) {
-    return;
-  }
-
-  await naiveForm.validate();
-
+async function submitPermission(currentModel: Model) {
   const permissionCode = model.value.permissionCode.trim();
   const group = getGroupByPermissionCode(permissionCode);
 
   const payload: Api.Permission.PermissionPayload = {
     permissionCode,
-    permissionName: model.value.permissionName.trim(),
+    permissionName: currentModel.permissionName.trim(),
     group: group || props.rowData?.group || '',
-    description: model.value.description.trim(),
-    status: model.value.status
+    description: currentModel.description.trim(),
+    status: currentModel.status
   };
 
-  const { error } =
-    props.operateType === 'add'
-      ? await fetchCreatePermission(payload, { handleValidationErrorLocally: true })
-      : await fetchUpdatePermission(props.rowData?.id || 0, payload, { handleValidationErrorLocally: true });
-
-  if (error) {
-    if (shouldApplyServerValidation(error)) {
-      await naiveForm.applyServerValidation(error);
-    }
-  }
-
-  if (!error) {
-    window.$message?.success(props.operateType === 'add' ? $t('common.addSuccess') : $t('common.updateSuccess'));
-    closeDrawer();
-    emit('submitted');
-  }
+  return props.operateType === 'add'
+    ? fetchCreatePermission(payload, { handleValidationErrorLocally: true })
+    : fetchUpdatePermission(props.rowData?.id || 0, payload, { handleValidationErrorLocally: true });
 }
 
-watch(visible, () => {
-  if (visible.value) {
-    handleInitModel();
-    naiveForm.restoreValidation();
-  }
-});
+function getGroupByPermissionCode(permissionCode: string) {
+  return permissionCode.split('.')[0]?.trim() || '';
+}
 </script>
 
 <template>

@@ -134,7 +134,7 @@ export function createRequest<ResponseData, ApiData, State extends Record<string
 ) {
   const { instance, opts, cancelAllRequest } = createCommonRequest<ResponseData, ApiData, State>(axiosConfig, options);
 
-  const request: RequestInstance<ApiData, State> = async function request<
+  const request: RequestInstance<ApiData, State> = async function requestInstance<
     T extends ApiData = ApiData,
     R extends ResponseType = 'json'
   >(config: CustomAxiosRequestConfig) {
@@ -170,7 +170,7 @@ export function createFlatRequest<ResponseData, ApiData, State extends Record<st
 ) {
   const { instance, opts, cancelAllRequest } = createCommonRequest<ResponseData, ApiData, State>(axiosConfig, options);
 
-  const flatRequest: FlatRequestInstance<ResponseData, ApiData, State> = async function flatRequest<
+  const flatRequest: FlatRequestInstance<ResponseData, ApiData, State> = async function flatRequestInstance<
     T extends ApiData = ApiData,
     R extends ResponseType = 'json'
   >(config: CustomAxiosRequestConfig) {

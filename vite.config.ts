@@ -18,7 +18,8 @@ export default defineConfig(configEnv => {
     resolve: {
       alias: {
         '~': fileURLToPath(new URL('./', import.meta.url)),
-        '@': fileURLToPath(new URL('./src', import.meta.url))
+        '@': fileURLToPath(new URL('./src', import.meta.url)),
+        '@demo': fileURLToPath(new URL('./demo', import.meta.url))
       }
     },
     css: {
