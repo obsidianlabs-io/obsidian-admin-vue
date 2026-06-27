@@ -15,7 +15,6 @@ import {
   dispatchAuthUserNameSync,
   redirectAfterSessionInitialized,
   redirectToLoginIfNeeded,
-  refreshWorkspaceAfterTenantSwitch,
   resetWorkspaceAfterLogout
 } from '@/bootstrap/auth-effects';
 import { SetupStoreId } from '@/enum';
@@ -356,9 +355,6 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
       setCurrentTenantId(previousTenantId);
       return false;
     }
-
-    localStg.remove('globalTabs');
-    await refreshWorkspaceAfterTenantSwitch();
 
     window.dispatchEvent(new CustomEvent(appEvent.tenantChanged, { detail: { tenantId: nextTenantId } }));
 

@@ -18,9 +18,11 @@ async function loginToPairedBackend(page: Page) {
 async function switchToMainTenant(page: Page) {
   const switcherButton = page.getByRole('button', { name: /Platform|平台/ }).first();
 
-  await expect(switcherButton).toBeVisible();
-  await switcherButton.hover();
-  await page.getByText(/Main Tenant/).click();
+  await switcherButton.click();
+  await page
+    .getByText(/Main Tenant/)
+    .first()
+    .click();
 
   await expect(page.getByRole('button', { name: /Main Tenant/ }).first()).toBeVisible();
 }

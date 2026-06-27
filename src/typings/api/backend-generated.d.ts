@@ -223,28 +223,12 @@ declare namespace BackendGenerated {
         group: string;
       }
 
-      interface StorePermissionInputDTO {
-        permissionCode: string;
-        permissionName: string;
-        group: string;
-        description: string;
-        status: string;
-      }
-
       interface UpdatePermissionDTO {
         code: string;
         name: string;
         group: string;
         description: string;
         status: string;
-      }
-
-      interface UpdatePermissionInputDTO {
-        permissionCode: string;
-        permissionName: string;
-        group: string;
-        description: string;
-        status: string | null;
       }
     }
 

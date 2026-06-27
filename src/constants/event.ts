@@ -4,5 +4,7 @@ export const appEvent = {
   themeSchemaSync: 'app:theme-schema-sync',
   themeConfigSync: 'app:theme-config-sync',
   tenantChanged: 'tenant-changed',
+  workspaceReset: 'app:workspace-reset',
+  tabsClear: 'app:tabs-clear',
   systemRealtimeUpdated: 'app:system-realtime-updated'
 } as const;

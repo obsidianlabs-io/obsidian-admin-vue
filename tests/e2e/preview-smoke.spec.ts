@@ -26,10 +26,13 @@ test('pages preview supports tenant switching in demo runtime', async ({ page })
   const switcherButton = page.getByRole('button', { name: /Platform|平台/ });
   await expect(switcherButton).toBeVisible();
 
-  await switcherButton.hover();
-  await page.getByText(/Main Tenant/).click();
+  await switcherButton.click();
+  await page
+    .getByText(/Main Tenant/)
+    .first()
+    .click();
 
-  await expect(page.getByRole('button', { name: /Main Tenant/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: /Main Tenant/ }).first()).toBeVisible();
   await expect(page).toHaveURL(/#\/dashboard$/);
 });
 

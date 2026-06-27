@@ -1,8 +1,10 @@
 import { computed, nextTick, ref, shallowRef } from 'vue';
 import type { RouteRecordRaw } from 'vue-router';
+import { useEventListener } from '@vueuse/core';
 import { defineStore } from 'pinia';
 import { useBoolean } from '@sa/hooks';
 import type { CustomRoute, ElegantConstRoute, LastLevelRouteKey, RouteKey, RouteMap } from '@elegant-router/types';
+import { appEvent } from '@/constants/event';
 import { router } from '@/router';
 import { fetchGetConstantRoutes, fetchGetUserRoutes, fetchIsRouteExist } from '@/service/api/route';
 import { SetupStoreId } from '@/enum';
@@ -172,20 +174,35 @@ export const useRouteStore = defineStore(SetupStoreId.Route, () => {
     tabStore.initHomeTab();
   }
 
+  let initAuthRoutePromise: Promise<void> | null = null;
+
   /** Init auth route */
   async function initAuthRoute() {
-    // check if user info is initialized
-    if (!authStore.userInfo.userId) {
-      await authStore.initUserInfo();
+    if (initAuthRoutePromise) {
+      await initAuthRoutePromise;
+      return;
     }
 
-    if (authRouteMode.value === 'static') {
-      initStaticAuthRoute();
-    } else {
-      await initDynamicAuthRoute();
-    }
+    initAuthRoutePromise = (async () => {
+      // check if user info is initialized
+      if (!authStore.userInfo.userId) {
+        await authStore.initUserInfo();
+      }
 
-    tabStore.initHomeTab();
+      if (authRouteMode.value === 'static') {
+        initStaticAuthRoute();
+      } else {
+        await initDynamicAuthRoute();
+      }
+
+      tabStore.initHomeTab();
+    })();
+
+    try {
+      await initAuthRoutePromise;
+    } finally {
+      initAuthRoutePromise = null;
+    }
   }
 
   /** Init static auth route */
@@ -345,6 +362,20 @@ export const useRouteStore = defineStore(SetupStoreId.Route, () => {
   async function onRouteSwitchWhenNotLoggedIn() {
     // some global init logic if it does not need to be logged in
   }
+
+  // -- Event-driven cross-store communication (avoids circular auth ↔ route deps) --
+
+  /** Tenant changed → re-init auth routes (menu/perms may differ per tenant). */
+  useEventListener(window, appEvent.tenantChanged, async () => {
+    setIsInitAuthRoute(false);
+    await initAuthRoute();
+    updateGlobalMenusByLocale();
+  });
+
+  /** Workspace reset (logout) → full route store cleanup. */
+  useEventListener(window, appEvent.workspaceReset, () => {
+    resetStore();
+  });
 
   return {
     resetStore,
