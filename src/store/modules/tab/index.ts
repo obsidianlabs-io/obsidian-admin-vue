@@ -2,6 +2,7 @@ import { computed, ref } from 'vue';
 import { useEventListener } from '@vueuse/core';
 import { defineStore } from 'pinia';
 import type { RouteKey } from '@elegant-router/types';
+import { appEvent } from '@/constants/event';
 import { router } from '@/router';
 import { useRouteStore } from '@/store/modules/route';
 import { useRouterPush } from '@/hooks/common/router';
@@ -354,6 +355,23 @@ export const useTabStore = defineStore(SetupStoreId.Tab, () => {
 
   // cache tabs when page is closed or refreshed
   useEventListener(window, 'beforeunload', () => {
+    cacheTabs();
+  });
+
+  // -- Event-driven cross-store communication --
+
+  /** Tenant changed → clear all tabs (menu structure may differ per tenant). */
+  useEventListener(window, appEvent.tenantChanged, () => {
+    clearTabs();
+  });
+
+  /** Explicit tab clear (new user login, etc.). */
+  useEventListener(window, appEvent.tabsClear, () => {
+    clearTabs();
+  });
+
+  /** Workspace reset (logout) → cache current tabs before reset. */
+  useEventListener(window, appEvent.workspaceReset, () => {
     cacheTabs();
   });
 

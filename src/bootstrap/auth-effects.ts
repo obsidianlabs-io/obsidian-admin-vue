@@ -4,9 +4,8 @@ import { localStg } from '@/utils/storage';
 import { buildAppHref } from './runtime-location';
 import { isGuestBootstrapMode } from './runtime-state';
 
+// Lazy-resolved cross-cutting modules that DON'T create store circular deps
 let websocketModulePromise: Promise<typeof import('@/service/websocket')> | null = null;
-let routeStorePromise: Promise<ReturnType<(typeof import('@/store/modules/route'))['useRouteStore']>> | null = null;
-let tabStorePromise: Promise<ReturnType<(typeof import('@/store/modules/tab'))['useTabStore']>> | null = null;
 let routerPushHelpersPromise: Promise<ReturnType<(typeof import('@/hooks/common/router'))['useRouterPush']>> | null =
   null;
 
@@ -16,22 +15,6 @@ async function resolveWebsocketModule() {
   }
 
   return websocketModulePromise;
-}
-
-async function resolveRouteStore() {
-  if (!routeStorePromise) {
-    routeStorePromise = import('@/store/modules/route').then(({ useRouteStore }) => useRouteStore());
-  }
-
-  return routeStorePromise;
-}
-
-async function resolveTabStore() {
-  if (!tabStorePromise) {
-    tabStorePromise = import('@/store/modules/tab').then(({ useTabStore }) => useTabStore());
-  }
-
-  return tabStorePromise;
 }
 
 async function resolveRouterPushHelpers() {
@@ -75,18 +58,15 @@ export async function redirectToLoginIfNeeded(route: RouteLocationNormalizedLoad
   return false;
 }
 
+/** Logout: notify stores to persist + reset via events (avoids cross-store direct imports). */
 export async function resetWorkspaceAfterLogout() {
-  const [tabStore, routeStore] = await Promise.all([resolveTabStore(), resolveRouteStore()]);
-
-  tabStore.cacheTabs();
-  routeStore.resetStore();
+  window.dispatchEvent(new CustomEvent(appEvent.workspaceReset));
 }
 
+/** New user login: clear persisted tab state, then notify tab store to clear. */
 export async function clearTabsForNewUser() {
   localStg.remove('globalTabs');
-  const tabStore = await resolveTabStore();
-
-  await tabStore.clearTabs();
+  window.dispatchEvent(new CustomEvent(appEvent.tabsClear));
 }
 
 export async function redirectAfterSessionInitialized(route: RouteLocationNormalizedLoaded, needRedirect: boolean) {
@@ -106,15 +86,4 @@ export async function redirectAfterSessionInitialized(route: RouteLocationNormal
 
   const { redirectFromLogin } = await resolveRouterPushHelpers();
   await redirectFromLogin(needRedirect);
-}
-
-export async function refreshWorkspaceAfterTenantSwitch() {
-  const [tabStore, routeStore] = await Promise.all([resolveTabStore(), resolveRouteStore()]);
-  const { routerPushByKey } = await resolveRouterPushHelpers();
-
-  await tabStore.clearTabs();
-  routeStore.setIsInitAuthRoute(false);
-  await routeStore.initAuthRoute();
-  routeStore.updateGlobalMenusByLocale();
-  await routerPushByKey('root');
 }
