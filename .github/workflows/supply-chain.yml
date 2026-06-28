@@ -83,7 +83,7 @@ jobs:
           path: build
 
       - name: Attest frontend SBOM artifact
-        uses: actions/attest-build-provenance@a2bbfa25375fe432b6a289bc6b6cd05ecd0c4c32
+        uses: actions/attest-build-provenance@0f67c3f4856b2e3261c31976d6725780e5e4c373
         with:
           subject-path: build/frontend-sbom.cyclonedx.json
 
@@ -105,6 +105,6 @@ jobs:
         run: pnpm build
 
       - name: Attest frontend dist
-        uses: actions/attest-build-provenance@a2bbfa25375fe432b6a289bc6b6cd05ecd0c4c32
+        uses: actions/attest-build-provenance@0f67c3f4856b2e3261c31976d6725780e5e4c373
         with:
           subject-path: dist/**
