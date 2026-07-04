@@ -79,7 +79,7 @@ jobs:
       - name: Cache Playwright browsers
         if: steps.changes.outputs.e2e == 'true'
         id: playwright-cache
-        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}
