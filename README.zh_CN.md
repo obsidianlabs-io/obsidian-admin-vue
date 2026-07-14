@@ -52,6 +52,7 @@
 - `pnpm test:unit`
 - `pnpm test:e2e`
 - GitHub Actions: `Frontend Quality Gate` / `Frontend Contract Gate` / `Frontend Supply Chain`
+- CycloneDX SBOM 产物 + attestation，满足发布级依赖清单要求
 
 ## 适用场景
 
@@ -72,10 +73,17 @@
 ## 关键文档
 
 - 版本兼容矩阵：[`docs/compatibility-matrix.md`](./docs/compatibility-matrix.md)
+- 支持策略：[`docs/support-policy.md`](./docs/support-policy.md)
 - 前端架构说明：[`docs/architecture.md`](./docs/architecture.md)
+- 全栈评估：[`docs/full-stack-evaluation.md`](./docs/full-stack-evaluation.md)
 - 公开预览说明：[`docs/demo.md`](./docs/demo.md)
+- 发布产物说明：[`docs/release-artifacts.md`](./docs/release-artifacts.md)
 - 发布签发清单：[`docs/release-final-checklist.md`](./docs/release-final-checklist.md)
 - API 契约快照：[`docs/api-client-contract.snapshot`](./docs/api-client-contract.snapshot)
+
+## 公开文档
+
+- 文档地址：[https://obsidianlabs-io.github.io/obsidian-admin-vue/](https://obsidianlabs-io.github.io/obsidian-admin-vue/)
 
 ## 公开预览
 
@@ -109,6 +117,22 @@ pnpm dev
 ```bash
 pnpm build
 ```
+
+### 发布产物
+
+稳定发布标签会在 GitHub Release 页面发布可下载的前端产物：
+
+- 生产环境应用包
+- demo 预览包
+- Pages 包（`docs + /preview/`）
+
+供应链产物通过 GitHub Actions 单独发布：
+
+- `frontend-sbom-cyclonedx`
+- 前端 SBOM attestation
+- 前端 dist attestation
+
+这些产物用于评估、静态预览托管和发布验证。本仓库仍然是应用模板，不是通过 npm 分发的 UI 包。
 
 ## 推荐开发流程
 
@@ -163,11 +187,18 @@ pnpm typecheck:api
 - `BACKEND_REPO_TOKEN` 仅在后端仓库为私有时需要
 - 若后端缺少 `docs/api-contract.snapshot`，工作流会直接失败
 
-## 推荐配套项目
+## 推荐配套后端
 
 若你希望获得完整的契约驱动开发体验，建议与以下后端配套使用:
 
 - [Obsidian Admin Laravel](https://github.com/obsidianlabs-io/obsidian-admin-laravel)
+
+当前文档记录的稳定配对版本：
+
+- 前端 `v1.2.2`
+- 后端 `v1.3.2`
+
+后端 `main` 跟踪当前 Laravel 13 基线，当前协调发布的稳定配对为前端 `v1.2.2` 与后端 `v1.3.2`。前端 `v1.2.1` 在分阶段滚动发布期间仍然兼容，但建议优先使用 `v1.2.2` 版本。在混合使用发布标签与 `main` 分支之前，请查阅兼容性矩阵。
 
 ## 致谢
 
