@@ -107,8 +107,8 @@ importers:
         specifier: ^0.94.5
         version: 0.94.5(magicast@0.3.4)(typescript@5.9.3)
       '@iconify/json':
-        specifier: 2.2.461
-        version: 2.2.461
+        specifier: 2.2.474
+        version: 2.2.474
       '@lhci/cli':
         specifier: 0.15.1
         version: 0.15.1
@@ -1064,8 +1064,8 @@ packages:
   '@iconify-json/simple-icons@1.2.90':
     resolution: {integrity: sha512-zt2o2ZvQpHVvZJARIkZ51RnaHY2oqcPJMvHE+mVnxkSr+c33fnX4gciiXu+wyX5ei+s0qbVX1wD0DWBbaGBYMA==}
 
-  '@iconify/json@2.2.461':
-    resolution: {integrity: sha512-UiujJDldh6bD5v0EDbB6aKgye1tW3mteqmjHAwXi1bLQm9OYnHAWBIe8ogVZB2ttEFFraOBFkpe3VFwtxRSKSQ==}
+  '@iconify/json@2.2.474':
+    resolution: {integrity: sha512-6dyYYjYWMcsV3nWMX4rEtDypaSL1+j6M7ra7F+CMLlpCSy8qdgYUDcwr7FrIYSa+GySmRfhdtJcUPQYWvB4DRw==}
 
   '@iconify/types@2.0.0':
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
@@ -7330,7 +7330,7 @@ snapshots:
     dependencies:
       '@iconify/types': 2.0.0
 
-  '@iconify/json@2.2.461':
+  '@iconify/json@2.2.474':
     dependencies:
       '@iconify/types': 2.0.0
       pathe: 2.0.3
