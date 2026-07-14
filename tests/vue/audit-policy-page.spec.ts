@@ -103,7 +103,7 @@ describe('audit-policy index page', () => {
   });
 
   it('should handle API error gracefully', async () => {
-    fetchGetAuditPolicyList.mockRejectedValue(new Error('Network error'));
+    fetchGetAuditPolicyList.mockResolvedValue({ data: null, error: new Error('Network error') });
 
     const AuditPolicyPage = (await import('@/views/audit-policy/index.vue')).default;
 

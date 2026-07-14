@@ -41,10 +41,6 @@ declare namespace BackendGenerated {
     }
 
     namespace Auth {
-      interface ForgotPasswordInputDTO {
-        email: string;
-      }
-
       interface LoginInputDTO {
         userName: string | null;
         email: string | null;
@@ -52,10 +48,6 @@ declare namespace BackendGenerated {
         rememberMe: boolean;
         otpCode: string | null;
         locale: string | null;
-      }
-
-      interface LogoutInputDTO {
-        refreshToken: string | null;
       }
 
       interface RefreshTokenInputDTO {
@@ -75,29 +67,12 @@ declare namespace BackendGenerated {
         passwordConfirmation: string;
       }
 
-      interface RevokeSessionInputDTO {
-        sessionId: string;
-      }
-
-      interface TwoFactorCodeInputDTO {
-        otpCode: string;
-      }
-
-      interface UpdatePreferredLocaleInputDTO {
-        locale: string;
-      }
-
       interface UpdateProfileInputDTO {
         userName: string;
         email: string;
         currentPassword: string | null;
         password: string | null;
         timezone: string | null;
-      }
-
-      interface UpdateSessionAliasInputDTO {
-        sessionId: string;
-        deviceAlias: string | null;
       }
 
       interface UpdateUserPreferencesInputDTO {
@@ -108,43 +83,7 @@ declare namespace BackendGenerated {
       }
     }
 
-    namespace FeatureFlag {
-      interface ForgetFeatureFlagOverrideDTO {
-        key: string;
-        scope: string;
-      }
-
-      interface ListFeatureFlagsDTO {
-        current: number;
-        size: number;
-        keyword: string;
-      }
-
-      interface PurgeFeatureFlagDTO {
-        key: string;
-      }
-
-      interface SetFeatureFlagOverrideDTO {
-        key: string;
-        scope: string;
-        enabled: boolean;
-      }
-
-      interface ToggleFeatureFlagDTO {
-        key: string;
-        enabled: boolean;
-      }
-    }
-
     namespace Language {
-      interface CreateLanguageTranslationDTO {
-        languageId: number;
-        translationKey: string;
-        translationValue: string;
-        description: string;
-        status: string;
-      }
-
       interface ListLanguageTranslationsInputDTO {
         current: number;
         size: number;
@@ -156,14 +95,6 @@ declare namespace BackendGenerated {
 
       interface StoreLanguageTranslationInputDTO {
         locale: string;
-        translationKey: string;
-        translationValue: string;
-        description: string;
-        status: string;
-      }
-
-      interface UpdateLanguageTranslationDTO {
-        languageId: number;
         translationKey: string;
         translationValue: string;
         description: string;
@@ -233,15 +164,6 @@ declare namespace BackendGenerated {
     }
 
     namespace Role {
-      interface CreateRoleDTO {
-        code: string;
-        name: string;
-        description: string;
-        status: string;
-        tenantId: number | null;
-        level: number;
-      }
-
       interface ListRolesInputDTO {
         current: number;
         size: number;
@@ -260,20 +182,8 @@ declare namespace BackendGenerated {
         permissionCodes: unknown[];
       }
 
-      interface SyncRolePermissionsDTO {
-        permissionIds: unknown[];
-      }
-
       interface SyncRolePermissionsInputDTO {
         permissionCodes: unknown[];
-      }
-
-      interface UpdateRoleDTO {
-        code: string;
-        name: string;
-        description: string;
-        status: string;
-        level: number;
       }
 
       interface UpdateRoleInputDTO {
@@ -370,17 +280,6 @@ declare namespace BackendGenerated {
         roleCode: string;
       }
 
-      interface CreateUserDTO {
-        name: string;
-        email: string;
-        password: string;
-        status: string;
-        roleId: number;
-        tenantId: number | null;
-        organizationId: number | null;
-        teamId: number | null;
-      }
-
       interface CreateUserInputDTO {
         userName: string;
         email: string;
@@ -407,17 +306,6 @@ declare namespace BackendGenerated {
         email: string;
         password: string | null;
         timezone: string | null;
-      }
-
-      interface UpdateUserDTO {
-        name: string;
-        email: string;
-        password: string | null;
-        status: string;
-        roleId: number;
-        tenantId: number | null;
-        organizationId: number | null;
-        teamId: number | null;
       }
 
       interface UpdateUserInputDTO {
