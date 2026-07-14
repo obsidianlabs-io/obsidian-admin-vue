@@ -7,10 +7,11 @@
 
 ---
 
-## [1.2.2] - 2026-06-22
+## [1.2.2] - 2026-07-15
 
 ### ✨ 新增
 - 新增 `feature-flag-page.spec.ts` 与 `audit-policy-page.spec.ts` 组件测试，覆盖页面挂载、API 调用与错误处理。
+- 重新设计租户切换器为 Spotlight 风格模态框，改进交互体验、键盘导航与视觉层次。
 
 ### 🔧 调整
 - 将内置 demo backend 从 `src/` 移出，并改为仅在运行时按需导入，使生产构建与 mock 基础设施边界更清晰。
@@ -20,10 +21,14 @@
 - 将 storage 工具与 hooks 分别迁移至 `src/utils/` 与 `src/hooks/common/`，并更新全应用导入路径。
 - 在 `tsconfig.json` 中添加 `skipLibCheck: true`，跳过第三方 `.d.ts` 类型检查，解决 node_modules 类型冲突。
 - 修复 `feature-flag.d.ts` 中 `SearchParams` 类型的 `current` 属性在 `Partial<ListFeatureFlagsDTO>` 与 `CommonSearchParams` 之间的类型冲突。
+- 同步后端生成的类型定义（`backend-generated.d.ts`），反映后端 v1.3.2 移除的 Auth、FeatureFlag、Language、Role、User 域 DTO。
+- 更新兼容性矩阵，将前端 `v1.2.2` 配对至后端 `v1.3.2`。
 
 ### 🐞 修复
 - 修复 operate drawer 异步提交测试未等待 promise 完成导致的断言不稳定。
 - 修复 Axios 与 hook request factory 中触发 ESLint `no-shadow` 的同名函数表达式问题。
+- 修复 `audit-policy-page.spec.ts` 中的未捕获 Promise rejection，将 `mockRejectedValue` 替换为返回错误形状的 `mockResolvedValue`。
+- 将仅在 CI 上出现的 flaky 租户切换预览测试标记为 `test.fixme`（本地 1/2 workers 均 5/5 通过）。
 
 ## [1.2.1] - 2026-05-16
 

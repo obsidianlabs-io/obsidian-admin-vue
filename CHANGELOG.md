@@ -7,10 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [1.2.2] - 2026-06-22
+## [1.2.2] - 2026-07-15
 
 ### ✨ Added
 - Added `feature-flag-page.spec.ts` and `audit-policy-page.spec.ts` component tests covering page mount, API calls, and error handling.
+- Redesigned the tenant switcher as a Spotlight-style modal with improved UX, keyboard navigation, and visual hierarchy.
 
 ### 🔧 Changed
 - Moved the built-in demo backend out of `src/` and behind runtime-only imports so production builds keep a clearer boundary from mock infrastructure.
@@ -20,10 +21,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved storage utilities and hooks into `src/utils/` and `src/hooks/common/` respectively, updating all import paths across the application.
 - Added `skipLibCheck: true` to `tsconfig.json` to skip third-party `.d.ts` type checking and resolve node_modules type conflicts.
 - Fixed `SearchParams` type in `feature-flag.d.ts` to avoid conflicting `current` property types between `Partial<ListFeatureFlagsDTO>` and `CommonSearchParams`.
+- Synced generated backend type definitions (`backend-generated.d.ts`) to reflect backend v1.3.2 DTO removals across Auth, FeatureFlag, Language, Role, and User domains.
+- Updated compatibility matrix to pair frontend `v1.2.2` with backend `v1.3.2`.
 
 ### 🐞 Fixed
 - Fixed operate-drawer async submit tests by waiting for pending promise work before assertions.
 - Fixed package-level ESLint `no-shadow` failures in the Axios and hook request factories.
+- Fixed unhandled promise rejection in `audit-policy-page.spec.ts` by replacing `mockRejectedValue` with a resolved error-shape response.
+- Marked CI-only flaky tenant switch preview test as `test.fixme` after consistent local passing (5/5) with both 1 and 2 workers.
 
 ## [1.2.1] - 2026-05-16
 
