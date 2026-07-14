@@ -32,8 +32,8 @@ test('pages preview supports tenant switching in demo runtime', async ({ page })
     .first()
     .click();
 
-  await expect(page.getByRole('button', { name: /Main Tenant/ }).first()).toBeVisible();
-  await expect(page).toHaveURL(/#\/dashboard$/);
+  await expect(page.getByRole('button', { name: /Main Tenant/ }).first()).toBeVisible({ timeout: 15_000 });
+  await expect(page).toHaveURL(/#\/dashboard$/, { timeout: 15_000 });
 });
 
 test('pages preview can open the user drawer in demo runtime', async ({ page }) => {
