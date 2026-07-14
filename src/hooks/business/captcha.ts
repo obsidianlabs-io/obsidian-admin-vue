@@ -1,6 +1,6 @@
 import { computed } from 'vue';
-import { useCountDown, useLoading } from '@sa/hooks';
 import { REG_PHONE } from '@/constants/reg';
+import { useCountDown, useLoading } from '@/hooks/common';
 import { getNaiveMessage } from '@/utils/naive-ui';
 import { $t } from '@/locales';
 

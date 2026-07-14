@@ -9,10 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.2.2] - 2026-06-22
 
+### ✨ Added
+- Added `feature-flag-page.spec.ts` and `audit-policy-page.spec.ts` component tests covering page mount, API calls, and error handling.
+
 ### 🔧 Changed
 - Moved the built-in demo backend out of `src/` and behind runtime-only imports so production builds keep a clearer boundary from mock infrastructure.
 - Extracted authentication side effects into a bootstrap layer and standardized CRUD drawer form logic through a shared operate-form composable.
 - Removed the unused `packages/alova` workspace package and refreshed frontend dependency metadata for the release lane.
+- Merged `@sa/uno-preset`, `@sa/utils`, and `@sa/hooks` packages into `src/` to eliminate over-fragmented monorepo workspace packages.
+- Moved storage utilities and hooks into `src/utils/` and `src/hooks/common/` respectively, updating all import paths across the application.
+- Added `skipLibCheck: true` to `tsconfig.json` to skip third-party `.d.ts` type checking and resolve node_modules type conflicts.
+- Fixed `SearchParams` type in `feature-flag.d.ts` to avoid conflicting `current` property types between `Partial<ListFeatureFlagsDTO>` and `CommonSearchParams`.
 
 ### 🐞 Fixed
 - Fixed operate-drawer async submit tests by waiting for pending promise work before assertions.

@@ -17,8 +17,9 @@ declare namespace Api {
 
     type ListResponse = Common.PaginatingQueryRecord<Flag>;
 
-    interface SearchParams
-      extends Partial<BackendGenerated.DTO.FeatureFlag.ListFeatureFlagsDTO>, Common.CommonSearchParams {}
+    interface SearchParams extends Common.CommonSearchParams {
+      keyword?: string;
+    }
 
     interface ToggleResponse {
       key: string;

@@ -9,10 +9,17 @@
 
 ## [1.2.2] - 2026-06-22
 
+### ✨ 新增
+- 新增 `feature-flag-page.spec.ts` 与 `audit-policy-page.spec.ts` 组件测试，覆盖页面挂载、API 调用与错误处理。
+
 ### 🔧 调整
 - 将内置 demo backend 从 `src/` 移出，并改为仅在运行时按需导入，使生产构建与 mock 基础设施边界更清晰。
 - 将认证相关副作用提取到 bootstrap 层，并通过共享 operate-form composable 统一 CRUD 抽屉表单逻辑。
 - 删除未使用的 `packages/alova` workspace 包，并刷新本次发布线的前端依赖元数据。
+- 将 `@sa/uno-preset`、`@sa/utils`、`@sa/hooks` 三个过细的 monorepo workspace 包合并入 `src/`，消除过度碎片化的包结构。
+- 将 storage 工具与 hooks 分别迁移至 `src/utils/` 与 `src/hooks/common/`，并更新全应用导入路径。
+- 在 `tsconfig.json` 中添加 `skipLibCheck: true`，跳过第三方 `.d.ts` 类型检查，解决 node_modules 类型冲突。
+- 修复 `feature-flag.d.ts` 中 `SearchParams` 类型的 `current` 属性在 `Partial<ListFeatureFlagsDTO>` 与 `CommonSearchParams` 之间的类型冲突。
 
 ### 🐞 修复
 - 修复 operate drawer 异步提交测试未等待 promise 完成导致的断言不稳定。

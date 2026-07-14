@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { jsonClone } from '@sa/utils';
 import { getEnableStatusLabel, getEnableStatusOptions, getEnableStatusTagType } from '@/constants/common';
 import { fetchCreateRole, fetchGetRoleAssignablePermissions, fetchUpdateRole } from '@/service/api';
+import { jsonClone } from '@/utils/klona';
 import { $t } from '@/locales';
 import FormModalWrapper from '@/components/advanced/form-modal-wrapper.vue';
 import { useOperateForm } from '../../_shared/composables/use-operate-form';

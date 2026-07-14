@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import type { AxiosResponse, CreateAxiosDefaults, InternalAxiosRequestConfig } from 'axios';
 import axiosRetry from 'axios-retry';
-import { nanoid } from '@sa/utils';
+import { nanoid } from 'nanoid';
 import { createAxiosConfig, createDefaultOptions, createRetryOptions } from './options';
 import { transformResponse } from './shared';
 import { BACKEND_ERROR_CODE, REQUEST_ID_KEY } from './constant';

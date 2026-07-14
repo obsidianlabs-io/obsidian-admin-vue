@@ -2,14 +2,15 @@ import { computed, effectScope, h, onScopeDispose, reactive, shallowRef, watch }
 import type { Ref } from 'vue';
 import { NTag } from 'naive-ui';
 import type { PaginationProps } from 'naive-ui';
-import { useBoolean, useTable } from '@sa/hooks';
-import type { PaginationData, TableColumnCheck, UseTableOptions } from '@sa/hooks';
 import type { FlatResponseData } from '@sa/axios';
-import { jsonClone } from '@sa/utils';
 import { getEnableStatusLabel, getEnableStatusTagType } from '@/constants/common';
 import { useAppStore } from '@/store/modules/app';
+import { jsonClone } from '@/utils/klona';
 import { getNaiveMessage } from '@/utils/naive-ui';
 import { $t } from '@/locales';
+import type { PaginationData, TableColumnCheck, UseTableOptions } from './use-table';
+import useTable from './use-table';
+import useBoolean from './use-boolean';
 
 export type UseNaiveTableOptions<ResponseData, ApiData, Pagination extends boolean> = Omit<
   UseTableOptions<ResponseData, ApiData, NaiveUI.TableColumn<ApiData>, Pagination>,

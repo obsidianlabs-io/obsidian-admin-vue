@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import useTableModule from '../packages/hooks/src/use-table';
+import useTableModule from '../src/hooks/common/use-table';
 
 const useTable = (useTableModule as unknown as { default?: typeof useTableModule }).default ?? useTableModule;
 

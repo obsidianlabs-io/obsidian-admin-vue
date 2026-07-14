@@ -1,6 +1,6 @@
 import type { Ref } from 'vue';
 import { toRaw } from 'vue';
-import { jsonClone } from '@sa/utils';
+import { jsonClone } from '@/utils/klona';
 
 export function useSearchFormActions<T extends object>(model: Ref<T>, onSearch: () => void) {
   const defaultModel = jsonClone(toRaw(model.value));

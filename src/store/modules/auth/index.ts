@@ -1,10 +1,10 @@
 import { computed, reactive, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { defineStore } from 'pinia';
-import { useLoading } from '@sa/hooks';
 import { appEvent } from '@/constants/event';
 import { fetchGetUserInfo, fetchLogin, fetchLogout, fetchUpdateLocale } from '@/service/api/auth';
 import { resolveRequestErrorStrategy } from '@/service/request/shared';
+import { useLoading } from '@/hooks/common';
 import { localStg } from '@/utils/storage';
 import { createDefaultThemeConfig } from '@/utils/theme-config';
 import { getNaiveNotification } from '@/utils/naive-ui';
